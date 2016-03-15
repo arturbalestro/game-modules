@@ -2,30 +2,13 @@
 <html>
 <head>
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="grid.css" />
 </head>
 <body>
 	<div class="grid">
-		<div class="spell">
-			<!--SPELL ICON GOES HERE-->
-			<img src="aspects/hot.png" />
-			<span class="spell-name">Anger</span>
-		</div>
-		<div class="spell">
-			<!--SPELL ICON GOES HERE-->
-			<img src="aspects/snowflake.png" />
-			<span class="spell-name">Indifference</span>
-		</div>
-		<div class="spell">
-			<!--SPELL ICON GOES HERE-->
-			<img src="aspects/raindrop.png" />
-			<span class="spell-name">Honesty</span>
-		</div>
-		<div class="spell">
-			<!--SPELL ICON GOES HERE-->
-			<img src="aspects/feather.png" />
-			<span class="spell-name">Quickness</span>
-		</div>
+		<div class="innergrid"></div>
 	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 	<script type="text/javascript">
 		/*
 		Spell/Aspect Ideas
@@ -41,75 +24,95 @@
 		Magnetism: Attractiveness, Manipulation/Influence
 		*/
 		var fire = {
+			id: "fire",
 			icon: "aspects/hot.png",
 			aspect1: "Anger",
-			aspect2: "Compassion"
+			aspect2: "Love"
 		};
 
 		var water = {
+			id: "water",
 			icon: "aspects/raindrop.png",
 			aspect1: "Arrogance",
 			aspect2: "Honesty"
 		};
 
 		var wind = {
+			id: "wind",
 			icon: "aspects/feather.png",
 			aspect1: "Desperation",
 			aspect2: "Haste"
 		};
 
 		var earth = {
+			id:"earth",
 			icon: "aspects/shoot.png",
 			aspect1: "Mistrust",
 			aspect2: "Modesty"
 		};
 
 		var ice = {
+			id: "ice",
 			icon: "aspects/snowflake.png",
 			aspect1: "Indifference",
 			aspect2: "Smartness"
 		};
 
 		var thunder = {
+			id: "thunder",
 			icon: "aspects/bolt.png",
 			aspect1: "Hyperactivity",
 			aspect2: "Boldness"
 		};
 
 		var light = {
+			id: "light",
 			icon: "aspects/lightbulb.png",
 			aspect1: "Ingenuity",
 			aspect2: "Kindness"
 		};
 
 		var darkness = {
+			id: "darkness",
 			icon: "aspects/night.png",
 			aspect1: "Hate",
 			aspect2: "Panic"
 		};
 
 		var poison = {
+			id: "poison",
 			icon: "aspects/bug.png",
 			aspect1: "Mischief",
 			aspect2: "Lust"
 		};
 
 		var magnetism = {
+			id: "magnetism",
 			icon: "aspects/clock.png",
 			aspect1: "Manipulation",
 			aspect2: "Charisma"
 		};
 
-		var aspects = {
+		var aspects = [
 			fire,
 			water,
 			wind,
 			earth,
 			ice,
-			thunder
-		};
+			thunder,
+			light,
+			darkness,
+			poison,
+			magnetism
+		];
 
 		console.log(aspects);
+
+		for(var i = 0; i < aspects.length; i++) {
+			jQuery(".innergrid").append('<div class="aspect" id="'+aspects[i].id+'"><img src="'+aspects[i].icon+'" /><span class="aspect-name">'+aspects[i].aspect1+'</span></div>');
+
+			/*jQuery(".grid").append('<div class="aspect" id="'+aspects[i].id+'"><img src="'+aspects[i].icon+'" /><span class="aspect-name">'+aspects[i].aspect2+'</span></div>');*/
+		}
 
 	</script>
 </body>

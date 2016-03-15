@@ -1,0 +1,75 @@
+body {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.grid {
+	border: 2px solid #6B8E23;
+	border-radius: 800px;
+	min-width: 800px;
+	min-height: 800px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+}
+
+.innergrid {
+	border: 2px solid #4682B4;
+	border-radius: 400px;
+	min-width: 400px;
+	min-height: 400px;
+	display: inline-block;
+	position: relative;
+	margin-top: 10%;
+}
+
+.aspect {
+	/*display: inline-block;*/
+	margin: 0 5px;
+	position: absolute;
+	top: 0; 
+	text-align: center;
+}
+.aspect img {
+	display: inline-block;
+}
+.aspect span {
+	display: block;
+	margin-top: 5px;
+	width: 100%;
+}
+
+#fire {
+	top: -5px;
+}
+#water {
+	left: 26%;
+	top: -30px;
+}
+#wind {
+	left: 52%;
+	top: -30px;
+}
+#earth {
+	right: 0px;
+	top: 28px;
+}
+#ice {
+	top: 90px;
+	left: -50px;
+}
+#thunder {
+	right: -56px;
+	top: 35%;
+}
+#light {
+	bottom: -50px;
+	top: inherit;
+	left: 80px;
+}
+#darkness {
+	bottom: -50px;
+	top: inherit;
+	right: 100px;
+}
