@@ -3,25 +3,10 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="charlist.css" />
-	<link rel="stylesheet" href="roboto-fontfacekit/web fonts/roboto_regular/stylesheet.css" type="text/css" charset="utf-8" />
+	<link rel="stylesheet" href="roboto-fontfacekit/roboto_regular/stylesheet.css" type="text/css" charset="utf-8" />
 </head>
 <body>
-	<div class="charlist">
-		<!--<div class="char">
-			<div class="face"></div>
-			<div class="name"></div>
-			<div class="info">
-				<div class="gender">Gender: </div>
-				<div class="class">Class: </div>
-				<div class="race">Race: </div>
-				<div class="aspect">Aspect: </div>
-				<div class="weapon">Weapon: </div>
-				<div class="ability">Ability: </div>
-			</div>
-			<div class="battler"></div>
-			<div class="sprite"></div>
-		</div>-->
-	</div>
+	<div class="charlist"></div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 	<script type="text/javascript">
 		function character() {
@@ -85,14 +70,10 @@
 
 		for(var i = 0; i < roster.length; i++) {
 			jQuery(".charlist").append('<div class="char" id="'+roster[i].id+'"></div>');			
-
-			/*jQuery(".charlist")
-				.append('<div class="char" id="'+roster[i].id+'"><div class="face"><img src="'+roster[i].face+'" /></div><div class="name">'+roster[i].name+'</div><div class="info"><div class="gender">'+roster[i].gender+'</div><div class="class">'+roster[i].class+'</div><div class="race">'+roster[i].race+'</div><div class="aspect">'+roster[i].aspect+'</div><div class="weapon">'+roster[i].weapon+'</div><div class="ability">'+roster[i].ability+'</div></div><div class="battler"><img src="'+roster[i].battler+'" /></div><div class="sprite"><img src="'+roster[i].sprite+'" /></div></div>');*/
 		}
 
 		jQuery(".char").each(function(i) {
 			var currentChar = jQuery(this);
-			console.log(roster[i].face);
 			currentChar
 				.append('<div class="face"><img src="'+roster[i].face+'" /></div>')
 				.append('<div class="info"></div>')
