@@ -1,0 +1,120 @@
+body {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.grid {
+	border: 2px solid #6B8E23;
+	border-radius: 600px;
+	min-width: 600px;
+	min-height: 560px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	margin: 25px 0;
+}
+
+.innergrid {
+	border: 2px solid #4682B4;
+	border-radius: 400px;
+	min-width: 400px;
+	min-height: 360px;
+	display: inline-block;
+	position: relative;
+	margin-top: 15%;
+}
+
+.aspect {
+	margin: 0 5px;
+	position: absolute;
+	text-align: center;
+}
+.aspect img {
+	display: inline-block;
+}
+.aspect span {
+	display: block;
+	width: 100%;
+}
+
+#fire {
+	top: 28px;
+}
+#water {
+	left: 100px;
+	top: -30px;
+}
+#wind {
+	right: 100px;
+	top: -30px;
+}
+#earth {
+	right: 0px;
+	top: 28px;
+}
+#ice {
+	top: 35%;
+	left: -50px;
+}
+#thunder {
+	right: -56px;
+	top: 35%;
+}
+#light {
+	bottom: -50px;
+	left: 80px;
+}
+#darkness {
+	bottom: -50px;
+	right: 100px;
+}
+#poison {
+	bottom: 20px;
+	left: -20px;
+}
+#magnetism {
+	bottom: 20px;
+	right: -20px;	
+}
+
+#fire2 {
+	left: 15px;
+	top: 60px;
+}
+#water2 {
+	left: 120px;
+	top: -15px;
+}
+#wind2 {
+	right: 120px;
+	top: -15px;
+}
+#earth2 {
+	right: 10px;
+	top: 60px;
+}
+#ice2 {
+	left: -45px;
+	top: 35%;
+}
+#thunder2 {
+	right: -45px;
+	top: 35%;
+}
+#light2 {
+	left: 100px;
+	bottom: -30px;
+}
+#darkness2 {
+	right: 125px;
+	bottom: -30px;
+}
+#poison2 {
+	left: 0px;
+	bottom: 50px;
+}
+#magnetism2 {
+	right: 0px;
+	bottom: 50px;
+}
