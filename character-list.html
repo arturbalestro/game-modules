@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="charlist.css" />
+	<link rel="stylesheet" href="roboto-fontfacekit/web fonts/roboto_regular/stylesheet.css" type="text/css" charset="utf-8" />
+</head>
+<body>
+	<div class="charlist">
+		<!--<div class="char">
+			<div class="face"></div>
+			<div class="name"></div>
+			<div class="info">
+				<div class="gender">Gender: </div>
+				<div class="class">Class: </div>
+				<div class="race">Race: </div>
+				<div class="aspect">Aspect: </div>
+				<div class="weapon">Weapon: </div>
+				<div class="ability">Ability: </div>
+			</div>
+			<div class="battler"></div>
+			<div class="sprite"></div>
+		</div>-->
+	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+	<script type="text/javascript">
+		function character() {
+			this.id = "";
+			this.name = "";
+			this.gender = "";
+			this.class = "";
+			this.race = "";
+			this.aspect = "";
+			this.weapon = "";
+			this.ability = "";
+			this.face = "";
+			this.battler = "";
+			this.sprite = "";
+		};
+
+		var roster = [];
+
+		var ferid = new character();
+		ferid.name = "Ferid";
+		ferid.id = "ferid";
+		ferid.gender = "Male";
+		ferid.class = "Thief";
+		ferid.race = "Human";
+		ferid.aspect = "Mistrust";
+		ferid.weapon = "Twin Daggers";
+		ferid.ability = "Stealth Attack";
+		ferid.face = "chars/faces/t1.png";
+		ferid.battler = "chars/battlers/016-Thief01.png";
+		ferid.sprite = "chars/sprites/016-Thief01.png";
+
+		var lilka = new character();
+		lilka.name = "Lilka";
+		lilka.id = "lilka";
+		lilka.gender = "Female";
+		lilka.class = "Cleric";
+		lilka.race = "Elf";
+		lilka.aspect = "Hyperactivity";
+		lilka.weapon = "Tri-Chain Staff";
+		lilka.ability = "Healing Beam";
+		lilka.face = "chars/faces/c6l.jpg";
+		lilka.battler = "chars/battlers/030-Cleric06.png";
+		lilka.sprite = "chars/sprites/030-Cleric06.png";
+
+		var duessel = new character();
+		duessel.name = "Duessel";
+		duessel.id = "duessel";
+		duessel.gender = "Male";
+		duessel.class = "Warrior";
+		duessel.race = "Elf";
+		duessel.aspect = "Hate";
+		duessel.weapon = "Battleaxe";
+		duessel.ability = "Vicious Cut";
+		duessel.face = "chars/faces/w2.jpg";
+		duessel.battler = "chars/battlers/014-Warrior02.png";
+		duessel.sprite = "chars/sprites/014-Warrior02.png";
+
+		roster.push(ferid);
+		roster.push(lilka);
+		roster.push(duessel);
+
+		for(var i = 0; i < roster.length; i++) {
+			jQuery(".charlist").append('<div class="char" id="'+roster[i].id+'"></div>');			
+
+			/*jQuery(".charlist")
+				.append('<div class="char" id="'+roster[i].id+'"><div class="face"><img src="'+roster[i].face+'" /></div><div class="name">'+roster[i].name+'</div><div class="info"><div class="gender">'+roster[i].gender+'</div><div class="class">'+roster[i].class+'</div><div class="race">'+roster[i].race+'</div><div class="aspect">'+roster[i].aspect+'</div><div class="weapon">'+roster[i].weapon+'</div><div class="ability">'+roster[i].ability+'</div></div><div class="battler"><img src="'+roster[i].battler+'" /></div><div class="sprite"><img src="'+roster[i].sprite+'" /></div></div>');*/
+		}
+
+		jQuery(".char").each(function(i) {
+			var currentChar = jQuery(this);
+			console.log(roster[i].face);
+			currentChar
+				.append('<div class="face"><img src="'+roster[i].face+'" /></div>')
+				.append('<div class="info"></div>')
+				.append('<div class="battler"><img src="'+roster[i].battler+'" /></div>')
+				.append('<div class="sprite"><img src="'+roster[i].sprite+'" /></div>')
+
+				.children(".info")
+					.append('<div class="name">'+roster[i].name+'</div>')
+					.append('<div class="gender">Gender: <span>'+roster[i].gender+'</span></div>')
+					.append('<div class="class">Class: <span>'+roster[i].class+'</span></div>')
+					.append('<div class="race">Race: <span>'+roster[i].race+'</span></div>')
+					.append('<div class="aspect">Aspect: <span>'+roster[i].aspect+'</span></div>')
+					.append('<div class="weapon">Weapon: <span>'+roster[i].weapon+'</span></div>')
+					.append('<div class="ability">Ability: <span>'+roster[i].ability+'</span></div>');
+		});
+
+	</script>
+</body>
+</html>
