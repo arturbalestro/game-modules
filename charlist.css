@@ -16,9 +16,12 @@ body {
 	vertical-align: top;
 	margin: 5px;
 	padding: 5px;
+	min-height: 350px;
+	min-width: 307px;
+	position: relative;
 }
 .char .face {
-	
+	display: inline-block;
 }
 .char .name {
 	display: block;
@@ -29,7 +32,7 @@ body {
 }
 
 .char .info {
-	display: inline-block;
+	display: block;
 	vertical-align: top;
 	color: #EDC152;
 	font-family: 'robotoregular';
@@ -38,14 +41,137 @@ body {
 	color: #FFF;
 }
 .char .battler {
-	display: inline-block;
-	vertical-align: top;
-	width: inherit;
-	min-height: 220px;
-}
-.char .battler img {
-
+	margin-left: 10px;
+	float: right;
 }
 .char .sprite {
+	display: inline-block;
+	width: 32px;
+	height: 48px;
+	margin-top: 10px;
+}
+.char#muzet .sprite {
+	height: 32px;
+}
+.char#neclord .sprite, .char#bleu .sprite {
+	width: 48px;
+}
+.char#elle .sprite {
+	width: 64px;
+	height: 64px;
+}
+.char#bazba .sprite {
+	width: 48px;
+	height: 64px;
+}
 
+.animaBottom {
+	animation: playBottom .9s steps(4) infinite;
+	-webkit-animation: playBottom .9s steps(4) infinite;
+	-moz-animation: playBottom .9s steps(4) infinite;
+	-ms-animation: playBottom .9s steps(4) infinite;
+	-o-animation: playBottom .9s steps(4) infinite;
+}
+.animaLeft {
+	animation: playLeft .9s steps(4) infinite;
+	-webkit-animation: playLeft .9s steps(4) infinite;
+	-moz-animation: playLeft .9s steps(4) infinite;
+	-ms-animation: playLeft .9s steps(4) infinite;
+	-o-animation: playLeft .9s steps(4) infinite;
+}
+.animaRight {
+	animation: playRight .9s steps(4) infinite;
+	-webkit-animation: playRight .9s steps(4) infinite;
+	-moz-animation: playRight .9s steps(4) infinite;
+	-ms-animation: playRight .9s steps(4) infinite;
+	-o-animation: playRight .9s steps(4) infinite;
+}
+.animaTop {
+	animation: playTop .9s steps(4) infinite;
+	-webkit-animation: playTop .9s steps(4) infinite;
+	-moz-animation: playTop .9s steps(4) infinite;
+	-ms-animation: playTop .9s steps(4) infinite;
+	-o-animation: playTop .9s steps(4) infinite;
+}
+.paused{
+  -webkit-animation-play-state:paused;
+  -moz-animation-play-state:paused;
+  -o-animation-play-state:paused; 
+  animation-play-state:paused;
+}
+.running{
+  -webkit-animation-play-state:running;
+  -moz-animation-play-state:running;
+  -o-animation-play-state:running; 
+  animation-play-state:running;
+}
+
+@keyframes playBottom {
+	from { background-position: 0 0; }
+	to { background-position: -128px 0; }
+}
+@-webkit-keyframes playBottom {
+	from { background-position: 0 0; }
+	to { background-position: -128px 0; }
+}
+@-moz-keyframes playBottom {
+	from { background-position: 0 0; }
+	to { background-position: -128px 0; }
+}
+
+@keyframes playLeft {
+	from { background-position: 0 -48px; }
+	to { background-position: -128px -48px; }
+}
+@-webkit-keyframes playLeft {
+	from { background-position: 0 -48px; }
+	to { background-position: -128px -48px; }
+}
+@-moz-keyframes playLeft {
+	from { background-position: 0 -48px; }
+	to { background-position: -128px -48px; }
+}
+
+@keyframes playRight {
+	from { background-position: 0 -96px; }
+	to { background-position: -128px -96px; }
+}
+@-webkit-keyframes playRight {
+	from { background-position: 0 -96px; }
+	to { background-position: -128px -96px; }
+}
+@-moz-keyframes playRight {
+	from { background-position: 0 -96px; }
+	to { background-position: -128px -96px; }
+}
+
+@keyframes playTop {
+	from { background-position: 0 -144px; }
+	to { background-position: -128px -192px; }
+}
+@-webkit-keyframes playTop {
+	from { background-position: 0 -144px; }
+	to { background-position: -128px -144px; }
+}
+@-moz-keyframes playTop {
+	from { background-position: 0 -144px; }
+	to { background-position: -128px -144px; }
+}
+
+.choose-button {
+	background: #919267;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-family: "robotoregular";
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+.choose-button:hover {
+	background: #edc152;
 }

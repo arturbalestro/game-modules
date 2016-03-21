@@ -23,50 +23,154 @@
 			this.sprite = "";
 		};
 
+		/*Name Homages:
+		Suikoden 1 - Odessa (Samurai)
+		Suikoden 2 - Neclord (Vampire)
+		Suikoden 3 - Bazba (Lizard)
+		Suikoden 4 - Ameria (Female Warrior)
+		Suikoden 5 - Ferid (Male Thief)
+		Wild Arms 1 - Zed (Male Knight) 
+		Wild Arms 2 - Lilka (Female Cleric)
+		Wild Arms 3 - Virginia (Fortune Teller)
+		Wild Arms 4 - Gawn (Gunner)
+		Wild Arms 5 - Fereydoon (Lancer)
+		Tales of Phantasia - Arche (Archer)
+		Tales of Destiny - Philia (Nun)
+		Tales of Eternia - Hyades (Demon)
+		Tales of the Abyss - Anise (Female Monk)
+		Tales of Symphonia - Genis (Male Monk) 
+		Tales of Legendia - Senel (Male Cleric)
+		Tales of Xillia - Muzet (Fairy)
+		Breath of Fire 1 - Bleu (Lamia)
+		Breath of Fire 4 - Ershin (Witch)
+		Fire Emblem - Duessel (Male Warrior)
+		Legend of Mana - Elle (Harpy)
+		Star Ocean 3 - Albel (King)
+		Chrono Trigger - Magus (Male Mage)
+		Chrono Cross - Steena (Queen)
+		Persona 3 - Koromaru (Wolf)
+		Persona 4 - Dojima (Alchemist)
+		.hack - Mistral (Angel)
+		.hack G.U. - Alkaid (Female Thief)
+		Ar Tonelico - Mir (Female Mage)
+		Ar Tonelico 2 - 
+		Two more games
+		*/
+
 		var roster = [];
 
 		var ferid = new character();
 		ferid.name = "Ferid";
 		ferid.id = "ferid";
-		ferid.gender = "Male";
+		ferid.gender = "M";
 		ferid.class = "Thief";
 		ferid.race = "Human";
 		ferid.aspect = "Mistrust";
 		ferid.weapon = "Twin Daggers";
 		ferid.ability = "Stealth Attack";
-		ferid.face = "chars/faces/t1.png";
-		ferid.battler = "chars/battlers/016-Thief01.png";
-		ferid.sprite = "chars/sprites/016-Thief01.png";
+		ferid.face = "chars/faces/malethief.jpg";
+		ferid.battler = "chars/battlers/malethief.png";
+		ferid.sprite = "chars/sprites/malethief.png";
 
 		var lilka = new character();
 		lilka.name = "Lilka";
 		lilka.id = "lilka";
-		lilka.gender = "Female";
+		lilka.gender = "F";
 		lilka.class = "Cleric";
 		lilka.race = "Elf";
 		lilka.aspect = "Hyperactivity";
 		lilka.weapon = "Tri-Chain Staff";
 		lilka.ability = "Healing Beam";
-		lilka.face = "chars/faces/c6l.jpg";
-		lilka.battler = "chars/battlers/030-Cleric06.png";
-		lilka.sprite = "chars/sprites/030-Cleric06.png";
+		lilka.face = "chars/faces/femalecleric.jpg";
+		lilka.battler = "chars/battlers/femalecleric.png";
+		lilka.sprite = "chars/sprites/femalecleric.png";
 
 		var duessel = new character();
 		duessel.name = "Duessel";
 		duessel.id = "duessel";
-		duessel.gender = "Male";
+		duessel.gender = "M";
 		duessel.class = "Warrior";
 		duessel.race = "Elf";
 		duessel.aspect = "Hate";
 		duessel.weapon = "Battleaxe";
 		duessel.ability = "Vicious Cut";
-		duessel.face = "chars/faces/w2.jpg";
-		duessel.battler = "chars/battlers/014-Warrior02.png";
-		duessel.sprite = "chars/sprites/014-Warrior02.png";
+		duessel.face = "chars/faces/malewarrior.jpg";
+		duessel.battler = "chars/battlers/malewarrior.png";
+		duessel.sprite = "chars/sprites/malewarrior.png";
+
+		var muzet = new character();
+		muzet.name = "Muzet";
+		muzet.id = "muzet";
+		muzet.gender = "F";
+		muzet.class = "Shapeshifter";
+		muzet.race = "Fairy";
+		muzet.aspect = "Desperation";
+		muzet.weapon = "Magic Powder";
+		muzet.ability = "Makeover";
+		muzet.face = "chars/faces/fairy.jpg";
+		muzet.battler = "chars/battlers/fairy.png";
+		muzet.sprite = "chars/sprites/fairy.png";
+
+		var neclord = new character();
+		neclord.name = "Neclord";
+		neclord.id = "neclord";
+		neclord.gender = "M";
+		neclord.class = "Drainer";
+		neclord.race = "Vampire";
+		neclord.aspect = "Mischief";
+		neclord.weapon = "Draining Gloves";
+		neclord.ability = "Bloodsuck";
+		neclord.face = "chars/faces/vampire.jpg";
+		neclord.battler = "chars/battlers/vampire.png";
+		neclord.sprite = "chars/sprites/vampire.png";
+
+		var elle = new character();
+		elle.name = "Elle";
+		elle.id = "elle";
+		elle.gender = "F";
+		elle.class = "Bard";
+		elle.race = "Harpy";
+		elle.aspect = "Arrogance";
+		elle.weapon = "Metal Claws";
+		elle.ability = "Sonic Strike";
+		elle.face = "chars/faces/harpy.jpg";
+		elle.battler = "chars/battlers/harpy.png";
+		elle.sprite = "chars/sprites/harpy.png";
+
+		var bazba = new character();
+		bazba.name = "Bazba";
+		bazba.id = "bazba";
+		bazba.gender = "M";
+		bazba.class = "Warrior";
+		bazba.race = "Lizard";
+		bazba.aspect = "Anger";
+		bazba.weapon = "Pickaxe";
+		bazba.ability = "Dirt Pick";
+		bazba.face = "chars/faces/lizard.jpg";
+		bazba.battler = "chars/battlers/lizard.png";
+		bazba.sprite = "chars/sprites/lizard.png";
+
+		var bleu = new character();
+		bleu.name = "Bleu";
+		bleu.id = "bleu";
+		bleu.gender = "F";
+		bleu.class = "Drainer";
+		bleu.race = "Lamia";
+		bleu.aspect = "Mischief";
+		bleu.weapon = "Hair Whip";
+		bleu.ability = "Poison Bite";
+		bleu.face = "chars/faces/lamia.jpg";
+		bleu.battler = "chars/battlers/lamia.png";
+		bleu.sprite = "chars/sprites/lamia.png";
 
 		roster.push(ferid);
 		roster.push(lilka);
 		roster.push(duessel);
+		roster.push(muzet);
+		roster.push(neclord);
+		roster.push(elle);
+		roster.push(bazba);
+		roster.push(bleu);
 
 		for(var i = 0; i < roster.length; i++) {
 			jQuery(".charlist").append('<div class="char" id="'+roster[i].id+'"></div>');			
@@ -76,9 +180,10 @@
 			var currentChar = jQuery(this);
 			currentChar
 				.append('<div class="face"><img src="'+roster[i].face+'" /></div>')
-				.append('<div class="info"></div>')
 				.append('<div class="battler"><img src="'+roster[i].battler+'" /></div>')
-				.append('<div class="sprite"><img src="'+roster[i].sprite+'" /></div>')
+				.append('<div class="info"></div>')
+				.append('<div class="sprite"></div>')
+				.append('<div class="choose-button">Choose</div>')
 
 				.children(".info")
 					.append('<div class="name">'+roster[i].name+'</div>')
@@ -87,7 +192,11 @@
 					.append('<div class="race">Race: <span>'+roster[i].race+'</span></div>')
 					.append('<div class="aspect">Aspect: <span>'+roster[i].aspect+'</span></div>')
 					.append('<div class="weapon">Weapon: <span>'+roster[i].weapon+'</span></div>')
-					.append('<div class="ability">Ability: <span>'+roster[i].ability+'</span></div>');
+					.append('<div class="ability">Ability: <span>'+roster[i].ability+'</span></div>')
+
+				.siblings(".sprite")
+					.css("background", "url("+roster[i].sprite+")")
+					.addClass("animaBottom");
 		});
 
 	</script>
