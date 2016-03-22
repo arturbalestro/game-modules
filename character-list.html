@@ -149,11 +149,53 @@
 		helga.weapon = "Halberd";
 		helga.ability = "Stealth Attack";
 
+		var hyades = new character("hyades", "Sorcerer", "Demon", "demon");
+		hyades.gender = "M";
+		hyades.aspect = "Hate";
+		hyades.weapon = "Halberd";
+		hyades.ability = "Stealth Attack";
+
+		var koromaru = new character("koromaru", "Warrior", "Wolf", "wolf");
+		koromaru.gender = "M";
+		koromaru.aspect = "Hate";
+		koromaru.weapon = "Halberd";
+		koromaru.ability = "Stealth Attack";
+
+		var leglius = new character("leglius", "Ninja", "Orc", "ninja");
+		leglius.gender = "M";
+		leglius.aspect = "Hate";
+		leglius.weapon = "Halberd";
+		leglius.ability = "Stealth Attack";
+
+		var lilika = new character("lilika", "Knight", "Human", "femaleknight");
+		lilika.gender = "F";
+		lilika.aspect = "Hate";
+		lilika.weapon = "Halberd";
+		lilika.ability = "Stealth Attack";
+
+		var magus = new character("magus", "Mage", "Elf", "malemage");
+		magus.gender = "M";
+		magus.aspect = "Hate";
+		magus.weapon = "Halberd";
+		magus.ability = "Stealth Attack";
+
 		var marivel = new character("marivel", "Cleric", "Elf", "femalecleric");
 		marivel.gender = "F";
 		marivel.aspect = "Hyperactivity";
 		marivel.weapon = "Tri-Chain Staff";
 		marivel.ability = "Healing Beam";
+
+		var mir = new character("mir", "Mage", "Human", "femalemage");
+		mir.gender = "F";
+		mir.aspect = "Hyperactivity";
+		mir.weapon = "Tri-Chain Staff";
+		mir.ability = "Healing Beam";
+
+		var mistral = new character("mistral", "Cleric", "Angel", "angel");
+		mistral.gender = "F";
+		mistral.aspect = "Hyperactivity";
+		mistral.weapon = "Tri-Chain Staff";
+		mistral.ability = "Healing Beam";
 
 		var muzet = new character("muzet", "Shapeshifter", "Fairy", "fairy");
 		muzet.gender = "F";
@@ -167,7 +209,49 @@
 		neclord.weapon = "Draining Gloves";
 		neclord.ability = "Bloodsuck";
 
-		roster.push(albel, alkaid, anise, arche, bazba, bleu, dojima, duessel, elle, ershin, fereydoon, ferid, gawn, genis, helga, marivel, muzet, neclord);
+		var odessa = new character("odessa", "Ninja", "Human", "samurai");
+		odessa.gender = "F";
+		odessa.aspect = "Desperation";
+		odessa.weapon = "Magic Powder";
+		odessa.ability = "Makeover";
+
+		var philia = new character("philia", "Cleric", "Human", "nun");
+		philia.gender = "F";
+		philia.aspect = "Desperation";
+		philia.weapon = "Magic Powder";
+		philia.ability = "Makeover";
+
+		var senel = new character("senel", "Cleric", "Human", "malecleric");
+		senel.gender = "M";
+		senel.aspect = "Mischief";
+		senel.weapon = "Draining Gloves";
+		senel.ability = "Bloodsuck";
+
+		var steena = new character("steena", "Sorceress", "Human", "queen");
+		steena.gender = "F";
+		steena.aspect = "Desperation";
+		steena.weapon = "Magic Powder";
+		steena.ability = "Makeover";
+
+		/*var ulf = new character("senel", "Cleric", "Human", "malecleric");
+		senel.gender = "M";
+		senel.aspect = "Mischief";
+		senel.weapon = "Draining Gloves";
+		senel.ability = "Bloodsuck";
+
+		var virginia = new character("steena", "Sorceress", "Human", "queen");
+		steena.gender = "F";
+		steena.aspect = "Desperation";
+		steena.weapon = "Magic Powder";
+		steena.ability = "Makeover";
+
+		var zed = new character("senel", "Cleric", "Human", "malecleric");
+		senel.gender = "M";
+		senel.aspect = "Mischief";
+		senel.weapon = "Draining Gloves";
+		senel.ability = "Bloodsuck";*/
+
+		roster.push(albel, alkaid, anise, arche, bazba, bleu, dojima, duessel, elle, ershin, fereydoon, ferid, gawn, genis, helga, hyades, koromaru, leglius, lilika, magus, marivel, mir, mistral, muzet, neclord, odessa, philia, senel, steena);
 
 		for(var i = 0; i < roster.length; i++) {
 			jQuery(".charlist").append('<div class="char" id="'+roster[i].name+'"></div>');			
