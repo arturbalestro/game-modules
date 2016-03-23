@@ -191,7 +191,7 @@
 		mir.weapon = "Tri-Chain Staff";
 		mir.ability = "Healing Beam";
 
-		var mistral = new character("mistral", "Cleric", "Angel", "angel");
+		var mistral = new character("mistral", "Bard", "Angel", "angel");
 		mistral.gender = "F";
 		mistral.aspect = "Hyperactivity";
 		mistral.weapon = "Tri-Chain Staff";
@@ -233,25 +233,25 @@
 		steena.weapon = "Magic Powder";
 		steena.ability = "Makeover";
 
-		/*var ulf = new character("senel", "Cleric", "Human", "malecleric");
-		senel.gender = "M";
-		senel.aspect = "Mischief";
-		senel.weapon = "Draining Gloves";
-		senel.ability = "Bloodsuck";
+		var ulf = new character("ulf", "Drainer", "Imp", "imp");
+		ulf.gender = "M";
+		ulf.aspect = "Mischief";
+		ulf.weapon = "Draining Gloves";
+		ulf.ability = "Bloodsuck";
 
-		var virginia = new character("steena", "Sorceress", "Human", "queen");
-		steena.gender = "F";
-		steena.aspect = "Desperation";
-		steena.weapon = "Magic Powder";
-		steena.ability = "Makeover";
+		var virginia = new character("virginia", "Sorceress", "Human", "fortuneteller");
+		virginia.gender = "F";
+		virginia.aspect = "Desperation";
+		virginia.weapon = "Magic Powder";
+		virginia.ability = "Makeover";
 
-		var zed = new character("senel", "Cleric", "Human", "malecleric");
-		senel.gender = "M";
-		senel.aspect = "Mischief";
-		senel.weapon = "Draining Gloves";
-		senel.ability = "Bloodsuck";*/
+		var zed = new character("zed", "Knight", "Human", "maleknight");
+		zed.gender = "M";
+		zed.aspect = "Mischief";
+		zed.weapon = "Draining Gloves";
+		zed.ability = "Bloodsuck";
 
-		roster.push(albel, alkaid, anise, arche, bazba, bleu, dojima, duessel, elle, ershin, fereydoon, ferid, gawn, genis, helga, hyades, koromaru, leglius, lilika, magus, marivel, mir, mistral, muzet, neclord, odessa, philia, senel, steena);
+		roster.push(albel, alkaid, anise, arche, bazba, bleu, dojima, duessel, elle, ershin, fereydoon, ferid, gawn, genis, helga, hyades, koromaru, leglius, lilika, magus, marivel, mir, mistral, muzet, neclord, odessa, philia, senel, steena, ulf, virginia, zed);
 
 		for(var i = 0; i < roster.length; i++) {
 			jQuery(".charlist").append('<div class="char" id="'+roster[i].name+'"></div>');			
@@ -278,6 +278,26 @@
 				.siblings(".sprite")
 					.css("background", "url("+roster[i].sprite+")")
 					.addClass("animaBottom");
+
+			jQuery("#muzet")
+				.children(".sprite")
+				.removeClass("animaBottom")
+				.addClass("animaBottomSmall");
+
+			jQuery("#bleu, #neclord")
+				.children(".sprite")
+				.removeClass("animaBottom")
+				.addClass("animaBottomMedium");
+
+			jQuery("#bazba")
+				.children(".sprite")
+				.removeClass("animaBottom")
+				.addClass("animaBottomBig");
+
+			jQuery("#elle, #hyades, #mistral")
+				.children(".sprite")
+				.removeClass("animaBottom")
+				.addClass("animaBottomLarge");
 		});
 
 	</script>
