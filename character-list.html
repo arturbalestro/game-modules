@@ -300,6 +300,11 @@
 				.addClass("animaBottomLarge");
 		});
 
+		jQuery(".choose-button").click(function() {
+			var chosenChar = jQuery(this).parent(".char").attr("id");
+			console.log(chosenChar);
+		});
+
 	</script>
 </body>
 </html>
