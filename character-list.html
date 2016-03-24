@@ -254,7 +254,8 @@
 		roster.push(albel, alkaid, anise, arche, bazba, bleu, dojima, duessel, elle, ershin, fereydoon, ferid, gawn, genis, helga, hyades, koromaru, leglius, lilika, magus, marivel, mir, mistral, muzet, neclord, odessa, philia, senel, steena, ulf, virginia, zed);
 
 		for(var i = 0; i < roster.length; i++) {
-			jQuery(".charlist").append('<div class="char" id="'+roster[i].name+'"></div>');			
+			roster[i].id = i;
+			jQuery(".charlist").append('<div class="char" id="'+roster[i].name+'" title="'+roster[i].id+'"></div>');			
 		}
 
 		jQuery(".char").each(function(i) {
@@ -301,8 +302,8 @@
 		});
 
 		jQuery(".choose-button").click(function() {
-			var chosenChar = jQuery(this).parent(".char").attr("id");
-			console.log(chosenChar);
+			var chosenChar = jQuery(this).parent(".char").attr("title");
+			console.log(roster[chosenChar]);
 		});
 
 	</script>

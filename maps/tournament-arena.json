@@ -45,11 +45,11 @@
         {
          "columns":16,
          "firstgid":1,
-         "image":"I:\/AB Files\/Projetos\/Apps e Jogos\/hellophaser\/img\/tilesets\/Tile_DBZ_TournamentArena_by_Benjiro.png",
+         "image":"Tile_DBZ_TournamentArena_by_Benjiro.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
-         "name":"Tile_DBZ_TournamentArena_by_Benjiro",
+         "name":"tournament-arena",
          "properties":
             {
 
