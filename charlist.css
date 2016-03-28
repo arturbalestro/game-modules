@@ -282,6 +282,7 @@ body {
 
 .choose-button {
 	background: #919267;
+	border: none;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
