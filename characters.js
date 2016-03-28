@@ -9,6 +9,8 @@ function character(name, job, race, imagemodel) {
 	this.face = "chars/faces/"+imagemodel+".jpg";
 	this.battler = "chars/battlers/"+imagemodel+".png";
 	this.sprite = "chars/sprites/"+imagemodel+".png";
+	this.spw = 32;
+	this.sph = 48;
 };
 
 /*Name Homages:
@@ -77,12 +79,15 @@ bazba.gender = "M";
 bazba.aspect = "Anger";
 bazba.weapon = "Pickaxe";
 bazba.ability = "Dirt Pick";
+bazba.spw = 48;
+bazba.sph = 64;
 
 var bleu = new character("bleu", "Drainer", "Lamia", "lamia");
 bleu.gender = "F";
 bleu.aspect = "Mischief";
 bleu.weapon = "Hair Whip";
 bleu.ability = "Poison Bite";
+bleu.spw = 48;
 
 var dojima = new character("dojima", "Alchemist", "Human", "alchemist");
 dojima.gender = "M";
@@ -101,6 +106,8 @@ elle.gender = "F";
 elle.aspect = "Arrogance";
 elle.weapon = "Metal Claws";
 elle.ability = "Sonic Strike";
+elle.spw = 64;
+elle.sph = 64;
 
 var ershin = new character("ershin", "Sorceress", "Human", "witch");
 ershin.gender = "F";
@@ -143,6 +150,8 @@ hyades.gender = "M";
 hyades.aspect = "Hate";
 hyades.weapon = "Halberd";
 hyades.ability = "Stealth Attack";
+hyades.spw = 64;
+hyades.sph = 64;
 
 var koromaru = new character("koromaru", "Warrior", "Wolf", "wolf");
 koromaru.gender = "M";
@@ -185,18 +194,22 @@ mistral.gender = "F";
 mistral.aspect = "Hyperactivity";
 mistral.weapon = "Tri-Chain Staff";
 mistral.ability = "Healing Beam";
+mistral.spw = 64;
+mistral.sph = 64;
 
 var muzet = new character("muzet", "Shapeshifter", "Fairy", "fairy");
 muzet.gender = "F";
 muzet.aspect = "Desperation";
 muzet.weapon = "Magic Powder";
 muzet.ability = "Makeover";
+muzet.sph = 32;
 
 var neclord = new character("neclord", "Drainer", "Vampire", "vampire");
 neclord.gender = "M";
 neclord.aspect = "Mischief";
 neclord.weapon = "Draining Gloves";
 neclord.ability = "Bloodsuck";
+neclord.spw = 48;
 
 var odessa = new character("odessa", "Ninja", "Human", "samurai");
 odessa.gender = "F";

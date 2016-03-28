@@ -202,7 +202,7 @@
     }
 	}
 
-	function drawFighter(image, x, y) {
+	function drawCharacters(image, x, y) {
 		image.onload = function() {
 	    for (var r = 0; r < rowTileCount; r++) {
 		    for (var c = 0; c < colTileCount; c++) {
@@ -210,22 +210,7 @@
 		    		var tile = layer2[ r ][ c ];
 			      var imgRow = (tile / imageNumTiles) | 0;
 			      var imgCol = (tile % imageNumTiles) | 0;
-						ctx.drawImage(image, (imgCol * 48), (imgRow * tileSize), tileSize, 48, (c * tileSize), (r * tileSize), tileSize, 48);	
-		    	}
-		    }	
-		  }   	
-		}		
-	}
-
-	function drawSpectators(image, x, y) {
-		image.onload = function() {
-	    for (var r = 0; r < rowTileCount; r++) {
-		    for (var c = 0; c < colTileCount; c++) {
-		    	if(r == y && c == x) {
-		    		var tile = layer2[ r ][ c ];
-			      var imgRow = (tile / imageNumTiles) | 0;
-			      var imgCol = (tile % imageNumTiles) | 0;
-						ctx.drawImage(image, (imgCol * 48), (imgRow * tileSize), tileSize, 48, (c * tileSize), (r * tileSize), tileSize, 48);	
+						ctx.drawImage(image, (imgCol * image.height), (imgRow * image.width), image.width, image.height, (c * tileSize), (r * tileSize), image.width, image.height);	
 		    	}
 		    }	
 		  }   	
@@ -235,19 +220,17 @@
 	var chosenChar = getParameter("chosenChar");
 	var chosenCharImage = new Image();
 	chosenCharImage.src = roster[chosenChar].sprite;
-	chosenCharImage.width = 32;
-	chosenCharImage.height = 48;
-
-	var chosenChallengerImage = new Image();
-	chosenChallengerImage.width = 32;
-	chosenChallengerImage.height = 48;
-
-	drawFighter(chosenCharImage, 18, 15);
+	chosenCharImage.width = roster[chosenChar].spw;
+	chosenCharImage.height = roster[chosenChar].sph;
+	drawCharacters(chosenCharImage, 18, 15);
 
 	var rand = roster[Math.floor(Math.random()*roster.length)];
 	if(rand.id != chosenChar) {
+		var chosenChallengerImage = new Image();
 		chosenChallengerImage.src = rand.sprite;
-		drawFighter(chosenChallengerImage, 21, 15);			
+		chosenChallengerImage.width = rand.spw;
+		chosenChallengerImage.height = rand.sph;
+		drawCharacters(chosenChallengerImage, 21, 15);			
 	}
 
 	var x = 5;
@@ -255,9 +238,9 @@
 		if(roster[i].id != rand.id && roster[i].id != chosenChar) {
 			var spectatorImage = new Image();
 			spectatorImage.src = roster[i].sprite;
-			spectatorImage.width = 32;
-			spectatorImage.height = 48;
-			drawSpectators(spectatorImage, x, 5);
+			spectatorImage.width = roster[i].spw;
+			spectatorImage.height = roster[i].sph;
+			drawCharacters(spectatorImage, x, 5);
 			x++;
 		}
 	}
