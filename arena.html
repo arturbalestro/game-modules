@@ -210,7 +210,7 @@
 		    		var tile = layer2[ r ][ c ];
 			      var imgRow = (tile / imageNumTiles) | 0;
 			      var imgCol = (tile % imageNumTiles) | 0;
-						ctx.drawImage(image, (imgCol * image.height), (imgRow * image.width), image.width, image.height, (c * tileSize), (r * tileSize), image.width, image.height);	
+						ctx.drawImage(image, (imgCol * image.height), (imgRow * image.width), image.width, image.height, ((c * tileSize) - image.alt), ((r * tileSize) - image.name), image.width, image.height);	
 		    	}
 		    }	
 		  }   	
@@ -240,6 +240,8 @@
 			spectatorImage.src = roster[i].sprite;
 			spectatorImage.width = roster[i].spw;
 			spectatorImage.height = roster[i].sph;
+			spectatorImage.alt = roster[i].distx;
+			spectatorImage.name = roster[i].disty;
 			drawCharacters(spectatorImage, x, 5);
 			x++;
 		}
