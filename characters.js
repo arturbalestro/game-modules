@@ -9,10 +9,32 @@ function character(name, job, race, imagemodel) {
 	this.face = "chars/faces/"+imagemodel+".jpg";
 	this.battler = "chars/battlers/"+imagemodel+".png";
 	this.sprite = "chars/sprites/"+imagemodel+".png";
-	this.spw = 32;
-	this.sph = 48;
+	this.spw = 32; //The initial width of the sprite.
+	this.sph = 48;	//The initial height of the sprite.
 	this.distx = 0; //Additional distance modifier. Helps positioning larger sprite images.
 	this.disty = 0;
+	this.x = 0;
+  this.y = 130;
+  this.sx = 0;
+  this.sy = 96;
+  this.faceRight = false;
+  this.faceLeft = false;
+  this.faceUp = false;
+  this.faceDown = false;
+  this.counter = 0;
+  this.step = 15;
+  this.nextStep = 0;
+  this.endStep = 60;
+  this.start = {
+    rightX: 0,
+    leftX: 0,
+    upX: 0,
+    downX: 0,
+    rightY: 96,
+    leftY: 48,
+    upY: 144,
+    downY: 0
+  }
 };
 
 /*Name Homages:
@@ -85,6 +107,9 @@ bazba.spw = 48;
 bazba.sph = 64;
 bazba.distx = 8;
 bazba.disty = 14;
+bazba.start.leftY = 64;
+bazba.start.rightY = 128;
+bazba.start.upY = 192;
 
 var bleu = new character("bleu", "Drainer", "Lamia", "lamia");
 bleu.gender = "F";
@@ -115,6 +140,9 @@ elle.spw = 64;
 elle.sph = 64;
 elle.distx = 16;
 elle.disty = 10;
+elle.start.leftY = 64;
+elle.start.rightY = 128;
+elle.start.upY = 192;
 
 var ershin = new character("ershin", "Sorceress", "Human", "witch");
 ershin.gender = "F";
@@ -161,6 +189,9 @@ hyades.spw = 64;
 hyades.sph = 64;
 hyades.distx = 16;
 hyades.disty = 14;
+hyades.start.leftY = 64;
+hyades.start.rightY = 128;
+hyades.start.upY = 192;
 
 var koromaru = new character("koromaru", "Warrior", "Wolf", "wolf");
 koromaru.gender = "M";
@@ -207,6 +238,9 @@ mistral.spw = 64;
 mistral.sph = 64;
 mistral.distx = 16;
 mistral.disty = 14;
+mistral.start.leftY = 64;
+mistral.start.rightY = 128;
+mistral.start.upY = 192;
 
 var muzet = new character("muzet", "Shapeshifter", "Fairy", "fairy");
 muzet.gender = "F";
@@ -214,6 +248,9 @@ muzet.aspect = "Desperation";
 muzet.weapon = "Magic Powder";
 muzet.ability = "Makeover";
 muzet.sph = 32;
+muzet.start.leftY = 32;
+muzet.start.rightY = 64;
+muzet.start.upY = 96;
 
 var neclord = new character("neclord", "Drainer", "Vampire", "vampire");
 neclord.gender = "M";
