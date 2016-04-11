@@ -198,6 +198,20 @@ image2.width = 100;
 image2.height = 100;
 ctx2.drawImage(image2, 0, 0, image2.width, image2.height, 730, 10, image2.width, image2.height);
 
+var result1 = Math.floor((Math.random()*6) + 1);
+var result2 = Math.floor((Math.random()*6) + 1);
+console.log(result1+" x "+result2);
+
+if(result1 > result2) {
+	console.log(roster[chosenChar].name+" is the winner!");
+}else{
+	if(result1 == result2) {
+		console.log("It's a draw!");
+	}else{
+		console.log(rand.name+" is the winner!");
+	}
+}
+
 var x = 0;
 var y = 1;
 var aux = 0;
