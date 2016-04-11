@@ -184,6 +184,20 @@ if(rand.id != chosenChar) {
 window.addEventListener('keydown', keyDown, false);
 window.addEventListener('keyup', keyUp, false);
 
+var image = new Image();
+image.src = roster[chosenChar].face;
+image.alt = roster[chosenChar].name;
+image.width = 100;
+image.height = 100;
+ctx2.drawImage(image, 0, 0, image.width, image.height, 420, 10, image.width, image.height);
+
+var image2 = new Image();
+image2.src = rand.face;
+image2.alt = rand.name;
+image2.width = 100;
+image2.height = 100;
+ctx2.drawImage(image2, 0, 0, image2.width, image2.height, 730, 10, image2.width, image2.height);
+
 var x = 0;
 var y = 1;
 var aux = 0;
