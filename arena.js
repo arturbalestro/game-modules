@@ -175,10 +175,18 @@ function drawCharacters(character, x, y, direction) {
 
 var chosenChar = getParameter("chosenChar");
 drawCharacters(roster[chosenChar], 18, 9, 'right');
+var chosenIndex = roster.indexOf(roster[chosenChar]);
+if (chosenIndex > -1) {
+  roster.splice(chosenIndex, 1);
+}
 
 var rand = roster[Math.floor(Math.random()*roster.length)];
 if(rand.id != chosenChar) {
-	drawCharacters(rand, 21, 9, 'left');			
+	drawCharacters(rand, 21, 9, 'left');
+	var chosenIndex = roster.indexOf(rand);
+	if (chosenIndex > -1) {
+	  roster.splice(chosenIndex, 1);
+	}			
 }
 
 window.addEventListener('keydown', keyDown, false);
@@ -259,3 +267,10 @@ for(var i = 15; i < roster.length; i++) {
 		}
 	}
 }
+
+function loop() {
+	setDirections(roster[chosenChar], 'right');
+	requestAnimFrame(loop);
+}
+
+loop();

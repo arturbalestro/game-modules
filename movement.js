@@ -6,6 +6,7 @@ key = {
 };
 
 function move(player, yPos, right, left, up, down) {
+  console.log("MOVING");
   player.faceRight = right;
   player.faceLeft = left;
   player.faceUp = up;
@@ -32,6 +33,7 @@ function reset(player) {
 
 function setDirections(player, direction) {
   if (key.right === true) {
+    console.log("MOVE");
     move(player.h * 2, true, false);
     player.x += 1;
     if (player.sx > player.w * 3) {
@@ -76,6 +78,7 @@ function setDirections(player, direction) {
 
 function keyDown(e) {
   if (e.keyCode === 39) {
+    console.log("TEST");
     key.right = true;
   } else if (e.keyCode === 37) {
       key.left = true;
