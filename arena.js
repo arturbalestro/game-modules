@@ -173,14 +173,105 @@ function drawCharacters(character, x, y, direction) {
 	}		
 }
 
+function drawSpectators() {
+	var x = 0;
+	var y = 1;
+	var aux = 0;
+	for(var i = 0; i <= 14; i++) {
+		aux++;
+		if(roster[i].id != rand.id && roster[i].id != chosenChar) {
+			drawCharacters(roster[i], x, y, 'right');
+			y += 2;
+
+			if(aux == 3) {
+				switch(x) {
+					case 0:
+						y = 2;
+					break;
+
+					case 1:
+						y = 3;
+					break;
+
+					case 2:
+						y = 4;
+					break;
+
+					case 3:
+						y = 5;
+					break;
+
+					case 4:
+						y = 6;
+					break;
+				}
+
+				x++;
+				aux = 0;
+			}
+		}
+	}
+
+	var a = 39;
+	var b = 1;
+	var aux2 = 0;
+	for(var i = 15; i < roster.length; i++) {
+		aux2++;
+		if(roster[i].id != rand.id && roster[i].id != chosenChar) {
+			drawCharacters(roster[i], a, b, 'left');
+			b += 2;
+
+			if(aux2 == 3) {
+				switch(a) {
+					case 39:
+						b = 2;
+					break;
+
+					case 38:
+						b = 3;
+					break;
+
+					case 37:
+						b = 4;
+					break;
+
+					case 36:
+						b = 5;
+					break;
+
+					case 35:
+						b = 6;
+					break;
+				}
+
+				a--;
+				aux2 = 0;
+			}
+		}
+	}
+}
+
 var chosenChar = getParameter("chosenChar");
 drawCharacters(roster[chosenChar], 18, 9, 'right');
 var chosenIndex = roster.indexOf(roster[chosenChar]);
+var image = new Image();
+image.src = roster[chosenChar].face;
+image.alt = roster[chosenChar].name;
+image.width = 100;
+image.height = 100;
+ctx2.drawImage(image, 0, 0, image.width, image.height, 420, 10, image.width, image.height);
+
 if (chosenIndex > -1) {
   roster.splice(chosenIndex, 1);
 }
 
 var rand = roster[Math.floor(Math.random()*roster.length)];
+var image2 = new Image();
+image2.src = rand.face;
+image2.alt = rand.name;
+image2.width = 100;
+image2.height = 100;
+ctx2.drawImage(image2, 0, 0, image2.width, image2.height, 730, 10, image2.width, image2.height);
 if(rand.id != chosenChar) {
 	drawCharacters(rand, 21, 9, 'left');
 	var chosenIndex = roster.indexOf(rand);
@@ -191,20 +282,6 @@ if(rand.id != chosenChar) {
 
 window.addEventListener('keydown', keyDown, false);
 window.addEventListener('keyup', keyUp, false);
-
-var image = new Image();
-image.src = roster[chosenChar].face;
-image.alt = roster[chosenChar].name;
-image.width = 100;
-image.height = 100;
-ctx2.drawImage(image, 0, 0, image.width, image.height, 420, 10, image.width, image.height);
-
-var image2 = new Image();
-image2.src = rand.face;
-image2.alt = rand.name;
-image2.width = 100;
-image2.height = 100;
-ctx2.drawImage(image2, 0, 0, image2.width, image2.height, 730, 10, image2.width, image2.height);
 
 var result1 = Math.floor((Math.random()*6) + 1);
 var result2 = Math.floor((Math.random()*6) + 1);
@@ -220,81 +297,7 @@ if(result1 > result2) {
 	}
 }
 
-var x = 0;
-var y = 1;
-var aux = 0;
-for(var i = 0; i <= 14; i++) {
-	aux++;
-	if(roster[i].id != rand.id && roster[i].id != chosenChar) {
-		drawCharacters(roster[i], x, y, 'right');
-		y += 2;
-
-		if(aux == 3) {
-			switch(x) {
-				case 0:
-					y = 2;
-				break;
-
-				case 1:
-					y = 3;
-				break;
-
-				case 2:
-					y = 4;
-				break;
-
-				case 3:
-					y = 5;
-				break;
-
-				case 4:
-					y = 6;
-				break;
-			}
-
-			x++;
-			aux = 0;
-		}
-	}
-}
-
-var a = 39;
-var b = 1;
-var aux2 = 0;
-for(var i = 15; i < roster.length; i++) {
-	aux2++;
-	if(roster[i].id != rand.id && roster[i].id != chosenChar) {
-		drawCharacters(roster[i], a, b, 'left');
-		b += 2;
-
-		if(aux2 == 3) {
-			switch(a) {
-				case 39:
-					b = 2;
-				break;
-
-				case 38:
-					b = 3;
-				break;
-
-				case 37:
-					b = 4;
-				break;
-
-				case 36:
-					b = 5;
-				break;
-
-				case 35:
-					b = 6;
-				break;
-			}
-
-			a--;
-			aux2 = 0;
-		}
-	}
-}
+drawSpectators();
 
 function loop() {
 	setDirections(roster[chosenChar], 'right');
