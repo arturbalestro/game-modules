@@ -173,6 +173,13 @@ function drawCharacters(character, x, y, direction) {
 	}		
 }
 
+function drawCharacterImage(character, posX, posY) {
+	var image = new Image();
+	image.src = character.face;
+	image.alt = character.name;
+	ctx2.drawImage(image, 0, 0, image.width, image.height, posX, posY, image.width, image.height);
+}
+
 function drawSpectators() {
 	var x = 0;
 	var y = 1;
@@ -253,25 +260,13 @@ function drawSpectators() {
 
 var chosenChar = getParameter("chosenChar");
 drawCharacters(roster[chosenChar], 18, 9, 'right');
+drawCharacterImage(roster[chosenChar], 420, 10);
 var chosenIndex = roster.indexOf(roster[chosenChar]);
-var image = new Image();
-image.src = roster[chosenChar].face;
-image.alt = roster[chosenChar].name;
-image.width = 100;
-image.height = 100;
-ctx2.drawImage(image, 0, 0, image.width, image.height, 420, 10, image.width, image.height);
-
 if (chosenIndex > -1) {
   roster.splice(chosenIndex, 1);
 }
 
 var rand = roster[Math.floor(Math.random()*roster.length)];
-var image2 = new Image();
-image2.src = rand.face;
-image2.alt = rand.name;
-image2.width = 100;
-image2.height = 100;
-ctx2.drawImage(image2, 0, 0, image2.width, image2.height, 730, 10, image2.width, image2.height);
 if(rand.id != chosenChar) {
 	drawCharacters(rand, 21, 9, 'left');
 	var chosenIndex = roster.indexOf(rand);
@@ -301,6 +296,9 @@ drawSpectators();
 
 function loop() {
 	setDirections(roster[chosenChar], 'right');
+
+	drawCharacterImage(rand, 730, 10);
+
 	requestAnimFrame(loop);
 }
 
