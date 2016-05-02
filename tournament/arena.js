@@ -148,6 +148,13 @@ function getParameter(name) {
   }
 }
 
+function removeFromArray(obj, array) {
+	var chosenIndex = array.indexOf(obj);
+	if (chosenIndex > -1) {
+	  array.splice(chosenIndex, 1);
+	}
+}
+
 function drawCharacters(character, x, y, direction) {
 	var image = new Image();
 	image.src = character.sprite;
@@ -177,6 +184,7 @@ function drawCharacterImage(character, posX, posY) {
 	var image = new Image();
 	image.src = character.face;
 	image.alt = character.name;
+
 	ctx2.drawImage(image, 0, 0, image.width, image.height, posX, posY, image.width, image.height);
 }
 
@@ -258,25 +266,24 @@ function drawSpectators() {
 	}
 }
 
+function clearCanvas(canvas, ctx) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function loop() {
+	drawCharacterImage(rand, 730, 10);
+	requestAnimFrame(loop);
+}
+
+clearCanvas(canvas2, ctx2);
 var chosenChar = getParameter("chosenChar");
 drawCharacters(roster[chosenChar], 18, 9, 'right');
 drawCharacterImage(roster[chosenChar], 420, 10);
-var chosenIndex = roster.indexOf(roster[chosenChar]);
-if (chosenIndex > -1) {
-  roster.splice(chosenIndex, 1);
-}
 
 var rand = roster[Math.floor(Math.random()*roster.length)];
 if(rand.id != chosenChar) {
-	drawCharacters(rand, 21, 9, 'left');
-	var chosenIndex = roster.indexOf(rand);
-	if (chosenIndex > -1) {
-	  roster.splice(chosenIndex, 1);
-	}			
+	drawCharacters(rand, 21, 9, 'left');		
 }
-
-window.addEventListener('keydown', keyDown, false);
-window.addEventListener('keyup', keyUp, false);
 
 var result1 = Math.floor((Math.random()*6) + 1);
 var result2 = Math.floor((Math.random()*6) + 1);
@@ -292,14 +299,12 @@ if(result1 > result2) {
 	}
 }
 
-drawSpectators();
-
-function loop() {
-	setDirections(roster[chosenChar], 'right');
-
-	drawCharacterImage(rand, 730, 10);
-
-	requestAnimFrame(loop);
-}
+window.addEventListener('keydown', keyDown, false);
+window.addEventListener('keyup', keyUp, false);
 
 loop();
+
+removeFromArray(roster[chosenChar], roster);
+removeFromArray(rand, roster);
+
+drawSpectators();

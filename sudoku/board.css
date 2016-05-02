@@ -1,0 +1,117 @@
+body {
+  position: relative;
+  text-align: center;
+}
+
+.board {
+  display: inline-block;
+  max-width: 220px;  
+}
+
+.tilegroup {
+  border: 1px solid #666;
+  display: inline-block;
+  max-width: 100px;
+}
+
+.tile {
+  background: #FFF;
+  border: 1px solid #666;
+  font-family: 'Arial';
+  padding: 2px 5px;
+}
+input[disabled] {
+  background: #DDD;
+  color: #000;
+  font-weight: bold;
+}
+
+.column {
+  display: inline-block;
+  font-size: 16px;
+  max-width: 10px;
+  min-height: 20px;
+}
+
+.clear {
+  clear: both;
+  margin-bottom: 10px;
+}
+
+.rules {
+  margin: 0 auto;
+  display: table;
+}
+.rules ul {
+  padding-left: 25px;
+  text-align: left;
+}
+.rules li {
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
+.correct {
+  color: blue;
+}
+.wrong {
+  color: red;
+}
+
+.overlay {
+  display: none;
+  content: "";
+  position: fixed;
+  background: #000;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 0;
+  opacity: 0.5;
+}
+.popup {
+  display: none;
+  background: #EDF0F3;
+  width: 60%;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 70%; 
+  left: 0; 
+  bottom: 0; 
+  right: 0;
+  z-index: 1;
+  padding: 10px;
+}
+.popup button {
+  border: none;
+  color: #FFF;
+  cursor: pointer;
+  margin-bottom: 18px;
+  padding: 5px;
+}
+.success {
+  border: 1px solid #1287C2;
+}
+.success button {
+  background: #1287C2;
+}
+.failure {
+  border: 1px solid #FF002A;
+}
+.failure button {
+  background: #FF002A;
+}
+
+input[type='number']::-webkit-inner-spin-button, 
+input[type='number']::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}

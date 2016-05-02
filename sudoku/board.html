@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <link rel="stylesheet" type="text/css" href="board.css" />
+</head>
+<body onload="playGame();">
+  <h2>Sudoku</h2>
+  <div class="board">
+  </div>
+  <div class="rules">
+    <h3>Rules: </h3>
+    <ul>
+      <li>Blanks must contain numbers from 1 to 9.</li>
+      <li>Numbers must not repeat in each line, column or separate block of 3 x 3.</li>
+    </ul>
+  </div>
+  <div class="overlay"></div>
+  <div class="popup success">
+    <p>Congratulations! You finished the puzzle!</p>
+    <button onclick="playGame();closePopup();">Play Again</button>
+  </div>
+  <div class="popup failure">
+    <p>You still have some wrong numbers to fix!</p>
+    <button onclick="closePopup();">Ok</button>
+  </div>
+  <!--
+  Upgrades for version 0.3+
+  - Autofocus on next empty field.
+  - Prevent user from typing non-valid numbers.
+  - Use cookies instead of hidden inputs to store the correct values.
+  - Empty the field when focusing on a wrong number.
+  - Add tabindex to the fields.
+  - Random board generator:
+    - Verify that repeated numbers aren't inserted in a row.
+    - Verify how many repeated numbers are present in the array.
+    - Verify which numbers are 0 and insert the eligible (remaining) numbers.
+    - Have a test with 9 separate arrays with random numbers from 1 to 9 that get joined into a new array.
+  - Difficulty selector.
+  * Show each number occurence and which numbers filled all the possible blanks (such as 'all 7s were used').
+  * Tooltip with all the number possibilities of each field.
+  + Better organize functions and interface.
+  
+  Caption:
+  - Required; * Optional; + Recurring;
+  -->
+  <script src="board.js" id="jsbin-source-javascript" type="text/javascript"></script></body>
+</html>
