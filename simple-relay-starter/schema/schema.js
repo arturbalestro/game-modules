@@ -70,6 +70,10 @@ var pokemonType = new GraphQL.GraphQLObjectType({
       type: GraphQL.GraphQLString,
       description: 'The type of the Pokémon',
     },
+    image: {
+      type: GraphQL.GraphQLString,
+      description: 'The image of the Pokémon',
+    },
     species: {
       type: GraphQL.GraphQLString,
       description: 'The species of the Pokémon',
@@ -133,6 +137,34 @@ var trainerType = new GraphQL.GraphQLObjectType({
   interfaces: [nodeDefinitions.nodeInterface],
 })
 
+var GraphQLRenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
+  name: 'RenameTrainer',
+  inputFields: {
+    id: { type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID) },
+    name: { type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString) },
+  },
+  outputFields: {
+    trainer: {
+      type: trainerType,
+      resolve: function (localTrainerId) { 
+        getTrainer(localTrainerId);
+      }
+    },
+  },
+  mutateAndGetPayload: function(id, name) {
+    var localTrainerId = GraphQLRelay.fromGlobalId(id).id;
+    RenameTrainer(localTrainerId, name);
+    return {localTrainerId};
+  }
+});
+
+var Mutation = new GraphQL.GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    renameTrainer: GraphQLRenameTrainerMutation
+  },
+});
+
 // Now we can bundle our types up and export a schema
 // GraphQL expects a set of top-level queries and optional mutations (we have
 // none in this simple example so we leave the mutation field out)
@@ -147,9 +179,10 @@ module.exports = new GraphQL.GraphQLSchema({
         type: trainerType,
         resolve: function() {
           // return db.getAnonymousUser()
-          return db.getTrainer(1)
+          return db.getTrainer(4)
         },
       },
     },
   }),
+  mutation: Mutation
 })

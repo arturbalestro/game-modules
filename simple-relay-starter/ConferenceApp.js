@@ -1,13 +1,14 @@
 /* eslint-env es6 */
 var React = require('react')
 var Relay = require('react-relay')
+import { Label, Button } from 'react-bootstrap';
 
 // ConferenceApp is our top-level component
 class ConferenceApp extends React.Component {
   render() {
     return (
       <div className="container">
-        <h2>{this.props.trainer.name} Pokémons</h2>
+        <h2>Pokémons of {this.props.trainer.name}</h2>
         {this.props.trainer.pokemons.edges.map(edge =>
           <Pokemon edge={edge} />
         )}
@@ -17,19 +18,27 @@ class ConferenceApp extends React.Component {
 }
 
 class Pokemon extends React.Component {
+
+  handleClick(e) {
+    console.log("click value: ", e);
+  }
+
   render() {
     // We get the conference edges passed in from the top-level container
     // The edges have data like name and id on them
-    var edge = this.props.edge
+    var edge = this.props.edge;
     return (
-      <div className="col-sm-4">
+      <div className="col-sm-3 col-lg-3">
         <div className="panel panel-default" key={edge.node.id}>
           <div className="panel-heading">
-            <h3>{edge.node.name}</h3>
+            <h5><b>{edge.node.name}</b></h5>
           </div>
-          <div className="panel-body">
-            {edge.node.pokemonType}
+          <div className="panel-body text-center">
+            <img src={edge.node.image} height="120" />
+            <br /><br />
+            <Label bsStyle="success">{edge.node.pokemonType}</Label>
           </div>
+          <Button onClick={this.handleClick()}>Choose Pokémon</Button>
         </div>
       </div>
     )
@@ -41,7 +50,7 @@ class Pokemon extends React.Component {
 exports.Container = Relay.createContainer(ConferenceApp, {
   // We initially want to get the first user's conferences
   initialVariables: {
-    trainerToShow: 1,
+    trainerToShow: 4,
   },
   fragments: {
     // Results from this query will be placed on this.props for access in
@@ -54,6 +63,7 @@ exports.Container = Relay.createContainer(ConferenceApp, {
             node {
               id,
               name,
+              image,
               pokemonType
             },
           },
