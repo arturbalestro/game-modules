@@ -1,0 +1,244 @@
+function start() { //Início da função Start
+	$("#inicio").hide();
+
+	$("#fundoGame").append("<div id='jogador'></div>");
+	/*$("#fundoGame").append("<div class='pokemon animaPokeRight' style='top: 100px;'></div>");
+	$("#fundoGame").append("<div class='pokemon animaPokeLeft' style='top: 150px;'></div>");
+	$("#fundoGame").append("<div class='pokemon animaPokeTop' style='top: 200px;'></div>");*/
+
+	//Principais variáveis do jogo
+	var jogo = {}
+	var velocidade = 5;
+	var posicaoY = parseInt(Math.random() * 334);
+	var fimdejogo = false;
+	var stopMoving = false;
+
+	var TECLA = {
+		W: 87,
+		S: 83,
+		A: 65,
+		D: 68,
+		E: 69
+	}
+
+	jogo.pressionou = [];
+
+	//Verifica se o jogador pressionou alguma tecla
+	$(document).keydown(function(e) {
+		jogo.pressionou[e.which] = true;
+	});
+
+	$(document).keyup(function(e) {
+		jogo.pressionou[e.which] = false;
+		//$("#jogador").css("animation-iteration-count","initial");
+		$("#jogador").removeClass("animaBottom");
+		$("#jogador").removeClass("animaLeft");
+		$("#jogador").removeClass("animaRight");
+		$("#jogador").removeClass("animaTop");
+	});
+
+	jogo.timer = setInterval(loop,300);
+
+	function getRandomObject(array) {
+		var rand = parseInt(Math.random() * array.length - 1);
+
+		for(var i = 0; i < array.length; i++) {
+			if(i === rand) {
+				return array[i];
+			}
+		}
+	}
+
+	function loop() {
+		colisao();
+		movejogador(20);
+	}
+
+	function movejogador(velocidade) {
+		if(jogo.pressionou[TECLA.W]) {
+			$("#jogador").removeClass("animaBottom");
+			$("#jogador").removeClass("animaLeft");
+			$("#jogador").removeClass("animaRight");
+			$("#jogador").addClass("animaTop");
+
+			var topo = parseInt($("#jogador").css("top"));
+			$("#jogador").css("top",topo-velocidade);
+
+			if(topo <= 0) {
+				$("#jogador").css("top",topo+velocidade);				
+			}
+		}
+
+		if(jogo.pressionou[TECLA.S]) {
+			$("#jogador").removeClass("animaTop");
+			$("#jogador").removeClass("animaLeft");
+			$("#jogador").removeClass("animaRight");
+			$("#jogador").addClass("animaBottom");
+			
+			var topo = parseInt($("#jogador").css("top"));
+			$("#jogador").css("top",topo+velocidade);
+
+			if(topo >= 434) {
+				$("#jogador").css("top",topo-velocidade);				
+			}
+		}
+
+		if(jogo.pressionou[TECLA.A]) {
+			$("#jogador").removeClass("animaTop");
+			$("#jogador").removeClass("animaBottom");
+			$("#jogador").removeClass("animaRight");
+			$("#jogador").addClass("animaLeft");
+
+			var lateral = parseInt($("#jogador").css("left"));
+			$("#jogador").css("left",lateral-velocidade);
+
+			if(lateral <= 0) {
+				$("#jogador").css("left",lateral+velocidade);				
+			}
+		}
+
+		if(jogo.pressionou[TECLA.D]) {
+			$("#jogador").removeClass("animaTop");
+			$("#jogador").removeClass("animaBottom");
+			$("#jogador").removeClass("animaLeft");
+			$("#jogador").addClass("animaRight");
+
+			var lateral = parseInt($("#jogador").css("left"));
+			$("#jogador").css("left",lateral+velocidade);
+
+			if(lateral >= 694) {
+				$("#jogador").css("left",lateral-velocidade);				
+			}
+		}
+
+		if(jogo.pressionou[TECLA.E]) {
+			//Atirar
+			//disparo();
+		}
+	}
+
+	function movebot() {
+		if(stopMoving == false) {
+			$(".anima").each(function() {
+				posicaoX = parseInt($(this).css("left"));
+				posicaoY = parseInt($(this).css("top"));
+				//posicaoY = parseInt(Math.random() * 334);	
+
+				$(this).css("left",posicaoX-10);
+				$(this).css("top",posicaoY);
+
+				if(posicaoX <= 0) {
+					stopMoving = true;
+					posicaoX = parseInt(Math.random() * 334);
+					posicaoY = parseInt(Math.random() * 334);
+					$(this).css("left",600);
+					$(this).css("top",posicaoY);
+				}
+			});
+		}
+	}
+
+	function stopMoving(personagem) {
+		stopMoving = true;
+		personagem.removeClass("animaBottom");
+		personagem.removeClass("animaLeft");
+		personagem.removeClass("animaRight");
+		personagem.removeClass("animaTop");
+	}
+
+	function setBattleImage(src, direction) {
+		src = src.replace("kanto", "kanto/"+direction);
+
+		var image = {
+			src: src,
+			size: 0,
+			width: 0,
+			height: 0
+		}
+
+		$("body").append('<img class="decoyImage" src="'+src+'" />');
+		$(".decoyImage").load(function() {
+			image.width = $(".decoyImage").width() * 4;
+			image.height = $(".decoyImage").height() * 4;
+
+			//vertical
+			if(image.width < image.height) {
+				image.size = image.width;
+			}
+
+			//horizontal
+			if(image.width > image.height) {
+				image.size = image.height;
+			}
+		})
+
+		return image;
+	}
+
+	var areaCounter = 0;
+	var battleCounter = 0;
+	var chosenPokemon = getRandomObject(pokemons);
+	var pokeFront = setBattleImage(chosenPokemon.image, 'front');
+	var pokeBack = setBattleImage(chosenPokemon.image, 'back');
+
+	function colisao() {
+		var jogador = $("#jogador");
+		var pokemon = $(".pokemon");
+		var pokemonArea = $(".pokemonArea");
+		var colisaoPokemon = (jogador.collision(pokemon));
+		var colisaoArea = (jogador.collision(pokemonArea));
+
+		if(colisaoPokemon.length > 0) {
+			jogador.removeClass("running").addClass("paused");
+			pokemon.removeClass("running").addClass("paused");
+
+			posJogadorX = parseInt(jogador.css("left"));
+			posAmigoX = parseInt(pokemon.css("left"));
+
+			stopMoving = true;
+
+			$(".home").hide();
+			$(".battle").show();
+			if(battleCounter === 0) {
+				$(".battle").append("<div class='pokemonBattle front'></div>");
+				console.log('front', pokeFront, 'back', pokeBack);
+				$(".front").css({ 
+					'background-image': 'url("'+pokeFront.src+'")', 
+					'background-size': pokeFront.size+'px',
+					'width': pokeFront.width+'px', 
+					'height': pokeFront.height+'px'
+				});
+				$(".battle").append("<div class='pokemonBattle back'></div>");
+				$(".back").css({ 
+					'background-image': 'url("'+pokeBack.src+'")',
+					'background-size': pokeBack.size+'px', 
+					'width': pokeBack.width+'px', 
+					'height': pokeBack.height+'px'
+				});
+				battleCounter++;
+			}
+
+			//jogador.css("left",posJogadorX-10);
+		}else{
+			stopMoving = false;
+			jogador.removeClass("paused").addClass("running");
+			pokemon.removeClass("paused").addClass("running");
+		}
+
+		if(colisaoArea.length > 0) {
+			if(areaCounter === 0) {
+				$(".pokemonArea").append("<div class='pokemon animaPokeBottom' id='"+chosenPokemon.entryNumber+"'></div>");
+				$(".pokemon").css({ 'background-image': 'url("'+chosenPokemon.image+'")'});
+				areaCounter++;
+			}
+		}else{
+			$(".pokemonArea .pokemon").remove();
+			areaCounter = 0;
+		}
+	}
+} //Fim da função Start
+
+function reiniciaJogo() {
+	$("#fim").remove();
+	start();
+}

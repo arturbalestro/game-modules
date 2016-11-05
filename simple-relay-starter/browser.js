@@ -2,7 +2,8 @@ var React = require('react') // eslint-disable-line no-unused-vars
 var ReactDOM = require('react-dom')
 var Relay = require('react-relay') // eslint-disable-line no-unused-vars
 var App = require('./App')
-var ConferenceApp = require('./ConferenceApp')
+var PokemonList = require('./PokemonList')
+var PokeMap = require('./PokeMap')
 
 // This file is the entry point on the browser – browserify will compile it, as
 // well as App.js and any other client-side dependencies and create
@@ -16,7 +17,8 @@ ReactDOM.render(
   // We also illustrate the use of the onReadyStateChange handler in case
   // there's a network error, etc
   <Relay.RootContainer
-    Component={ConferenceApp.Container} route={ConferenceApp.queries}
+    Component={PokemonList.Container} route={PokemonList.queries}
+    Component={PokeMap.Container} route={PokeMap.queries}
     onReadyStateChange={({error}) => { if (error) console.error(error) }} />, // eslint-disable-line no-console
 
   document.getElementById('content')

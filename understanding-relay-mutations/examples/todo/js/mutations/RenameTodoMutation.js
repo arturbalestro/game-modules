@@ -13,6 +13,7 @@
 import Relay from 'react-relay';
 
 export default class RenameTodoMutation extends Relay.Mutation {
+  // we only need to request the id to perform this mutation
   static fragments = {
     todo: () => Relay.QL`
       fragment on Todo {
@@ -41,12 +42,15 @@ export default class RenameTodoMutation extends Relay.Mutation {
     }];
   }
   getVariables() {
+    // there are two inputs to the mutation: the todo `id` and the new `text` name.
     return {
       id: this.props.todo.id,
       text: this.props.text,
     };
   }
   getOptimisticResponse() {
+    // optionally spoof the server response
+    // same output as the above outputFields()
     return {
       todo: {
         id: this.props.todo.id,

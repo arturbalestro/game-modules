@@ -62,6 +62,10 @@ var pokemonType = new GraphQL.GraphQLObjectType({
 
   fields: {
     id: GraphQLRelay.globalIdField('Pokemon'),
+    entryNumber: {
+      type: GraphQL.GraphQLString,
+      description: 'The Pokédex entry number of the Pokémon',
+    },
     name: {
       type: GraphQL.GraphQLString,
       description: 'The name of the Pokémon',
@@ -113,7 +117,7 @@ var trainerType = new GraphQL.GraphQLObjectType({
         },
       },
 
-      // We can set up a relationship between users and conferences here
+      // We can set up a relationship between trainers and pokémons here
       pokemons: {
         description: 'A listing of the trainer\'s Pokémons',
 
@@ -137,7 +141,7 @@ var trainerType = new GraphQL.GraphQLObjectType({
   interfaces: [nodeDefinitions.nodeInterface],
 })
 
-var GraphQLRenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
+var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
   name: 'RenameTrainer',
   inputFields: {
     id: { type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID) },
@@ -161,7 +165,7 @@ var GraphQLRenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
 var Mutation = new GraphQL.GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    renameTrainer: GraphQLRenameTrainerMutation
+    renameTrainer: RenameTrainerMutation
   },
 });
 
@@ -179,7 +183,7 @@ module.exports = new GraphQL.GraphQLSchema({
         type: trainerType,
         resolve: function() {
           // return db.getAnonymousUser()
-          return db.getTrainer(4)
+          return db.getTrainer(0)
         },
       },
     },
