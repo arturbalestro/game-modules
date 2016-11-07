@@ -10,6 +10,10 @@ function Framework(id, name) {
   this.name = name
 }
 
+function Move(name, type, damageAmount, healingAmount, effect) {
+  
+}
+
 function Pokemon(entryNumber, name, pokemonType, image, available, caught, species, owners) {
   this.id = entryNumber.toString()
   this.entryNumber = entryNumber
