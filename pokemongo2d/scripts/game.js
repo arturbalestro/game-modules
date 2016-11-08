@@ -13,6 +13,27 @@ function start() { //Início da função Start
 	var fimdejogo = false;
 	var stopMoving = false;
 
+	var areaCounter = 0;
+	var battleCounter = 0;
+	var starterCounter = 0;
+	var chosenPokemon = getRandomObject(pokemons);
+	var pokeFront = setBattleImage(chosenPokemon.image, 'front');
+	var pokeBack = setBattleImage(chosenPokemon.image, 'back');
+	var pokeTeam = [];
+
+	trainers.map(function(t) {
+		if(t.name == "Red") {
+			t.pokeTeam = pokeTeam;
+			console.log(t.pokeTeam);
+			if(t.pokeTeam.length > 0) {
+				console.log(t.pokeTeam[0]);
+				var firstMember = setBattleImage(t.pokeTeam[0].image, 'back');
+			}else{
+				var firstMember = {};
+			}
+		}
+	});
+
 	var TECLA = {
 		W: 87,
 		S: 83,
@@ -30,7 +51,6 @@ function start() { //Início da função Start
 
 	$(document).keyup(function(e) {
 		jogo.pressionou[e.which] = false;
-		//$("#jogador").css("animation-iteration-count","initial");
 		$("#jogador").removeClass("animaBottom");
 		$("#jogador").removeClass("animaLeft");
 		$("#jogador").removeClass("animaRight");
@@ -51,7 +71,7 @@ function start() { //Início da função Start
 
 	function loop() {
 		colisao();
-		movejogador(20);
+		movejogador(30);
 	}
 
 	function movejogador(velocidade) {
@@ -163,30 +183,79 @@ function start() { //Início da função Start
 
 			//vertical
 			if(image.width < image.height) {
-				image.size = image.width;
-			}
-
-			//horizontal
-			if(image.width > image.height) {
 				image.size = image.height;
+			} else {
+				//horizontal
+				if(image.width > image.height) {
+					image.size = image.width;
+				}else{
+					//square
+					image.size = image.width;
+				}
 			}
 		})
 
 		return image;
 	}
 
-	var areaCounter = 0;
-	var battleCounter = 0;
-	var chosenPokemon = getRandomObject(pokemons);
-	var pokeFront = setBattleImage(chosenPokemon.image, 'front');
-	var pokeBack = setBattleImage(chosenPokemon.image, 'back');
+	function beginBattlePhase() {
+		$(".home").hide();
+		$(".battle").show();
+		if(battleCounter === 0) {
+			
+			$(".battle").append("<div class='trainerBattle animaThrow'></div>");
+
+			//if(firstMember != undefined) {
+				setTimeout(function() {
+					$(".trainerBattle").hide();
+					$(".backArea").append("<div class='pokemonBattle back'></div>");
+					$(".back").css({ 
+						'background-image': 'url("'+pokeBack.src+'")',
+						'background-size': pokeBack.size+'px', 
+						'width': pokeBack.width+'px', 
+						'height': pokeBack.height+'px'
+					});		
+				}, 1000);
+			//}
+
+			$(".frontArea").append("<div class='pokemonBattle front'></div>");
+			$(".front").css({ 
+				'background-image': 'url("'+pokeFront.src+'")', 
+				'background-size': pokeFront.size+'px',
+				'width': pokeFront.width+'px', 
+				'height': pokeFront.height+'px'
+			});
+
+			battleCounter++;
+		}
+	}
+
+	function setStarter(s) {
+		$(".starterArea").show();
+
+		pokemons.map(function(p) {
+			if(p.name == s.title) {
+				trainers.map(function(t) {
+					if(t.name == "Red") {
+						t.pokeTeam = pokeTeam;
+						t.pokeTeam.push(p);
+						console.log("You chose "+p.name+", the "+p.pokemonType+" pokémon!");
+						console.log(t);
+						$(".starterArea").hide();
+					}
+				});
+			}
+		});
+	}
 
 	function colisao() {
 		var jogador = $("#jogador");
-		var pokemon = $(".pokemon");
 		var pokemonArea = $(".pokemonArea");
+		var pokemon = $(".pokemonArea > .pokemon");
+		var starter = $(".starter");
 		var colisaoPokemon = (jogador.collision(pokemon));
 		var colisaoArea = (jogador.collision(pokemonArea));
+		var colisaoStarter = (jogador.collision(starter));
 
 		if(colisaoPokemon.length > 0) {
 			jogador.removeClass("running").addClass("paused");
@@ -197,26 +266,7 @@ function start() { //Início da função Start
 
 			stopMoving = true;
 
-			$(".home").hide();
-			$(".battle").show();
-			if(battleCounter === 0) {
-				$(".battle").append("<div class='pokemonBattle front'></div>");
-				console.log('front', pokeFront, 'back', pokeBack);
-				$(".front").css({ 
-					'background-image': 'url("'+pokeFront.src+'")', 
-					'background-size': pokeFront.size+'px',
-					'width': pokeFront.width+'px', 
-					'height': pokeFront.height+'px'
-				});
-				$(".battle").append("<div class='pokemonBattle back'></div>");
-				$(".back").css({ 
-					'background-image': 'url("'+pokeBack.src+'")',
-					'background-size': pokeBack.size+'px', 
-					'width': pokeBack.width+'px', 
-					'height': pokeBack.height+'px'
-				});
-				battleCounter++;
-			}
+			beginBattlePhase();
 
 			//jogador.css("left",posJogadorX-10);
 		}else{
@@ -227,13 +277,20 @@ function start() { //Início da função Start
 
 		if(colisaoArea.length > 0) {
 			if(areaCounter === 0) {
-				$(".pokemonArea").append("<div class='pokemon animaPokeBottom' id='"+chosenPokemon.entryNumber+"'></div>");
-				$(".pokemon").css({ 'background-image': 'url("'+chosenPokemon.image+'")'});
+				pokemonArea.append("<div class='pokemon animaPokeBottom' id='"+chosenPokemon.entryNumber+"'></div>");
+				$(".pokemonArea > .pokemon").css({ 'background-image': 'url("'+chosenPokemon.image+'")'});
 				areaCounter++;
 			}
 		}else{
-			$(".pokemonArea .pokemon").remove();
+			pokemon.remove();
 			areaCounter = 0;
+		}
+
+		if(colisaoStarter.length > 0) {
+			if(areaCounter === 0) {
+				setStarter(colisaoStarter[0]);
+				areaCounter++;
+			}
 		}
 	}
 } //Fim da função Start

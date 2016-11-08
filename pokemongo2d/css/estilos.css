@@ -68,6 +68,24 @@ h1 {
 	margin-left: auto;
 	margin-right: auto;
 }
+.starter {
+	display: inline-block;
+}
+#bulbasaur {
+	background-image: url("../img/pokemons/kanto/bulbasaur.png");
+}
+#charmander {
+	background-image: url("../img/pokemons/kanto/charmander.png");
+}
+#squirtle {
+	background-image: url("../img/pokemons/kanto/squirtle.png");
+}
+.starterArea {
+	width: 200px;
+	height: 100px;
+	position: absolute;
+	left: 50%;
+}
 
 .pokemonArea {
 	background: #2C97C1;
@@ -77,6 +95,7 @@ h1 {
 	position: absolute;
 	top: 10px;
 	left: 10%;
+	/*opacity: 0.3;*/
 }
 
 .pokemonBattle {
@@ -85,66 +104,66 @@ h1 {
 	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
+	left: 0;
+	right: 0;
 }
 .front {
-	top: 20%;
-	right: 15%;
+	bottom: 0;
 }
 .back {
-	left: 15%;
 	bottom: 2%;
+}
+
+.frontArea {
+	position: absolute;
+  right: 0;
+  top: 0;
+  width: 462px;
+  height: 330px;
+  text-align: center;
+}
+.backArea {
+  position: absolute;
+  bottom: 0;
+  width: 440px;
+  height: 330px;
+  left: 0;
+  text-align: center;
 }
 
 .decoyImage {
 	display: none;
 }
 
-#inicio {
-	cursor: pointer;
-	width: 350px;
-	background: #FFF;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 100px;
-	text-align: center;
-	padding: 10px;
+.trainerBattle {
+	background: url('../img/trainers/battle/red1.png') no-repeat;
+	background-size: 256px;
+	position: absolute;
+	width: 256px;
+	height: 256px;
+	left: 5%;
+	bottom: 0;
 }
 
 .animaBottom {
 	width: 48px;
 	height: 64px;
 	animation: playBottom .9s steps(4) infinite;
-	-webkit-animation: playBottom .9s steps(4) infinite;
-	-moz-animation: playBottom .9s steps(4) infinite;
-	-ms-animation: playBottom .9s steps(4) infinite;
-	-o-animation: playBottom .9s steps(4) infinite;
 }
 .animaLeft {
 	width: 48px;
 	height: 64px;
 	animation: playLeft .9s steps(4) infinite;
-	-webkit-animation: playLeft .9s steps(4) infinite;
-	-moz-animation: playLeft .9s steps(4) infinite;
-	-ms-animation: playLeft .9s steps(4) infinite;
-	-o-animation: playLeft .9s steps(4) infinite;
 }
 .animaRight {
 	width: 48px;
 	height: 64px;
 	animation: playRight .9s steps(4) infinite;
-	-webkit-animation: playRight .9s steps(4) infinite;
-	-moz-animation: playRight .9s steps(4) infinite;
-	-ms-animation: playRight .9s steps(4) infinite;
-	-o-animation: playRight .9s steps(4) infinite;
 }
 .animaTop {
 	width: 48px;
 	height: 64px;
 	animation: playTop .9s steps(4) infinite;
-	-webkit-animation: playTop .9s steps(4) infinite;
-	-moz-animation: playTop .9s steps(4) infinite;
-	-ms-animation: playTop .9s steps(4) infinite;
-	-o-animation: playTop .9s steps(4) infinite;
 }
 
 @keyframes playBottom {
@@ -200,6 +219,18 @@ h1 {
 @keyframes playPokeTop {
 	from { background-position: 0 0; }
 	to { background-position: 0 -128px; }
+}
+
+.animaThrow {
+	animation: playThrow 1s steps(1) infinite;
+}
+@keyframes playThrow {
+	0% { background-image: url('../img/trainers/battle/red1.png'); }
+	20% { background-image: url('../img/trainers/battle/red2.png'); }
+	40% { background-image: url('../img/trainers/battle/red2.png'); }
+	60% { background-image: url('../img/trainers/battle/red3.png'); }
+	80% { background-image: url('../img/trainers/battle/red4.png'); }
+	100% { background-image: url('../img/trainers/battle/red5.png'); }
 }
 
 .paused{
