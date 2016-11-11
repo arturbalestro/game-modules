@@ -2,7 +2,7 @@
 var React = require('react')
 var Relay = require('react-relay')
 import { Label, Button } from 'react-bootstrap';
-import RenameTrainerMutation from './RenameTrainerMutation';
+//import RenameTrainerMutation from './RenameTrainerMutation';
 
 // PokemonList is our top-level component
 class PokemonList extends React.Component {
@@ -12,9 +12,9 @@ class PokemonList extends React.Component {
 
   handleClick(name) {
     console.log('-----------handleclick', this, name);
-    Relay.Store.commitUpdate(
+    /*Relay.Store.commitUpdate(
       new RenameTrainerMutation({trainer: this.props.trainer, name})
-    );
+    );*/
   }
 
   render() {
@@ -24,8 +24,12 @@ class PokemonList extends React.Component {
         <h2>Pokémons of {this.props.trainer.name}</h2>
         <Button onClick={this.handleClick.bind(this, 'Embar')}>Change the name of the trainer</Button>
         <br /><br />
-        {this.props.trainer.pokemons.edges.map(edge =>
-          <Pokemon edge={edge} />
+        {this.props.user.trainers.edges.map(edge =>
+          {/* <Trainer edge={edge} /> */}
+          <h2>{edge.node.name}</h2>
+          {edge.node.pokemons.edges.map(edge =>
+            <Pokemon edge={edge} />
+          )}
         )}
       </div>
     )
@@ -65,23 +69,31 @@ class Pokemon extends React.Component {
 exports.Container = Relay.createContainer(PokemonList, {
   // We initially want to get the first trainer's pokémons
   initialVariables: {
-    trainerToShow: 4,
+    // trainerToShow: 4,
   },
   fragments: {
     // Results from this query will be placed on this.props for access in
     // our component
-    trainer: () => Relay.QL`
-      fragment on Trainer {
+    user: () => Relay.QL`
+      fragment on User {
         id,
         name,
-        pokemons(trainerToShow: $trainerToShow) {
+        trainers(first: 10) {
           edges {
             node {
               id,
-              entryNumber,
               name,
-              image,
-              pokemonType
+              pokemons(first: 10000) {
+                edges {
+                  node {
+                    id,
+                    entryNumber,
+                    name,
+                    image,
+                    pokemonType
+                  },
+                },
+              },
             },
           },
         },
@@ -96,6 +108,6 @@ exports.queries = {
   params: {},
   queries: {
     // user in this case matches the fragment in the container above
-    trainer: () => Relay.QL`query { trainer }`,
+    user: () => Relay.QL`query { user }`,
   },
 }

@@ -65,23 +65,31 @@ class Pokemon extends React.Component {
 exports.Container = Relay.createContainer(PokeMap, {
   // We initially want to get the first trainer's pokémons
   initialVariables: {
-    trainerToShow: 5,
+    // trainerToShow: 5,
   },
   fragments: {
     // Results from this query will be placed on this.props for access in
     // our component
-    trainer: () => Relay.QL`
-      fragment on Trainer {
+    user: () => Relay.QL`
+      fragment on User {
         id,
         name,
-        pokemons(trainerToShow: $trainerToShow) {
+        trainers(first: 10) {
           edges {
             node {
               id,
-              entryNumber,
               name,
-              image,
-              pokemonType
+              pokemons(first: 10000) {
+                edges {
+                  node {
+                    id,
+                    entryNumber,
+                    name,
+                    image,
+                    pokemonType
+                  },
+                },
+              },
             },
           },
         },
@@ -96,6 +104,6 @@ exports.queries = {
   params: {},
   queries: {
     // user in this case matches the fragment in the container above
-    trainer: () => Relay.QL`query { trainer }`,
+    user: () => Relay.QL`query { user }`,
   },
 }

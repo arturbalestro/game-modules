@@ -1,6 +1,6 @@
 // We use these types to hold data and resolve from GraphQL types in our schema
 
-function Trainer(id, name) {
+function User(id, name) {
   this.id = id.toString()
   this.name = name
 }
@@ -11,7 +11,12 @@ function Framework(id, name) {
 }
 
 function Move(name, type, damageAmount, healingAmount, effect) {
-  
+
+}
+
+function Trainer(id, name) {
+  this.id = id.toString()
+  this.name = name
 }
 
 function Pokemon(entryNumber, name, pokemonType, image, available, caught, species, owners) {
@@ -35,6 +40,8 @@ function Widget(id, userId, name) {
 // In a realistic system, the get functions below would return objects from a
 // datastore like a DB or a REST API instead of an in-memory store like this.
 // You can also return promises for async fetching
+
+var users = [new User(1, 'Anonymous')]
 
 var trainers = [
   new Trainer(0, 'Embar'), //The default trainer
@@ -222,16 +229,18 @@ var pokemons = [
 ]
 
 module.exports = {
-  Trainer: Trainer,
+  User: User,
   Widget: Widget,
   Framework: Framework,
+  Trainer: Trainer,
   Pokemon: Pokemon,
 
-  getTrainer: function(id) {
-    return trainers.filter(function(trainer) {
-      return trainer.id == id
+  getUser: function(id) {
+    return users.filter(function(user) {
+      return user.id == id
     })[0]
   },
+  getAnonymousUser: function() { return users[0] },
 
   getWidget: function(id) {
     return widgets.filter(function(w) {
@@ -241,6 +250,17 @@ module.exports = {
   getWidgetsByUser: function(userId) {
     return widgets.filter(function(w) {
       return w.userId == userId
+    })
+  },
+
+  getTrainer: function(id) {
+    return trainers.filter(function(trainer) {
+      return trainer.id == id
+    })[0]
+  },
+  getTrainersByUser: function(userId) {
+    return trainers.filter(function(t) {
+      return t.userId == userId
     })
   },
 

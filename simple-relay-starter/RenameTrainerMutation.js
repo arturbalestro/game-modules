@@ -16,7 +16,7 @@ export default class RenameTrainerMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on RenameTrainerPayload {
-        trainer {
+        user {
           name,
         }
       }
@@ -26,15 +26,15 @@ export default class RenameTrainerMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-        trainer: this.props.trainer.id,
+        user: this.props.user.id,
       },
     }];
   }
   getVariables() {
     // there are two inputs to the mutation: the trainer `id` and the new `text` name.
     return {
-      id: this.props.trainer.id,
-      name: this.props.trainer.name,
+      id: this.props.user.id,
+      name: this.props.user.name,
     };
   }
   getOptimisticResponse() {
@@ -42,7 +42,7 @@ export default class RenameTrainerMutation extends Relay.Mutation {
     // same output as the above outputFields()
     return {
       trainer: {
-        id: this.props.trainer.id,
+        id: this.props.user.id,
         name: this.props.name,
       },
     };

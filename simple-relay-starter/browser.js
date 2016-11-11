@@ -1,7 +1,6 @@
 var React = require('react') // eslint-disable-line no-unused-vars
 var ReactDOM = require('react-dom')
 var Relay = require('react-relay') // eslint-disable-line no-unused-vars
-var App = require('./App')
 var PokemonList = require('./PokemonList')
 var PokeMap = require('./PokeMap')
 

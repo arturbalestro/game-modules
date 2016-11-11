@@ -19,10 +19,12 @@ var db = require('./database')
 
 var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
   var idInfo = GraphQLRelay.fromGlobalId(globalId)
-  if (idInfo.type == 'Trainer') {
-    return db.getTrainer(idInfo.id)
+  if (idInfo.type == 'User') {
+    return db.getUser(idInfo.id)
   } else if (idInfo.type == 'Widget') {
     return db.getWidget(idInfo.id)
+  } else if (idInfo.type == 'Trainer') {
+    return db.getTrainer(idInfo.id)
   } else if (idInfo.type == 'Pokemon') {
     return db.getPokemon(idInfo.id)
   }
@@ -100,22 +102,6 @@ var trainerType = new GraphQL.GraphQLObjectType({
         type: GraphQL.GraphQLString,
         description: 'The name of the trainer',
       },
-      // Here we set up a paged one-to-many relationship ("Connection")
-      widgets: {
-        description: 'A user\'s collection of widgets',
-
-        // Relay gives us helper functions to define the Connection and its args
-        type: GraphQLRelay.connectionDefinitions({name: 'Widget', nodeType: widgetType}).connectionType,
-        args: GraphQLRelay.connectionArgs,
-
-        // You can define a resolving function for any field.
-        // It can also return a promise if you need async data fetching
-        resolve: function(trainer, args) {
-          // This wraps a Connection object around your data array
-          // Use connectionFromPromisedArray if you return a promise instead
-          return GraphQLRelay.connectionFromArray(db.getWidgetsByUser(trainer.id), args)
-        },
-      },
 
       // We can set up a relationship between trainers and pokémons here
       pokemons: {
@@ -126,14 +112,52 @@ var trainerType = new GraphQL.GraphQLObjectType({
 
         // argument to tell GraphQL which user to pass back
         // in the resolve block
-        args: {
-          trainerToShow: {type: GraphQL.GraphQLInt},
-        },
+        args: GraphQLRelay.connectionArgs,
+        // db.getPokemonsByTrainer(args.trainerToShow) - for later reference
 
         // The resolve block will complete a query and pass back
         // data for the user id supplied by the arguments we pass in
         resolve: function(trainer, args) {
-          return GraphQLRelay.connectionFromArray(db.getPokemonsByTrainer(args.trainerToShow), args)
+          return GraphQLRelay.connectionFromArray(db.getPokemonsByTrainer(trainer.id), args)
+        },
+      },
+    }
+  },
+  interfaces: [nodeDefinitions.nodeInterface],
+})
+
+var userType = new GraphQL.GraphQLObjectType({
+  name: 'User',
+  description: 'A user',
+  isTypeOf: function(obj) { return obj instanceof db.User },
+
+  // We use a closure here because we need to refer to widgetType from above
+  fields: function() {
+    return {
+      id: GraphQLRelay.globalIdField('User'),
+      name: {
+        type: GraphQL.GraphQLString,
+        description: 'The name of the user',
+      },
+
+      // We can set up a relationship between trainers and pokémons here
+      trainers: {
+        description: 'A person who trains Pokémon',
+
+        // Relay gives us helper functions to define the Connection and its args
+        type: GraphQLRelay.connectionDefinitions({name: 'Trainer', nodeType: trainerType}).connectionType,
+
+        // argument to tell GraphQL which user to pass back
+        // in the resolve block
+        // args: {
+        //   trainerToShow: {type: GraphQL.GraphQLInt},
+        // },
+        args: GraphQLRelay.connectionArgs,
+
+        // The resolve block will complete a query and pass back
+        // data for the user id supplied by the arguments we pass in
+        resolve: function(user, args) {
+          return GraphQLRelay.connectionFromArray(db.getTrainersByUser(user.id), args)
         },
       },
     }
@@ -144,21 +168,21 @@ var trainerType = new GraphQL.GraphQLObjectType({
 var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
   name: 'RenameTrainer',
   inputFields: {
-    id: { type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID) },
-    name: { type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString) },
+    id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
+    name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
   },
   outputFields: {
-    trainer: {
-      type: trainerType,
-      resolve: function (localTrainerId) { 
-        getTrainer(localTrainerId);
+    user: {
+      type: userType,
+      resolve: function(localTrainerId) {
+      db.getTrainer(localTrainerId)
       }
     },
   },
   mutateAndGetPayload: function(id, name) {
-    var localTrainerId = GraphQLRelay.fromGlobalId(id).id;
-    RenameTrainer(localTrainerId, name);
-    return {localTrainerId};
+    var localTrainerId = GraphQLRelay.fromGlobalId(id).id
+    // RenameTrainer(localTrainerId, name);
+    // return {localTrainerId};
   }
 });
 
@@ -179,11 +203,11 @@ module.exports = new GraphQL.GraphQLSchema({
       // Relay needs this to query Nodes using global IDs
       node: nodeDefinitions.nodeField,
       // Our own root query field(s) go here
-      trainer: {
-        type: trainerType,
+      user: {
+        type: userType,
         resolve: function() {
-          // return db.getAnonymousUser()
-          return db.getTrainer(0)
+          return db.getAnonymousUser()
+          // return db.getTrainer(0)
         },
       },
     },
