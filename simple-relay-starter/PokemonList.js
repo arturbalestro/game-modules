@@ -21,12 +21,11 @@ class PokemonList extends React.Component {
     console.log("-----", this.randomNumber(12));
     return (
       <div className="container">
-        <h2>Pokémons of {this.props.trainer.name}</h2>
         <Button onClick={this.handleClick.bind(this, 'Embar')}>Change the name of the trainer</Button>
         <br /><br />
         {this.props.user.trainers.edges.map(edge =>
           <ul>
-            <h2>{edge.node.name}</h2>
+            <h2>Pokémons of {edge.node.name}</h2>
             <li>
               {edge.node.pokemons.edges.map(edge2 =>
                 <Pokemon edge={edge2} />
