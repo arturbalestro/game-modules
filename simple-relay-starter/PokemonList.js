@@ -25,11 +25,14 @@ class PokemonList extends React.Component {
         <Button onClick={this.handleClick.bind(this, 'Embar')}>Change the name of the trainer</Button>
         <br /><br />
         {this.props.user.trainers.edges.map(edge =>
-          {/* <Trainer edge={edge} /> */}
-          <h2>{edge.node.name}</h2>
-          {edge.node.pokemons.edges.map(edge =>
-            <Pokemon edge={edge} />
-          )}
+          <ul>
+            <h2>{edge.node.name}</h2>
+            <li>
+              {edge.node.pokemons.edges.map(edge2 =>
+                <Pokemon edge={edge2} />
+              )}
+            </li>
+          </ul>
         )}
       </div>
     )
