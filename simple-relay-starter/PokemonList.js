@@ -24,14 +24,15 @@ class PokemonList extends React.Component {
         <Button onClick={this.handleClick.bind(this, 'Embar')}>Change the name of the trainer</Button>
         <br /><br />
         {this.props.user.trainers.edges.map(edge =>
-          <ul>
+          <div key={edge.node.id}>
             <h2>Pokémons of {edge.node.name}</h2>
-            <li>
+            <div>
               {edge.node.pokemons.edges.map(edge2 =>
-                <Pokemon edge={edge2} />
+                <Pokemon edge={edge2} key={edge2.node.id} />
               )}
-            </li>
-          </ul>
+            </div>
+            <br /><br />
+          </div>
         )}
       </div>
     )
@@ -92,7 +93,7 @@ exports.Container = Relay.createContainer(PokemonList, {
                     entryNumber,
                     name,
                     image,
-                    pokemonType
+                    pokemonType,
                   },
                 },
               },

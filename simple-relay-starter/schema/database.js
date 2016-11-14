@@ -14,8 +14,9 @@ function Move(name, type, damageAmount, healingAmount, effect) {
 
 }
 
-function Trainer(id, name) {
+function Trainer(id, userId, name) {
   this.id = id.toString()
+  this.userId = userId.toString()
   this.name = name
 }
 
@@ -44,13 +45,13 @@ function Widget(id, userId, name) {
 var users = [new User(1, 'Anonymous')]
 
 var trainers = [
-  new Trainer(0, 'Embar'), //The default trainer
-  new Trainer(1, 'Ash'),
-  new Trainer(2, 'Misty'),
-  new Trainer(3, 'Brock'),
-  new Trainer(4, 'Red'), //Has all available pokémon from pokédex
-  new Trainer(5, 'Wild'), //Pokemon you can find in the wild, not including evolutions or rare pokémon
-  new Trainer(6, 'Starter') //Only starter pokémons
+  new Trainer(0, 1, 'Embar'), //The default trainer
+  new Trainer(1, 1, 'Ash'),
+  new Trainer(2, 1, 'Misty'),
+  new Trainer(3, 1, 'Brock'),
+  new Trainer(4, 1, 'Red'), //Has all available pokémon from pokédex
+  new Trainer(5, 1, 'Wild'), //Pokemon you can find in the wild, not including evolutions or rare pokémon
+  new Trainer(6, 1, 'Starter') //Only starter pokémons
 ]
 
 var widgets = [
