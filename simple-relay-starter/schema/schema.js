@@ -89,6 +89,44 @@ var pokemonType = new GraphQL.GraphQLObjectType({
   interfaces: [nodeDefinitions.nodeInterface],
 })
 
+/* var trainerGroupType = new GraphQL.GraphQLObjectType({
+  name: 'TrainerGroup',
+  description: 'A group of Pokémon trainers',
+  isTypeOf: function(obj) { return obj instanceof db.Trainer },
+
+  // We use a closure here because we need to refer to widgetType from above
+  fields: function() {
+    return {
+      id: GraphQLRelay.globalIdField('TrainerGroup'),
+      name: {
+        type: GraphQL.GraphQLString,
+        description: 'The name of the trainer',
+      },
+
+      // We can set up a relationship between trainers and pokémons here
+      pokeGroup: {
+        description: 'A group of Pokémons that get a specific trainer id as argument. Might be a fake trainer, like Wild or Starter.',
+
+        // Relay gives us helper functions to define the Connection and its args
+        type: GraphQLRelay.connectionDefinitions({name: 'PokeGroup', nodeType: pokemonType}).connectionType,
+
+        // argument to tell GraphQL which user to pass back
+        // in the resolve block
+        args: {
+          trainerToShow: {type: GraphQL.GraphQLInt},
+        },
+
+        // The resolve block will complete a query and pass back
+        // data for the user id supplied by the arguments we pass in
+        resolve: function(user, args) {
+          return GraphQLRelay.connectionFromArray(db.getTrainersByUser(args.trainerToShow), args)
+        },
+      },
+    }
+  },
+  interfaces: [nodeDefinitions.nodeInterface],
+}) */
+
 var trainerType = new GraphQL.GraphQLObjectType({
   name: 'Trainer',
   description: 'A person who trains Pokémon',
@@ -113,7 +151,6 @@ var trainerType = new GraphQL.GraphQLObjectType({
         // argument to tell GraphQL which user to pass back
         // in the resolve block
         args: GraphQLRelay.connectionArgs,
-        // db.getPokemonsByTrainer(args.trainerToShow) - for later reference
 
         // The resolve block will complete a query and pass back
         // data for the user id supplied by the arguments we pass in
@@ -149,9 +186,6 @@ var userType = new GraphQL.GraphQLObjectType({
 
         // argument to tell GraphQL which user to pass back
         // in the resolve block
-        // args: {
-        //   trainerToShow: {type: GraphQL.GraphQLInt},
-        // },
         args: GraphQLRelay.connectionArgs,
 
         // The resolve block will complete a query and pass back
@@ -184,14 +218,14 @@ var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
     // RenameTrainer(localTrainerId, name);
     // return {localTrainerId};
   }
-});
+})
 
 var Mutation = new GraphQL.GraphQLObjectType({
   name: 'Mutation',
   fields: {
     renameTrainer: RenameTrainerMutation
   },
-});
+})
 
 // Now we can bundle our types up and export a schema
 // GraphQL expects a set of top-level queries and optional mutations (we have

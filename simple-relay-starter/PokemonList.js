@@ -1,7 +1,7 @@
 /* eslint-env es6 */
 var React = require('react')
 var Relay = require('react-relay')
-import { Label, Button } from 'react-bootstrap';
+import { Label, Button, Row, Col } from 'react-bootstrap';
 //import RenameTrainerMutation from './RenameTrainerMutation';
 
 // PokemonList is our top-level component
@@ -23,16 +23,15 @@ class PokemonList extends React.Component {
       <div className="container">
         <Button onClick={this.handleClick.bind(this, 'Embar')}>Change the name of the trainer</Button>
         <br /><br />
-        {this.props.user.trainers.edges.map(edge =>
-          <div key={edge.node.id}>
-            <h2>Pokémons of {edge.node.name}</h2>
-            <div>
-              {edge.node.pokemons.edges.map(edge2 =>
-                <Pokemon edge={edge2} key={edge2.node.id} />
+        {this.props.user.trainers.edges.map(trainer =>
+          <Row key={trainer.node.id}>
+            <Col md={12}>
+              <h2>Pokémons of {trainer.node.name}</h2>
+              {trainer.node.pokemons.edges.map(pokemon =>
+                <Pokemon edge={pokemon} key={pokemon.node.id} />
               )}
-            </div>
-            <br /><br />
-          </div>
+            </Col>
+          </Row>
         )}
       </div>
     )
@@ -51,14 +50,14 @@ class Pokemon extends React.Component {
     var edge = this.props.edge;
     return (
       <div className="col-sm-3 col-lg-3">
-        <div className="panel panel-default" key={edge.node.id}>
+        <div className="panel panel-default pokepanel" key={edge.node.id}>
           <div className="panel-heading">
             <h5><b>{edge.node.name}</b></h5>
           </div>
           <div className="panel-body text-center">
             <img src={edge.node.image} height="120" />
             <br /><br />
-            <Label bsStyle="success">{edge.node.pokemonType}</Label>
+            <Label bsStyle="success" className={"type-"+edge.node.pokemonType}>{edge.node.pokemonType}</Label>
           </div>
           <Button onClick={this.handleClick.bind(this)}>Choose Pokémon</Button>
         </div>
@@ -72,7 +71,7 @@ class Pokemon extends React.Component {
 exports.Container = Relay.createContainer(PokemonList, {
   // We initially want to get the first trainer's pokémons
   initialVariables: {
-    // trainerToShow: 4,
+    trainerToShow: 6,
   },
   fragments: {
     // Results from this query will be placed on this.props for access in
@@ -81,7 +80,7 @@ exports.Container = Relay.createContainer(PokemonList, {
       fragment on User {
         id,
         name,
-        trainers(first: 10) {
+        trainers(first: 10000) {
           edges {
             node {
               id,
@@ -100,6 +99,25 @@ exports.Container = Relay.createContainer(PokemonList, {
             },
           },
         },
+        # trainerGroups(trainerToShow: $trainerToShow) {
+        #   edges {
+        #     node {
+        #       id,
+        #       name,
+        #       pokeGroup(first: 10000) {
+        #         edges {
+        #           node {
+        #             id,
+        #             entryNumber,
+        #             name,
+        #             image,
+        #             pokemonType,
+        #           },
+        #         },
+        #       },
+        #     },
+        #   },
+        # },
       }
     `,
   },
