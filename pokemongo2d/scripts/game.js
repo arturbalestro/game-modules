@@ -294,32 +294,37 @@ function start() { //Início da função Start
 		}
 	}
 
-	var pokelab = document.getElementById('pokelab').getContext('2d');
-	console.log("here's the canvas data: ", pokelab);
+	var pokelab = document.getElementById('pokelab');
+	var ctx = pokelab.getContext('2d');
 	console.log("here's the json data: ", pokelabMap);
 
 	var tileSize = pokelabMap.tilewidth;       // The size of a tile (32×32)
-	var rowTileCount = 24;   // The number of tiles in a row of our background
-	var colTileCount = 40;   // The number of tiles in a column of our background
-	var imageNumTiles = 16;  // The number of tiles per row in the tileset image
+	var rowTileCount = 18;   // The number of tiles in a row of our background
+	var colTileCount = 30;   // The number of tiles in a column of our background
+	var imageNumTiles = 8;  // The number of tiles per row in the tileset image
 
 	var tilesetImage = new Image();
 	tilesetImage.src = pokelabMap.tilesets[0].image;
 	$(tilesetImage).load(function() {
-		drawTilemap(pokelab, pokelabMap.layers[0].data);
+		for(var layer = 0; layer < pokelabMap.layers.length; layer++) {
+			drawTilemap(ctx, pokelabMap.layers[layer].data);
+		}
 	});
 
 	function drawTilemap(context, layer) {
-		 context.drawImage(tilesetImage, 87, 140, tileSize, tileSize, 250, 50, tileSize, tileSize);
-	   /*for (var r = 0; r < rowTileCount; r++) {
-	      for (var c = 0; c < colTileCount; c++) {
-	        var tile = layer[ r ][ c ];
-	        // Steps 2 and 3
-	        var tileRow = (tile / imageNumTiles) | 0; // Bitwise OR operation
-					var tileCol = (tile % imageNumTiles) | 0;
-					context.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
-	      }
-	   }*/
+  	for (var r = 0; r < rowTileCount; r++) {
+      for (var c = 0; c < colTileCount; c++) {
+        var tile = (layer[ r ][ c ]) - 1;
+        // Steps 2 and 3
+        var tileRow = (tile / imageNumTiles) | 0; // Bitwise OR operation
+				var tileCol = (tile % imageNumTiles) | 0;
+				context.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
+      }
+    }
+	}
+
+	function clearCanvas(canvas, ctx) {
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 } //Fim da função Start
 
