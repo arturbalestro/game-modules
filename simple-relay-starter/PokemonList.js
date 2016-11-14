@@ -41,7 +41,11 @@ class PokemonList extends React.Component {
 class Pokemon extends React.Component {
 
   handleClick(e) {
-    console.log("click value: ", e);
+    var currentPokemon = this.props.edge.node;
+    console.log("click value: ", e.target.value);
+    if(currentPokemon.entryNumber === e.target.value) {
+      console.log('you chose ', currentPokemon.name);
+    }
   }
 
   render() {
@@ -59,7 +63,7 @@ class Pokemon extends React.Component {
             <br /><br />
             <Label bsStyle="success" className={"type-"+edge.node.pokemonType}>{edge.node.pokemonType}</Label>
           </div>
-          <Button onClick={this.handleClick.bind(this)}>Choose Pokémon</Button>
+          <Button onClick={this.handleClick.bind(this)} value={edge.node.entryNumber}>Choose Pokémon</Button>
         </div>
       </div>
     )
