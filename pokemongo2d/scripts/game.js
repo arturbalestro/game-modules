@@ -24,9 +24,9 @@ function start() { //Início da função Start
 	trainers.map(function(t) {
 		if(t.name == "Red") {
 			t.pokeTeam = pokeTeam;
-			console.log(t.pokeTeam);
+			//console.log(t.pokeTeam);
 			if(t.pokeTeam.length > 0) {
-				console.log(t.pokeTeam[0]);
+				//console.log(t.pokeTeam[0]);
 				var firstMember = setBattleImage(t.pokeTeam[0].image, 'back');
 			}else{
 				var firstMember = {};
@@ -307,20 +307,50 @@ function start() { //Início da função Start
 	tilesetImage.src = pokelabMap.tilesets[0].image;
 	$(tilesetImage).load(function() {
 		for(var layer = 0; layer < pokelabMap.layers.length; layer++) {
-			drawTilemap(ctx, pokelabMap.layers[layer].data);
+			var layerType = pokelabMap.layers[layer].type;
+			if(layerType === "tilelayer") {
+				drawTilemap(ctx, pokelabMap.layers[layer].data);
+			}
+
+			if(layerType === "objectgroup") {
+				drawObject(ctx, pokelabMap.layers[layer].objects);
+			}
 		}
-	});
+
+		var player = new Image();
+		player.src = 'img/trainers/red.png';
+		$(player).load(function() {
+			drawCharacter(ctx, player);
+		});
+	});	
 
 	function drawTilemap(context, layer) {
   	for (var r = 0; r < rowTileCount; r++) {
       for (var c = 0; c < colTileCount; c++) {
         var tile = (layer[ r ][ c ]) - 1;
         // Steps 2 and 3
-        var tileRow = (tile / imageNumTiles) | 0; // Bitwise OR operation
-				var tileCol = (tile % imageNumTiles) | 0;
-				context.drawImage(tilesetImage, (tileCol * tileSize), (tileRow * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
+        var tileClipX = (tile % imageNumTiles) | 0;
+      	var tileClipY = (tile / imageNumTiles) | 0; // Bitwise OR operation
+				context.drawImage(tilesetImage, (tileClipX * tileSize), (tileClipY * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
       }
     }
+	}
+
+	function drawObject(context, layer) {
+  	for (var obj = 0; obj < layer.length; obj++) {
+      var tile = layer[obj];
+      var tileId = tile.gid - 1;
+      var tileClipX = (tileId % imageNumTiles) | 0;
+      var tileClipY = (tileId / imageNumTiles) | 0; // Bitwise OR operation
+			context.drawImage(tilesetImage, (tileClipX * tileSize), (tileClipY * tileSize), tileSize, tileSize, tile.x, tile.y - tileSize, tileSize, tileSize);
+    }
+	}
+
+	function drawCharacter(context, layer) {
+		console.log(layer);
+		var tileClipX = (192 % 4) | 0;
+    var tileClipY = (256 / 4) | 0; // Bitwise OR operation
+		context.drawImage(layer, 0, 192, 48, 64, 448, 544 - (tileSize * 2), 48, 64);
 	}
 
 	function clearCanvas(canvas, ctx) {
