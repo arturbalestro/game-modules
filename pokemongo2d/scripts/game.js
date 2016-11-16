@@ -21,6 +21,12 @@ function start() { //Início da função Start
 	var pokeBack = setBattleImage(chosenPokemon.image, 'back');
 	var pokeTeam = [];
 
+	resources.load([
+    'img/trainers/red.png',
+    'img/trainers/profelm.png'
+	]);
+	resources.onReady(start);
+
 	trainers.map(function(t) {
 		if(t.name == "Red") {
 			t.pokeTeam = pokeTeam;
@@ -87,6 +93,11 @@ function start() { //Início da função Start
 			if(topo <= 0) {
 				$("#jogador").css("top",topo+velocidade);				
 			}
+
+			var player = new Image();
+			player.src = 'img/trainers/red.png';
+			var yPos = (544 - tileSize * 2) - 32;
+			ctx.drawImage(player, 0, 192, 48, 64, 448, yPos, 48, 64);
 		}
 
 		if(jogo.pressionou[TECLA.S]) {
@@ -320,7 +331,13 @@ function start() { //Início da função Start
 		var player = new Image();
 		player.src = 'img/trainers/red.png';
 		$(player).load(function() {
-			drawCharacter(ctx, player);
+			drawPlayer(ctx, player);
+		});
+
+		var npc = new Image();
+		npc.src = 'img/trainers/profelm.png';
+		$(npc).load(function() {
+			drawNPC(ctx, npc);
 		});
 	});	
 
@@ -346,11 +363,18 @@ function start() { //Início da função Start
     }
 	}
 
-	function drawCharacter(context, layer) {
+	function drawPlayer(context, layer) {
 		console.log(layer);
 		var tileClipX = (192 % 4) | 0;
     var tileClipY = (256 / 4) | 0; // Bitwise OR operation
 		context.drawImage(layer, 0, 192, 48, 64, 448, 544 - (tileSize * 2), 48, 64);
+	}
+
+	function drawNPC(context, layer) {
+		console.log(layer);
+		var tileClipX = (192 % 4) | 0;
+    var tileClipY = (256 / 4) | 0; // Bitwise OR operation
+		context.drawImage(layer, 0, 0, 48, 64, 384, 224 - (tileSize * 2), 48, 64);
 	}
 
 	function clearCanvas(canvas, ctx) {
