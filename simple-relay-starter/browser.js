@@ -16,8 +16,8 @@ ReactDOM.render(
   // We also illustrate the use of the onReadyStateChange handler in case
   // there's a network error, etc
   <Relay.RootContainer
-    Component={PokemonList.Container} route={PokemonList.queries}
-    //Component={PokeMap.Container} route={PokeMap.queries}
+    // Component={PokemonList.Container} route={PokemonList.queries}
+    Component={PokeMap.Container} route={PokeMap.queries}
     onReadyStateChange={({error}) => { if (error) console.error(error) }} />, // eslint-disable-line no-console
 
   document.getElementById('content')

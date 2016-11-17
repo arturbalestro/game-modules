@@ -1,62 +1,85 @@
 /* eslint-env es6 */
 var React = require('react')
 var Relay = require('react-relay')
-import { Label, Button } from 'react-bootstrap';
-import RenameTrainerMutation from './RenameTrainerMutation';
+import { Label, ButtonToolbar, ButtonGroup, Button, Grid, Row, Col, Image, Modal } from 'react-bootstrap';
 
 class PokeMap extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showModal: false,
+      chosenPokemon: {},
+    };
+  }
+
   randomNumber(x) {
     return Math.floor((Math.random() * x) + 1);
   }
 
+  openModal() {
+    const trainers = this.props.user.trainers.edges;
+
+    const wildGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === "Wild";
+    });
+    const availablePokemon = wildGroup[0].node.pokemons.edges;
+    //console.log("We have ",availablePokemon.length," Pokémon available", availablePokemon);
+    const randomPokemon = this.randomNumber(availablePokemon.length);
+    var chosenPokemon = availablePokemon[randomPokemon - 1];
+  	console.log('-----', chosenPokemon);
+
+    this.setState({ chosenPokemon: chosenPokemon, showModal: true });
+  }
+
+  closeModal(e) {
+    console.log("click value: ", e.target.value);
+    this.setState({ showModal: false });
+  }
+
   render() {
-  	const pokemons = this.props.trainer.pokemons.edges;
-  	const availablePokemon = pokemons.length;
-  	console.log("We have "+availablePokemon+" Pokémon available");
-  	const randomPokemon = this.randomNumber(availablePokemon);
-  	console.log(randomPokemon+" was picked up");
-  	console.log('-----', pokemons.indexOf(randomPokemon));
+    const grassImage = 'https://cdn3.f-cdn.com/contestentries/44321/7430869/526e2123b37c4_thumb900.jpg';
+    const chosenPokemon = this.state.chosenPokemon.node;
+    //const pokemonExists = this.state.chosenPokemon.node.entryNumber === edge.node.entryNumber;
     return (
       <div className="container">
-        <h2>Welcome, {this.props.trainer.name}!</h2>
-        <p>Choose your Starter to begin.</p>
-        <br /><br />
-        {this.props.trainer.pokemons.edges.map(edge =>
-		    	<Pokemon edge={edge} randomPokemon={randomPokemon} />
-        )}
+        <Grid>
+          <Row>
+            <ButtonToolbar>
+              <ButtonGroup>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
+              </ButtonGroup>
+            </ButtonToolbar>
+            {chosenPokemon &&
+              <Modal
+                show={this.state.showModal}
+                onHide={this.closeModal.bind(this)}
+                className="text-center"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title><b>#{chosenPokemon.entryNumber} {chosenPokemon.name}</b></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <img src={chosenPokemon.image} height="120" />
+                  <br /><br />
+                  <Label bsStyle="success">{chosenPokemon.pokemonType}</Label>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button onClick={this.closeModal.bind(this)} value={chosenPokemon.entryNumber}>Catch It!</Button>
+                </Modal.Footer>
+              </Modal>
+            }
+          </Row>
+        </Grid>
       </div>
     )
-  }
-}
-
-class Pokemon extends React.Component {
-
-  handleClick(e) {
-    console.log("click value: ", e.target.value);
-  }
-
-  render() {
-    // We get the conference edges passed in from the top-level container
-    // The edges have data like name and id on them
-    var edge = this.props.edge;
-    const pokemonExists = this.props.randomPokemon == edge.node.entryNumber;
-		return (
-		  <div>
-		    {pokemonExists &&
-			    <div className="panel panel-default text-center" bsStyle="text-center" key={edge.node.id}>
-			      <div className="panel-heading">
-			        <h5><b>#{edge.node.entryNumber} {edge.node.name}</b></h5>
-			      </div>
-			      <div className="panel-body text-center">
-			        <img src={edge.node.image} height="120" />
-			        <br /><br />
-			        <Label bsStyle="success">{edge.node.pokemonType}</Label>
-			      </div>
-			      <Button onClick={this.handleClick.bind(this)} value={edge.node.entryNumber}>Catch it!</Button>
-			    </div>
-		  	}
-		  </div>
-		)
   }
 }
 
@@ -74,7 +97,7 @@ exports.Container = Relay.createContainer(PokeMap, {
       fragment on User {
         id,
         name,
-        trainers(first: 10) {
+        trainers(first: 10000) {
           edges {
             node {
               id,
@@ -86,7 +109,7 @@ exports.Container = Relay.createContainer(PokeMap, {
                     entryNumber,
                     name,
                     image,
-                    pokemonType
+                    pokemonType,
                   },
                 },
               },
