@@ -8,16 +8,17 @@ class PokeMap extends React.Component {
     super(props);
 
     this.state = {
-      showModal: false,
       chosenPokemon: {},
     };
+
+    this.revealPokemon = this.revealPokemon.bind(this);
   }
 
   randomNumber(x) {
     return Math.floor((Math.random() * x) + 1);
   }
 
-  openModal() {
+  revealPokemon() {
     const trainers = this.props.user.trainers.edges;
 
     const wildGroup = trainers.filter(function(trainer) {
@@ -29,52 +30,42 @@ class PokeMap extends React.Component {
     var chosenPokemon = availablePokemon[randomPokemon - 1];
   	console.log('-----', chosenPokemon);
 
-    this.setState({ chosenPokemon: chosenPokemon, showModal: true });
-  }
+    this.setState({ chosenPokemon: chosenPokemon });
 
-  closeModal(e) {
-    console.log("click value: ", e.target.value);
-    this.setState({ showModal: false });
+    return (
+      <Image src={chosenPokemon.image} height="120" />
+    )
   }
 
   render() {
-    const grassImage = 'https://cdn3.f-cdn.com/contestentries/44321/7430869/526e2123b37c4_thumb900.jpg';
+    const grassImage = '/img/grass.jpg';
     const chosenPokemon = this.state.chosenPokemon.node;
     //const pokemonExists = this.state.chosenPokemon.node.entryNumber === edge.node.entryNumber;
     return (
       <div className="container">
         <Grid>
           <Row>
-            <ButtonToolbar>
-              <ButtonGroup>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-                <Button onClick={this.openModal.bind(this)}><img src={grassImage} height="120" /></Button>
-              </ButtonGroup>
-            </ButtonToolbar>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
+            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
             {chosenPokemon &&
-              <Modal
-                show={this.state.showModal}
-                onHide={this.closeModal.bind(this)}
-                className="text-center"
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title><b>#{chosenPokemon.entryNumber} {chosenPokemon.name}</b></Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+              <div className="panel panel-default pokepanel" key={chosenPokemon.entryNumber}>
+                <div className="panel-heading">
+                  <h5><b>#{chosenPokemon.entryNumber} {chosenPokemon.name}</b></h5>
+                </div>
+                <div className="panel-body text-center">
                   <img src={chosenPokemon.image} height="120" />
                   <br /><br />
-                  <Label bsStyle="success">{chosenPokemon.pokemonType}</Label>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={this.closeModal.bind(this)} value={chosenPokemon.entryNumber}>Catch It!</Button>
-                </Modal.Footer>
-              </Modal>
+                  <Label bsStyle="success" className={"type-"+chosenPokemon.pokemonType}>{chosenPokemon.pokemonType}</Label>
+                </div>
+                <Button value={chosenPokemon.entryNumber}>Catch It!</Button>
+              </div>
             }
           </Row>
         </Grid>
