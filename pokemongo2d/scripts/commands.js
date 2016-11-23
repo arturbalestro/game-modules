@@ -6,7 +6,7 @@ var keys = {
 	E: 69
 }
 
-pressed = [];
+var pressed = [];
 //Verifica se o jogador pressionou alguma tecla
 $(document).keydown(function(e) {
 	pressed[e.which] = true;
@@ -20,7 +20,7 @@ $(document).keyup(function(e) {
 	$("#jogador").removeClass("animaTop");
 });
 
-function movejogador(velocidade) {
+function moveSprite(player, context, speed) {
 	if(pressed[keys.W]) {
 		$("#jogador").removeClass("animaBottom");
 		$("#jogador").removeClass("animaLeft");
@@ -28,16 +28,20 @@ function movejogador(velocidade) {
 		$("#jogador").addClass("animaTop");
 
 		var topo = parseInt($("#jogador").css("top"));
-		$("#jogador").css("top",topo-velocidade);
+		$("#jogador").css("top",topo-speed);
 
 		if(topo <= 0) {
-			$("#jogador").css("top",topo+velocidade);				
+			$("#jogador").css("top",topo+speed);				
 		}
 
-		var player = new Image();
-		player.src = 'img/trainers/red.png';
-		var yPos = (544 - tileSize * 2) - 32;
-		ctx.drawImage(player, 0, 192, 48, 64, 448, yPos, 48, 64);
+		player.pos[1] -= speed;
+		//player.sprite.render(1000);
+		//debugger;
+		context.drawImage(resources.get(player.sprite.url),
+                player.sprite.bgpos[0], player.sprite.bgpos[1],
+                player.sprite.size[0], player.sprite.size[1],
+                player.pos[0], player.pos[1],
+                player.sprite.size[0], player.sprite.size[1]);
 	}
 
 	if(pressed[keys.S]) {
@@ -47,10 +51,10 @@ function movejogador(velocidade) {
 		$("#jogador").addClass("animaBottom");
 		
 		var topo = parseInt($("#jogador").css("top"));
-		$("#jogador").css("top",topo+velocidade);
+		$("#jogador").css("top",topo+speed);
 
 		if(topo >= 434) {
-			$("#jogador").css("top",topo-velocidade);				
+			$("#jogador").css("top",topo-speed);				
 		}
 	}
 
@@ -61,10 +65,10 @@ function movejogador(velocidade) {
 		$("#jogador").addClass("animaLeft");
 
 		var lateral = parseInt($("#jogador").css("left"));
-		$("#jogador").css("left",lateral-velocidade);
+		$("#jogador").css("left",lateral-speed);
 
 		if(lateral <= 0) {
-			$("#jogador").css("left",lateral+velocidade);				
+			$("#jogador").css("left",lateral+speed);				
 		}
 	}
 
@@ -75,10 +79,10 @@ function movejogador(velocidade) {
 		$("#jogador").addClass("animaRight");
 
 		var lateral = parseInt($("#jogador").css("left"));
-		$("#jogador").css("left",lateral+velocidade);
+		$("#jogador").css("left",lateral+speed);
 
 		if(lateral >= 694) {
-			$("#jogador").css("left",lateral-velocidade);				
+			$("#jogador").css("left",lateral-speed);				
 		}
 	}
 

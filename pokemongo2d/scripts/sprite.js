@@ -1,4 +1,5 @@
-function Sprite(url, pos, size, speed, frames, dir, once) {
+function Sprite(url, bgpos, pos, size, speed, frames, dir, once) {
+  this.bgpos = bgpos;
   this.pos = pos;
   this.size = size;
   this.speed = typeof speed === 'number' ? speed : 0;
@@ -30,9 +31,8 @@ Sprite.prototype.render = function(ctx) {
       frame = 0;
   }
 
-
-  var x = this.pos[0];
-  var y = this.pos[1];
+  var x = this.bgpos[0];
+  var y = this.bgpos[1];
 
   if(this.dir == 'vertical') {
       y += frame * this.size[1];
@@ -44,6 +44,11 @@ Sprite.prototype.render = function(ctx) {
   ctx.drawImage(resources.get(this.url),
                 x, y,
                 this.size[0], this.size[1],
-                0, 0,
+                this.pos[0], this.pos[1],
                 this.size[0], this.size[1]);
 }
+
+var player = {
+  pos: [448, 480],
+  sprite: new Sprite('img/trainers/red.png', [0, 192], [448, 480], [48, 64], 4, [0, 1, 2, 3])
+};
