@@ -13,12 +13,12 @@ var requestAnimFrame = (function(){
 
 // Create the canvas
 //var pokelab = document.getElementById('pokelab');
-var pokelab = document.createElement("canvas");
-var ctx = pokelab.getContext('2d');
+var canvas = document.createElement("canvas");
+var ctx = canvas.getContext('2d');
 console.log("here's the json data: ", pokelabMap);
-pokelab.width = 960;
-pokelab.height = 576;
-document.body.appendChild(pokelab);
+canvas.width = 960;
+canvas.height = 576;
+document.body.appendChild(canvas);
 
 // The main game loop
 var lastTime;
