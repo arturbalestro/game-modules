@@ -60,6 +60,11 @@ var enemies = [];
 var playerSpeed = 200;
 var enemySpeed = 100;
 
+var tileSize = pokelabMap.tilewidth;       // The size of a tile (32×32)
+var rowTileCount = 18;   // The number of tiles in a row of our background
+var colTileCount = 30;   // The number of tiles in a column of our background
+var imageNumTiles = 8;  // The number of tiles per row in the tileset image
+
 // Update game objects
 function update(dt) {
     gameTime += dt;
@@ -79,30 +84,29 @@ function update(dt) {
     }*/
 
     checkCollisions();
-
-    scoreEl.innerHTML = score;
 };
 
 function handleInput(dt) {
     if(input.isDown('DOWN') || input.isDown('s')) {
-        player.pos[1] += playerSpeed * dt;
+      player.pos[1] += playerSpeed * dt;
     }
 
     if(input.isDown('UP') || input.isDown('w')) {
-        player.pos[1] -= playerSpeed * dt;
+      player.pos[1] -= playerSpeed * dt;
+      player.sprite.update(dt)
     }
 
     if(input.isDown('LEFT') || input.isDown('a')) {
-        player.pos[0] -= playerSpeed * dt;
+      player.pos[0] -= playerSpeed * dt;
     }
 
     if(input.isDown('RIGHT') || input.isDown('d')) {
-        player.pos[0] += playerSpeed * dt;
+      player.pos[0] += playerSpeed * dt;
     }
 
     if(input.isDown('SPACE')) {
-        var x = player.pos[0] + player.sprite.size[0] / 2;
-        var y = player.pos[1] + player.sprite.size[1] / 2;
+      var x = player.pos[0] + player.sprite.size[0] / 2;
+      var y = player.pos[1] + player.sprite.size[1] / 2;
     }
 }
 
@@ -170,17 +174,50 @@ function checkPlayerBounds() {
     }
 }
 
+function drawTilemap(context, layer, tilesetImage) {
+	for (var r = 0; r < rowTileCount; r++) {
+    for (var c = 0; c < colTileCount; c++) {
+      var tile = (layer[ r ][ c ]) - 1;
+      // Steps 2 and 3
+      var tileClipX = (tile % imageNumTiles) | 0;
+    	var tileClipY = (tile / imageNumTiles) | 0; // Bitwise OR operation
+			context.drawImage(tilesetImage, (tileClipX * tileSize), (tileClipY * tileSize), tileSize, tileSize, (c * tileSize), (r * tileSize), tileSize, tileSize);
+    }
+  }
+}
+
+function drawObject(context, layer, tilesetImage) {
+	for (var obj = 0; obj < layer.length; obj++) {
+    var tile = layer[obj];
+    var tileId = tile.gid - 1;
+    var tileClipX = (tileId % imageNumTiles) | 0;
+    var tileClipY = (tileId / imageNumTiles) | 0; // Bitwise OR operation
+		context.drawImage(tilesetImage, (tileClipX * tileSize), (tileClipY * tileSize), tileSize, tileSize, tile.x, tile.y - tileSize, tileSize, tileSize);
+  }
+}
+
 // Draw everything
 function render() {
-    ctx.fillStyle = terrainPattern;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  //ctx.fillStyle = terrainPattern;
+  //ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Render the player if the game isn't over
-    if(!isGameOver) {
-        renderEntity(player);
-    }
+  var tilesetImage = resources.get('img/tilesets/pokelab.png');
 
-    renderEntities(enemies);
+	for(var layer = 0; layer < pokelabMap.layers.length; layer++) {
+ 		var layerType = pokelabMap.layers[layer].type;
+ 		if(layerType === "tilelayer") {
+ 			drawTilemap(ctx, pokelabMap.layers[layer].data, tilesetImage);
+ 		}
+
+ 		if(layerType === "objectgroup") {
+ 			drawObject(ctx, pokelabMap.layers[layer].objects, tilesetImage);
+ 		}
+ 	}
+
+ 	ctx.save();
+ 	player.sprite.render(ctx);
+ 	ctx.restore();
+  //renderEntities(enemies);
 };
 
 function renderEntities(list) {
