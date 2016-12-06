@@ -116,3 +116,22 @@ body {
   .pokepanel button {
     cursor: pointer;
     display: inline-block; }
+
+.pokeboard {
+  display: inline-block;
+  float: none;
+  text-align: center; }
+
+.poketile {
+  position: relative;
+  display: inline-block; }
+  .poketile .pokebg {
+    position: relative; }
+  .poketile .pokeimg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    text-align: center; }

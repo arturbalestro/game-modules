@@ -10,65 +10,98 @@ class PokeMap extends React.Component {
     this.state = {
       chosenPokemon: {},
     };
-
-    this.revealPokemon = this.revealPokemon.bind(this);
   }
 
   randomNumber(x) {
     return Math.floor((Math.random() * x) + 1);
   }
 
-  revealPokemon() {
+  generateTiles() {
+    //Step 1: get the pokemon available for the wild
+    const tiles = [];
     const trainers = this.props.user.trainers.edges;
-
     const wildGroup = trainers.filter(function(trainer) {
       return trainer.node.name === "Wild";
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges;
-    //console.log("We have ",availablePokemon.length," Pokémon available", availablePokemon);
-    const randomPokemon = this.randomNumber(availablePokemon.length);
-    var chosenPokemon = availablePokemon[randomPokemon - 1];
-  	console.log('-----', chosenPokemon);
+    console.log("We have ",availablePokemon.length," Pokémon available");
 
-    this.setState({ chosenPokemon: chosenPokemon });
+    //Step 2: Select a group of random pokemon to appear in the tiles
+    const tileGroup = [];
+    for(let i = 0; i < 21; i++) {
+      const randomPokemon = this.randomNumber(availablePokemon.length);
+      const chosenPokemon = availablePokemon[randomPokemon - 1];
+      tileGroup.push(chosenPokemon.node);
+    }
 
-    return (
-      <Image src={chosenPokemon.image} height="120" />
-    )
+    //Step 3: Duplicate the group of selected pokemon, to be their pairs, and join them all together.
+    const tileClone = tileGroup.slice(0);
+    const tilePairs = tileGroup.concat(tileClone);
+
+    //Step 5: Render all the tiles on the board randomly. The already drawn tiles are removed from the array.
+    for(let j = tilePairs.length; j > 0; j--) {
+      const randomPokemon = this.randomNumber(tilePairs.length);
+      const chosenPokemon = tilePairs[randomPokemon - 1];
+
+      tiles.push(<Tile chosenPokemon={chosenPokemon} />);
+
+      const index = tilePairs.indexOf(chosenPokemon);
+      if(index > -1) {
+        tilePairs.splice(index, 1);
+      }
+    }
+
+    return tiles;
   }
 
   render() {
-    const grassImage = '/img/grass.jpg';
-    const chosenPokemon = this.state.chosenPokemon.node;
-    //const pokemonExists = this.state.chosenPokemon.node.entryNumber === edge.node.entryNumber;
     return (
-      <div className="container">
-        <Grid>
+      <div className="container text-center">
           <Row>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            <a onClick={this.revealPokemon}><Image src={grassImage} height="120" /></a>
-            {chosenPokemon &&
-              <div className="panel panel-default pokepanel" key={chosenPokemon.entryNumber}>
-                <div className="panel-heading">
-                  <h5><b>#{chosenPokemon.entryNumber} {chosenPokemon.name}</b></h5>
-                </div>
-                <div className="panel-body text-center">
-                  <img src={chosenPokemon.image} height="120" />
-                  <br /><br />
-                  <Label bsStyle="success" className={"type-"+chosenPokemon.pokemonType}>{chosenPokemon.pokemonType}</Label>
-                </div>
-                <Button value={chosenPokemon.entryNumber}>Catch It!</Button>
-              </div>
-            }
+            <Col className="pokeboard" md={12} lg={10}>
+              {this.generateTiles()}
+            </Col>
           </Row>
-        </Grid>
+      </div>
+    )
+  }
+}
+
+class Tile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tileVisible: false,
+    };
+
+    this.revealTile = this.revealTile.bind(this);
+    this.unrevealTile = this.unrevealTile.bind(this);
+  }
+
+  revealTile(e) {
+    console.log('e.target', e.target);
+    e.target.setAttribute('class', 'active');
+
+    this.setState({ tileVisible: true });
+  }
+
+  unrevealTile() {
+    this.setState({ tileVisible: false });
+  }
+
+  render() {
+    // We get the conference edges passed in from the top-level container
+    // The edges have data like name and id on them
+    const grassImage = '/img/grass.jpg';
+    var chosenPokemon = this.props.chosenPokemon;
+    console.log('A wild ', chosenPokemon.name, ' appeared!');
+    return (
+      <div className="poketile">
+        <Image onClick={this.revealTile} id="pokebg" src={grassImage} height="120" />
+        {this.state.tileVisible &&
+          <Image id="pokeimg" src={chosenPokemon.image} height="120" />
+        }
       </div>
     )
   }
