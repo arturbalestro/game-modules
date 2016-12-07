@@ -48,16 +48,33 @@ function init() {
 resources.load([
 	'img/tilesets/pokelab.png',
   'img/trainers/red.png',
-  'img/trainers/profelm.png'
+  'img/trainers/profelm.png',
+  'img/pokemons/kanto/charmander.png',
+  'img/pokemons/kanto/lapras.png'
 ]);
 resources.onReady(init);
+
+var player = {
+  pos: [448, 480],
+  sprite: new Sprite('player', 'img/trainers/red.png', [0, 192], [0, 0], [48, 64], 4, [0, 1, 2, 3])
+};
+
+var charmander = {
+	pos: [448, 350],
+	sprite: new Sprite('pokemon', 'img/pokemons/kanto/charmander.png', [0, 64], [0, 0], [32, 32], 2, [0, 1], 'vertical')
+}
+
+var lapras = {
+	pos: [448, 150],
+	sprite: new Sprite('pokemon', 'img/pokemons/kanto/lapras.png', [0, 64], [0, 0], [32, 32], 2, [0, 1], 'vertical')
+}
 
 var gameTime = 0;
 var isGameOver;
 var enemies = [];
 
 // Speed in pixels per second
-var playerSpeed = 200;
+var playerSpeed = 100;
 var enemySpeed = 100;
 
 var tileSize = pokelabMap.tilewidth;       // The size of a tile (32×32)
@@ -69,39 +86,70 @@ var imageNumTiles = 8;  // The number of tiles per row in the tileset image
 function update(dt) {
     gameTime += dt;
 
-    handleInput(dt);
+    handleInput(dt, checkCollisions());
     updateEntities(dt);
 
     // It gets harder over time by adding enemies using this
     // equation: 1-.993^gameTime
-    /*if(Math.random() < 1 - Math.pow(.993, gameTime)) {
-        enemies.push({
-            pos: [canvas.width,
-                  Math.random() * (canvas.height - 39)],
-            sprite: new Sprite('img/sprites.png', [0, 78], [80, 39],
-                               6, [0, 1, 2, 3, 2, 1])
-        });
-    }*/
+    // if(Math.random() < 1 - Math.pow(.993, gameTime)) {
+    //     enemies.push({
+    //         pos: [canvas.width,
+    //               Math.random() * (canvas.height)],
+    //         sprite: new Sprite('img/pokemons/kanto/charmander.png', [0, 128], [0, 0], [64, 64],
+    //                            2, [0, 1])
+    //     });
+    // }
 
     checkCollisions();
 };
 
-function handleInput(dt) {
+function handleInput(dt, collided) {
     if(input.isDown('DOWN') || input.isDown('s')) {
-      player.pos[1] += playerSpeed * dt;
+    	player.sprite.update(dt);
+      player.sprite.bgpos = [0, 0];
+
+      if(!collided.hasCollision) {
+      	player.pos[1] += playerSpeed * dt;
+      }else{
+      	//player.pos[1] = collided.object.height - collided.object.sprite.size[1];
+      	player.pos[1] -= 20;
+      }
     }
 
     if(input.isDown('UP') || input.isDown('w')) {
-      player.pos[1] -= playerSpeed * dt;
-      player.sprite.update(dt)
+    	player.sprite.update(dt);
+      player.sprite.bgpos = [0, 192];
+
+      if(!collided.hasCollision) {
+      	player.pos[1] -= playerSpeed * dt;
+      }else{
+      	//player.pos[1] = collided.object.height - collided.object.sprite.size[1];
+      	player.pos[1] += 20;
+      }
     }
 
     if(input.isDown('LEFT') || input.isDown('a')) {
-      player.pos[0] -= playerSpeed * dt;
+    	player.sprite.update(dt);
+      player.sprite.bgpos = [0, 64];
+
+      if(!collided.hasCollision) {
+      	player.pos[0] -= playerSpeed * dt;
+      }else{
+      	//player.pos[0] = collided.object.width - collided.object.sprite.size[0];
+      	player.pos[0] += 20;
+      }
     }
 
     if(input.isDown('RIGHT') || input.isDown('d')) {
-      player.pos[0] += playerSpeed * dt;
+    	player.sprite.update(dt);
+      player.sprite.bgpos = [0, 128];
+
+      if(!collided.hasCollision) {
+      	player.pos[0] += playerSpeed * dt;
+      }else{
+      	//player.pos[0] = collided.object.width - collided.object.sprite.size[0];
+      	player.pos[0] -= 20;
+      }
     }
 
     if(input.isDown('SPACE')) {
@@ -112,7 +160,10 @@ function handleInput(dt) {
 
 function updateEntities(dt) {
     // Update the player sprite animation
-    player.sprite.update(dt);
+    //player.sprite.update(dt);
+
+    charmander.sprite.update(dt);
+    lapras.sprite.update(dt);
 
     // Update all the enemies
     for(var i=0; i<enemies.length; i++) {
@@ -143,6 +194,19 @@ function boxCollides(pos, size, pos2, size2) {
 
 function checkCollisions() {
     checkPlayerBounds();
+
+    var collided = {};
+    collided.hasCollision = false;
+    
+    var pos = charmander.pos;
+    var size = charmander.sprite.size;
+    if(boxCollides(pos, size, player.pos, player.sprite.size)) {
+    	collided.object = charmander;
+    	collided.hasCollision = true;
+    	console.log(collided);
+    }
+
+    return collided;
     
     // Run collision detection for all enemies and bullets
     for(var i=0; i<enemies.length; i++) {
@@ -215,9 +279,11 @@ function render() {
  	}
 
  	ctx.save();
- 	player.sprite.render(ctx);
+ 	renderEntity(player);
+ 	renderEntity(charmander);
+ 	renderEntity(lapras);
  	ctx.restore();
-  //renderEntities(enemies);
+  renderEntities(enemies);
 };
 
 function renderEntities(list) {
