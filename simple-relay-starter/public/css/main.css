@@ -128,6 +128,7 @@ body {
   .poketile .pokebg {
     position: relative; }
   .poketile .pokeimg {
+    display: none;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -135,3 +136,5 @@ body {
     left: 0;
     margin: 0 auto;
     text-align: center; }
+  .poketile .activeTile + .pokeimg, .poketile .correctTile + .pokeimg {
+    display: block; }

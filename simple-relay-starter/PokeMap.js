@@ -1,5 +1,6 @@
 /* eslint-env es6 */
 var React = require('react')
+var ReactDOM = require('react-dom')
 var Relay = require('react-relay')
 import { Label, ButtonToolbar, ButtonGroup, Button, Grid, Row, Col, Image, Modal } from 'react-bootstrap';
 
@@ -24,7 +25,7 @@ class PokeMap extends React.Component {
       return trainer.node.name === "Wild";
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges;
-    console.log("We have ",availablePokemon.length," Pokémon available");
+    //console.log("We have ",availablePokemon.length," Pokémon available");
 
     //Step 2: Select a group of random pokemon to appear in the tiles
     const tileGroup = [];
@@ -80,28 +81,57 @@ class Tile extends React.Component {
   }
 
   revealTile(e) {
-    console.log('e.target', e.target);
-    e.target.setAttribute('class', 'active');
-
     this.setState({ tileVisible: true });
+    console.log('pokebgs...', document.getElementsByClassName('pokebg'));
+    e.target.classList.add('activeTile');
+
+    const activeTile = document.getElementsByClassName('activeTile');
+    console.log(activeTile.length);
+
+    if(activeTile.length > 1) {
+      this.checkPair(activeTile);
+    }
   }
 
   unrevealTile() {
     this.setState({ tileVisible: false });
   }
 
+  checkPair(tiles) {
+    console.log(tiles[0].alt, tiles[1].alt);
+
+    if(tiles[0].alt == tiles[1].alt) {
+      console.log('You got a pair!');
+      tiles[0].classList.add('correctTile');
+      tiles[1].classList.add('correctTile');
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+    }else{
+      console.log('--------', tiles[0].classList, tiles[1].classList);
+      setTimeout(function() {
+        tiles[0].classList.remove('activeTile');
+        tiles[0].classList.remove('activeTile');
+      },500);
+    }
+  }
+
   render() {
-    // We get the conference edges passed in from the top-level container
-    // The edges have data like name and id on them
+    //console.log(this.state);
     const grassImage = '/img/grass.jpg';
     var chosenPokemon = this.props.chosenPokemon;
-    console.log('A wild ', chosenPokemon.name, ' appeared!');
+    //console.log('A wild ', chosenPokemon.name, ' appeared!');
     return (
       <div className="poketile">
-        <Image onClick={this.revealTile} id="pokebg" src={grassImage} height="120" />
-        {this.state.tileVisible &&
-          <Image id="pokeimg" src={chosenPokemon.image} height="120" />
-        }
+        <Image
+          onClick={this.revealTile}
+          className="pokebg"
+          alt={chosenPokemon.name}
+          src={grassImage}
+          height="120"
+        />
+        {/* {this.state.tileVisible && */}
+          <Image className="pokeimg" src={chosenPokemon.image} height="120" />
+        {/* } */}
       </div>
     )
   }
