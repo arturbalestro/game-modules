@@ -47,7 +47,7 @@ class PokeMap extends React.Component {
       const randomPokemon = this.randomNumber(tilePairs.length);
       const chosenPokemon = tilePairs[randomPokemon - 1];
 
-      tiles.push(<Tile chosenPokemon={chosenPokemon} />);
+      tiles.push(<Tile chosenPokemon={chosenPokemon} availablePokemon={availablePokemon} />);
 
       const index = tilePairs.indexOf(chosenPokemon);
       if(index > -1) {
@@ -209,7 +209,7 @@ class PrizeModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <h4>Congratulations, you found all the pairs!</h4>
-          <p>Received 1 Token.</p>
+          <p>Received 1 {this.props.prize.alt} Token.</p>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.closeModal}>Close</Button>
