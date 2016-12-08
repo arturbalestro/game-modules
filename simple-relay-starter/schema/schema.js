@@ -27,6 +27,8 @@ var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
     return db.getTrainer(idInfo.id)
   } else if (idInfo.type == 'Pokemon') {
     return db.getPokemon(idInfo.id)
+  } else if (idInfo.type == 'Token') {
+    return db.getToken(idInfo.id)
   }
   return null
 })
@@ -163,6 +165,32 @@ var trainerType = new GraphQL.GraphQLObjectType({
   interfaces: [nodeDefinitions.nodeInterface],
 })
 
+var tokenType = new GraphQL.GraphQLObjectType({
+  name: 'Token',
+  description: 'A Pokémon token that you receive by beating the stage',
+  isTypeOf: function(obj) { return obj instanceof db.Token },
+
+  // We use a closure here because we need to refer to tokenType from above
+  fields: function() {
+    return {
+      id: GraphQLRelay.globalIdField('Token'),
+      name: {
+        type: GraphQL.GraphQLString,
+        description: 'The name of the correspondent Pokémon',
+      },
+      attribute: {
+        type: GraphQL.GraphQLString,
+        description: 'The type of the correspondent Pokémon',
+      },
+      amount: {
+        type: GraphQL.GraphQLInt,
+        description: 'The amount of tokens you have for each specific Pokémon',
+      },
+    }
+  },
+  interfaces: [nodeDefinitions.nodeInterface],
+})
+
 var userType = new GraphQL.GraphQLObjectType({
   name: 'User',
   description: 'A user',
@@ -194,6 +222,23 @@ var userType = new GraphQL.GraphQLObjectType({
           return GraphQLRelay.connectionFromArray(db.getTrainersByUser(user.id), args)
         },
       },
+      // We can set up a relationship between users and tokens here
+      tokens: {
+        description: 'A Pokémon token that you receive by beating the stage',
+
+        // Relay gives us helper functions to define the Connection and its args
+        type: GraphQLRelay.connectionDefinitions({name: 'Token', nodeType: tokenType}).connectionType,
+
+        // argument to tell GraphQL which user to pass back
+        // in the resolve block
+        args: GraphQLRelay.connectionArgs,
+
+        // The resolve block will complete a query and pass back
+        // data for the user id supplied by the arguments we pass in
+        resolve: function(user, args) {
+          return GraphQLRelay.connectionFromArray(db.getTokensByUser(user.id), args)
+        },
+      },
     }
   },
   interfaces: [nodeDefinitions.nodeInterface],
@@ -220,10 +265,35 @@ var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
   }
 })
 
+var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
+  name: 'AddToken',
+  inputFields: {
+    id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
+    name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
+    attribute: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
+    amount: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLInt)},
+  },
+  outputFields: {
+    user: {
+      type: userType,
+      resolve: function(localTokenId) {
+        db.getToken(localTokenId)
+      }
+    },
+  },
+  mutateAndGetPayload: function(id, name, attribute, amount) {
+    var localTokenId = GraphQLRelay.fromGlobalId(id).id
+    //AddToken(localTokenId, name, attribute, amount);
+    console.log('localTokenId', localTokenId);
+    return {localTokenId};
+  }
+})
+
 var Mutation = new GraphQL.GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    renameTrainer: RenameTrainerMutation
+    renameTrainer: RenameTrainerMutation,
+    AddToken: AddTokenMutation,
   },
 })
 

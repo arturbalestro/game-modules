@@ -133,6 +133,11 @@ body {
 .poketile {
   position: relative;
   display: inline-block;
+  padding: 0;
+
+  &:focus {
+    outline: none;
+  }
 
   .pokebg {
     position: relative;
@@ -151,5 +156,25 @@ body {
     + .pokeimg {
       display: block;
     }
+  }
+}
+
+.token {
+  overflow: hidden;
+  border-style: solid;
+  border-width: 7px;
+  border-radius: 100px;
+  min-width: 120px;
+  min-height: 120px;
+  position: relative;
+  display: inline-block;
+
+  img {
+    position: absolute;
+    margin: 0 auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 }

@@ -32,6 +32,14 @@ function Pokemon(entryNumber, name, pokemonType, image, available, caught, speci
   this.owners = owners
 }
 
+function Token(id, userId, name, attribute, amount) {
+  this.id = id.toString()
+  this.userId = userId.toString()
+  this.name = name
+  this.attribute = attribute
+  this.amount = amount
+}
+
 function Widget(id, userId, name) {
   this.id = id.toString()
   this.userId = userId.toString()
@@ -229,12 +237,19 @@ var pokemons = [
   new Pokemon(151, 'Mew', psychic, spriteUrl+'mew.png', 7, 0, 'New Species Pokemon', [4]),
 ]
 
+var tokens = [
+  new Token(1, 1, 'Bulbasaur', grass, 1),
+  new Token(4, 1, 'Charmander', fire, 3),
+  new Token(7, 1, 'Squirtle', water, 5),
+]
+
 module.exports = {
   User: User,
   Widget: Widget,
   Framework: Framework,
   Trainer: Trainer,
   Pokemon: Pokemon,
+  Token: Token,
 
   getUser: function(id) {
     return users.filter(function(user) {
@@ -261,6 +276,17 @@ module.exports = {
   },
   getTrainersByUser: function(userId) {
     return trainers.filter(function(t) {
+      return t.userId == userId
+    })
+  },
+
+  getToken: function(id) {
+    return tokens.filter(function(token) {
+      return token.id == id
+    })[0]
+  },
+  getTokensByUser: function(userId) {
+    return tokens.filter(function(t) {
       return t.userId == userId
     })
   },

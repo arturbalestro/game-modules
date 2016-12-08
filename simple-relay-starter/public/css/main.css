@@ -124,7 +124,10 @@ body {
 
 .poketile {
   position: relative;
-  display: inline-block; }
+  display: inline-block;
+  padding: 0; }
+  .poketile:focus {
+    outline: none; }
   .poketile .pokebg {
     position: relative; }
   .poketile .pokeimg {
@@ -138,3 +141,20 @@ body {
     text-align: center; }
   .poketile .activeTile + .pokeimg, .poketile .correctTile + .pokeimg {
     display: block; }
+
+.token {
+  overflow: hidden;
+  border-style: solid;
+  border-width: 7px;
+  border-radius: 100px;
+  min-width: 120px;
+  min-height: 120px;
+  position: relative;
+  display: inline-block; }
+  .token img {
+    position: absolute;
+    margin: 0 auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0; }
