@@ -310,5 +310,5 @@ module.exports = {
   getWildPokemons: function() {
     console.log("pokemons are returning!!!!!!", pokemons);
     return pokemons;
-  }
+  },
 }

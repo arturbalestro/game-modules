@@ -265,35 +265,66 @@ var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
   }
 })
 
+// var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
+//   name: 'AddTokenMutation',
+//   inputFields: {
+//     id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
+//     name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
+//   },
+//   outputFields: {
+//     user: {
+//       type: userType,
+//       // resolve: ({localTodoId}) => db.getToken(localTodoId),
+//       resolve: function(localTokenId) {
+//         console.log('resolving localTokenId', localTokenId)
+//         db.getToken(localTokenId)
+//       },
+//     },
+//   },
+//   mutateAndGetPayload: ({id, name}) => {
+//     var localTokenId = GraphQLRelay.fromGlobalId(id).id
+//     console.log('getting payload...', id, name, localTokenId)
+//     AddTokenMutation(localTokenId, name)
+//     return {localTokenId}
+//   },
+// })
+
 var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
-  name: 'AddToken',
+  name: 'AddTokenMutation',
   inputFields: {
     id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
+    userId: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     attribute: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     amount: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLInt)},
   },
   outputFields: {
+    token: {
+      type: tokenType,
+      resolve: ({localTokenId}) => {
+        console.log('----getting token', localTokenId)
+        return {
+          token: localTokenId,
+        }
+      },
+    },
     user: {
       type: userType,
-      resolve: function(localTokenId) {
-        db.getToken(localTokenId)
-      }
+      resolve: () => db.getAnonymousUser(),
     },
   },
-  mutateAndGetPayload: function(id, name, attribute, amount) {
-    var localTokenId = GraphQLRelay.fromGlobalId(id).id
-    //AddToken(localTokenId, name, attribute, amount);
-    console.log('localTokenId', localTokenId);
-    return {localTokenId};
-  }
+  mutateAndGetPayload: ({id, userId, name, attribute, amount}) => {
+    var localTokenId = new db.Token(id, userId, name, attribute, amount)
+    console.log('getting payload...', id, userId, name, attribute, amount, localTokenId)
+    return {localTokenId}
+  },
 })
 
 var Mutation = new GraphQL.GraphQLObjectType({
   name: 'Mutation',
   fields: {
     renameTrainer: RenameTrainerMutation,
-    AddToken: AddTokenMutation,
+    addTokenMutation: AddTokenMutation,
   },
 })
 
@@ -316,5 +347,5 @@ module.exports = new GraphQL.GraphQLSchema({
       },
     },
   }),
-  mutation: Mutation
+  mutation: Mutation,
 })

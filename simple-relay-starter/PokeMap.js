@@ -6,6 +6,9 @@ import { Label, ButtonToolbar, ButtonGroup, Button, Grid, Row, Col, Image, Modal
 import AddTokenMutation from './AddTokenMutation';
 
 const pairsFound = [];
+let token = {};
+token.amount = 0;
+console.log('token?', token);
 
 class PokeMap extends React.Component {
   constructor(props) {
@@ -25,6 +28,7 @@ class PokeMap extends React.Component {
   generateTiles() {
     const tokenInventory = this.props.user.tokens.edges;
     console.log('tokenInventory: ', tokenInventory);
+    console.log('this.props', this.props);
 
     //Step 1: get the pokemon available for the wild
     const tiles = [];
@@ -156,12 +160,23 @@ class Tile extends React.Component {
       const prizePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === lastFound.alt;
       });
-      const token = prizePokemon[0].node;
+      token = prizePokemon[0].node;
+      //console.log('amount?', token.amount);
+      //token.amount += 1;
+      token.amount = 0;
       /*tokenInventory.push(token);
       console.log('inventory after added: ', tokenInventory);*/
 
+      console.log('token', token, this.props.user.id)
+
       Relay.Store.commitUpdate(
-        new AddTokenMutation({user: this.props.user, token}),
+        new AddTokenMutation({
+          id: token.id,
+          userId: this.props.user.id,
+          name: token.name,
+          attribute: token.pokemonType,
+          amount: token.amount
+        }),
         {
           onSuccess: (result) => {
             console.log('Mutation worked!', result);
