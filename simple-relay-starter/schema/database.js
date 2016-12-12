@@ -238,10 +238,13 @@ var pokemons = [
 ]
 
 var tokens = [
-  new Token(1, 1, 'Bulbasaur', grass, 1),
-  new Token(4, 1, 'Charmander', fire, 3),
-  new Token(7, 1, 'Squirtle', water, 5),
+  new Token(1, 'VXNlcjox', 'Bulbasaur', grass, 1),
+  new Token(4, 'VXNlcjox', 'Charmander', fire, 3),
+  new Token(7, 'VXNlcjox', 'Squirtle', water, 5),
 ]
+
+var tokensById = {}
+var nextTokenId = 0
 
 module.exports = {
   User: User,
@@ -280,15 +283,31 @@ module.exports = {
     })
   },
 
-  getToken: function(id) {
-    return tokens.filter(function(token) {
-      return token.id == id
-    })[0]
-  },
+  // getToken: function(id) {
+  //   console.log('trying to get the token that has the id ', id)
+  //   return tokens.filter(function(token) {
+  //     return token.id == id
+  //   })[0]
+  // },
   getTokensByUser: function(userId) {
     return tokens.filter(function(t) {
       return t.userId == userId
     })
+  },
+  addToken(name, attribute, amount) {
+    var token = new Token('', '', '', '', 0)
+    token.id = `${nextTokenId++}`
+    token.name = name
+    token.attribute = attribute
+    token.amount = amount
+    tokensById[token.id] = token
+    console.log('token', token)
+    // todoIdsByUser[VIEWER_ID].push(todo.id);
+    return token.id
+  },
+  getToken(id) {
+    console.log('trying to get the token that has the id ', id)
+    return tokensById[id];
   },
 
   getPokemon: function(id) {

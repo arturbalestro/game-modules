@@ -171,8 +171,8 @@ class Tile extends React.Component {
 
       Relay.Store.commitUpdate(
         new AddTokenMutation({
+          user: this.props.user,
           id: token.id,
-          userId: this.props.user.id,
           name: token.name,
           attribute: token.pokemonType,
           amount: token.amount
@@ -286,7 +286,7 @@ exports.Container = Relay.createContainer(PokeMap, {
             },
           },
         },
-        tokens(first: 10000) {
+        tokens {
           edges {
             node {
               id,
