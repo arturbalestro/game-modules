@@ -231,12 +231,7 @@ var userType = new GraphQL.GraphQLObjectType({
 
         // argument to tell GraphQL which user to pass back
         // in the resolve block
-        args: {
-          id: {type: GraphQL.GraphQLID},
-          name: {type: GraphQL.GraphQLString},
-          attribute: {type: GraphQL.GraphQLString},
-          amount: {type: GraphQL.GraphQLInt},
-        },
+        args: GraphQLRelay.connectionArgs,
 
         // The resolve block will complete a query and pass back
         // data for the user id supplied by the arguments we pass in
@@ -273,41 +268,23 @@ var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
 var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
   name: 'AddTokenMutation',
   inputFields: {
-    id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
     userId: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
     name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     attribute: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     amount: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLInt)},
   },
   outputFields: {
-    token: {
-      type: tokenType,
-      resolve: ({localTokenId}) => {
-        var token = db.getToken(localTokenId)
-        console.log('getting token...', token)
-        return {
-          cursor: GraphQLRelay.cursorForObjectInConnection(db.getTokensByUser(), localTokenId),
-          node: {
-            id: token.id,
-            userId: token.userId,
-            name: token.name,
-            attribute: token.attribute,
-            amount: token.amount,
-          },
-        }
-      },
-    },
     user: {
       type: userType,
-      resolve: () => db.getAnonymousUser(),
+      resolve: ({id}) => db.getUser(id),
     },
   },
-  mutateAndGetPayload: ({id, userId, name, attribute, amount}) => {
-    // var localTokenId = new db.Token(id, userId, name, attribute, amount)
-    console.log('..........', name, attribute, amount)
-    var localTokenId = db.addToken(name, attribute, amount)
-    console.log('getting payload...', localTokenId)
-    return {localTokenId}
+  mutateAndGetPayload: ({userId, name, attribute, amount}) => {
+    console.log('mutating..........', userId, name, attribute, amount)
+    const localUserId = GraphQLRelay.fromGlobalId(userId).id
+    const newToken = new db.Token(userId, '', name, attribute, amount)
+    console.log('getting payload...', newToken, localUserId)
+    return {localUserId}
   },
 })
 
