@@ -21,8 +21,6 @@ var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
   var idInfo = GraphQLRelay.fromGlobalId(globalId)
   if (idInfo.type == 'User') {
     return db.getUser(idInfo.id)
-  } else if (idInfo.type == 'Widget') {
-    return db.getWidget(idInfo.id)
   } else if (idInfo.type == 'Trainer') {
     return db.getTrainer(idInfo.id)
   } else if (idInfo.type == 'Pokemon') {
@@ -34,27 +32,6 @@ var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
 })
 
 // We can now use the Node interface in the GraphQL types of our schema
-
-var widgetType = new GraphQL.GraphQLObjectType({
-  name: 'Widget',
-  description: 'A shiny widget',
-
-  // Relay will use this function to determine if an object in your system is
-  // of a particular GraphQL type
-  isTypeOf: function(obj) { return obj instanceof db.Widget },
-
-  // We can either declare our fields as an object of name-to-definition
-  // mappings or a closure that returns said object (see userType below)
-  fields: {
-    id: GraphQLRelay.globalIdField('Widget'),
-    name: {
-      type: GraphQL.GraphQLString,
-      description: 'The name of the widget',
-    },
-  },
-  // This declares this GraphQL type as a Node
-  interfaces: [nodeDefinitions.nodeInterface],
-})
 
 var pokemonType = new GraphQL.GraphQLObjectType({
   name: 'Pokemon',
@@ -274,17 +251,38 @@ var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
     amount: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLInt)},
   },
   outputFields: {
+    token: {
+      type: tokenType,
+      resolve: (id) => {
+        console.log('resolving id...', id)
+        const token = db.getToken(id)
+        return {
+          cursor: GraphQLRelay.cursorForObjectInConnection(db.getTokensByUser(id), token),
+          node: token,
+        };
+        //return db.getAnonymousUser()
+      },
+    },
     user: {
       type: userType,
-      resolve: ({id}) => db.getUser(id),
+      resolve: () => db.getAnonymousUser(),
     },
   },
   mutateAndGetPayload: ({userId, name, attribute, amount}) => {
     console.log('mutating..........', userId, name, attribute, amount)
     const localUserId = GraphQLRelay.fromGlobalId(userId).id
-    const newToken = new db.Token(userId, '', name, attribute, amount)
-    console.log('getting payload...', newToken, localUserId)
-    return {localUserId}
+    //const newToken = new db.Token(userId, '', name, attribute, amount)
+    console.log('creating token with data', name, attribute, amount)
+    const localTokenId = db.addToken(name, attribute, amount)
+    console.log('returning...', localTokenId)
+    return {localTokenId}
+    //console.log('getting payload...', newToken, localUserId)
+    // return {
+    //   localUserId,
+    //   name,
+    //   attribute,
+    //   amount,
+    // }
   },
 })
 

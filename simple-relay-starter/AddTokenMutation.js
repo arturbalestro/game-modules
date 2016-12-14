@@ -9,17 +9,24 @@ export default class AddTokenMutation extends Relay.Mutation {
       fragment on AddTokenMutationPayload {
         user {
           id,
-          tokens(first: 10000) {
-            edges {
-              node {
-                id
-                name
-                attribute
-                amount
-              }
-            }
-          }
+          tokens
+          # tokens(first: 10000) {
+          #   edges {
+          #     node {
+          #       id
+          #       name
+          #       attribute
+          #       amount
+          #     }
+          #   }
+          # }
         },
+        token {
+          id
+          name
+          attribute
+          amount
+        }
       }
     `;
   }
@@ -28,6 +35,11 @@ export default class AddTokenMutation extends Relay.Mutation {
       type: 'FIELDS_CHANGE',
       fieldIDs: {
         user: this.props.user.id,
+        token: {
+          name: this.props.name,
+          attribute: this.props.attribute,
+          amount: this.props.amount,
+        }
       },
     }];
   }
@@ -40,22 +52,21 @@ export default class AddTokenMutation extends Relay.Mutation {
       amount: this.props.amount,
     };
   }
-  // getOptimisticResponse() {
-  //   return {
-  //     // FIXME: totalCount gets updated optimistically, but this edge does not
-  //     // get added until the server responds
-  //     token: {
-  //       id: this.props.token.id,
-  //       name: this.props.token.name,
-  //       attribute: this.props.token.attribute,
-  //       amount: this.props.token.amount,
-  //     },
-  //     user: {
-  //       id: this.props.user.id,
-  //       //totalCount: this.props.viewer.totalCount + 1,
-  //     },
-  //   };
-  // }
+  getOptimisticResponse() {
+    return {
+      // FIXME: totalCount gets updated optimistically, but this edge does not
+      // get added until the server responds
+      token: {
+        name: this.props.name,
+        attribute: this.props.attribute,
+        amount: this.props.amount,
+      },
+      user: {
+        id: this.props.user.id,
+        //totalCount: this.props.viewer.totalCount + 1,
+      },
+    };
+  }
 }
 
 AddTokenMutation.fragments = {

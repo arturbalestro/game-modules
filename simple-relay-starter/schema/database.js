@@ -5,11 +5,6 @@ function User(id, name) {
   this.name = name
 }
 
-function Framework(id, name) {
-  this.id = id.toString()
-  this.name = name
-}
-
 function Move(name, type, damageAmount, healingAmount, effect) {
 
 }
@@ -40,39 +35,20 @@ function Token(id, userId, name, attribute, amount) {
   this.amount = amount
 }
 
-function Widget(id, userId, name) {
-  this.id = id.toString()
-  this.userId = userId.toString()
-  this.name = name
-}
-
 // In a realistic system, the get functions below would return objects from a
 // datastore like a DB or a REST API instead of an in-memory store like this.
 // You can also return promises for async fetching
 
-var users = [new User(1, 'Anonymous')]
+var users = [new User('1', 'Anonymous')]
 
 var trainers = [
-  new Trainer(0, 1, 'Embar'), //The default trainer
-  new Trainer(1, 1, 'Ash'),
-  new Trainer(2, 1, 'Misty'),
-  new Trainer(3, 1, 'Brock'),
-  new Trainer(4, 1, 'Red'), //Has all available pokémon from pokédex
-  new Trainer(5, 1, 'Wild'), //Pokemon you can find in the wild, not including evolutions or rare pokémon
-  new Trainer(6, 1, 'Starter') //Only starter pokémons
-]
-
-var widgets = [
-  new Widget(1, 1, 'What\'s-it'),
-  new Widget(2, 1, 'Who\'s-it'),
-  new Widget(3, 1, 'How\'s-it'),
-]
-
-var frameworks = [
-  new Framework(1, 'AngularJS'),
-  new Framework(2, 'React'),
-  new Framework(3, 'JavaScript'),
-  new Framework(4, 'NodeJS'),
+  new Trainer(0, '1', 'Embar'), //The default trainer
+  new Trainer(1, '1', 'Ash'),
+  new Trainer(2, '1', 'Misty'),
+  new Trainer(3, '1', 'Brock'),
+  new Trainer(4, '1', 'Red'), //Has all available pokémon from pokédex
+  new Trainer(5, '1', 'Wild'), //Pokemon you can find in the wild, not including evolutions or rare pokémon
+  new Trainer(6, '1', 'Starter') //Only starter pokémons
 ]
 
 var grass = 'Grass', water = 'Water', fire = 'Fire', bug = 'Bug',
@@ -238,18 +214,19 @@ var pokemons = [
 ]
 
 var tokens = [
-  new Token('1', 'VXNlcjox', 'Bulbasaur', grass, 1),
-  new Token('4', 'VXNlcjox', 'Charmander', fire, 3),
-  new Token('7', 'VXNlcjox', 'Squirtle', water, 5),
+  new Token('1', '1', 'Bulbasaur', grass, 1),
+  new Token('4', '1', 'Charmander', fire, 3),
+  new Token('7', '1', 'Squirtle', water, 5),
 ]
 
-var tokensById = {}
-var nextTokenId = 0
+const tokensById = {}
+const tokenIdsByUser = {
+  ['1']: [],
+}
+let nextTokenId = 0
 
 module.exports = {
   User: User,
-  Widget: Widget,
-  Framework: Framework,
   Trainer: Trainer,
   Pokemon: Pokemon,
   Token: Token,
@@ -260,17 +237,6 @@ module.exports = {
     })[0]
   },
   getAnonymousUser: function() { return users[0] },
-
-  getWidget: function(id) {
-    return widgets.filter(function(w) {
-      return w.id == id
-    })[0]
-  },
-  getWidgetsByUser: function(userId) {
-    return widgets.filter(function(w) {
-      return w.userId == userId
-    })
-  },
 
   getTrainer: function(id) {
     return trainers.filter(function(trainer) {
@@ -283,29 +249,33 @@ module.exports = {
     })
   },
 
-  getToken: function(id) {
-    console.log('trying to get the token that has the id ', id)
-    return tokens.filter(function(token) {
-      console.log('comparing token id of ', token.name, ': ', token.id, id)
-      console.log(token.id == id)
-      return token.id == id
-    })[0]
-  },
+  // getToken: function(id) {
+  //   console.log('trying to get the token that has the id ', id)
+  //   return tokens.filter(function(token) {
+  //     console.log('comparing token id of ', token.name, ': ', token.id, id)
+  //     console.log(token.id == id)
+  //     return token.id == id
+  //   })[0]
+  // },
   getTokensByUser: function(userId) {
     return tokens.filter(function(t) {
       return t.userId == userId
     })
   },
+
+  // Mock token data
   addToken(name, attribute, amount) {
-    var token = new Token('', '', '', '', 0)
+    console.log('addToken', name, attribute, amount)
+    const token = new Token('', '1', name, attribute, amount)
     token.id = `${nextTokenId++}`
-    token.name = name
-    token.attribute = attribute
-    token.amount = amount
+    console.log('the token id will be...', token.id)
     tokensById[token.id] = token
-    console.log('token', token)
-    // todoIdsByUser[VIEWER_ID].push(todo.id);
+    tokenIdsByUser['1'].push(token.id)
     return token.id
+  },
+  getToken(id) {
+    console.log('getToken', id)
+    return tokensById[id]
   },
 
   getPokemon: function(id) {
