@@ -1,6 +1,6 @@
 (function() {
 	function Sprite(type, url, bgpos, pos, size, speed, frames, dir, once) {
-		this.type = type;
+	  this.type = type;
 	  this.bgpos = bgpos;
 	  this.pos = pos;
 	  this.size = size;

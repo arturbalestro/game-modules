@@ -37,7 +37,8 @@ var grass = 'Grass', water = 'Water', fire = 'Fire', bug = 'Bug',
 	fairy = 'Fairy', rock = 'Rock', ice = 'Ice', dragon = 'Dragon'
 
 var region = 'kanto/';
-var spriteUrl = 'img/pokemons/' + region;
+//var spriteUrl = 'img/pokemons/' + region;
+var spriteUrl = 'https://img.pokemondb.net/sprites/black-white/normal/';
 
 var pokemons = [
   new Pokemon(1, 'Bulbasaur', grass, spriteUrl+'bulbasaur.png', 0, 0, 'Seed Pokemon', [1, 4, 5, 6]),
@@ -191,4 +192,26 @@ var pokemons = [
   new Pokemon(149, 'Dragonite', dragon, spriteUrl+'dragonite.png', 6, 0, 'Dragon Pokemon', [4]),
   new Pokemon(150, 'Mewtwo', psychic, spriteUrl+'mewtwo.png', 6, 0, 'Genetic Pokemon', [4]),
   new Pokemon(151, 'Mew', psychic, spriteUrl+'mew.png', 7, 0, 'New Species Pokemon', [4]),
+
+  new Pokemon(152, 'Chikorita', grass, spriteUrl+'chikorita.png', 4, 0, 'Leaf Pokemon', [1, 4, 5, 6]),
+  new Pokemon(153, 'Bayleef', grass, spriteUrl+'bayleef.png', 5, 0, 'Virtual Pokemon', [1, 4]),
+  new Pokemon(154, 'Meganium', grass, spriteUrl+'meganium.png', 4, 0, 'Spiral Pokemon', [4]),
+  new Pokemon(155, 'Cyndaquil', fire, spriteUrl+'cyndaquil.png', 5, 0, 'Spiral Pokemon', [1, 4, 5, 6]),
+  new Pokemon(156, 'Quilava', fire, spriteUrl+'quilava.png', 4, 0, 'Shellfish Pokemon', [4]),
+  new Pokemon(157, 'Typhlosion', fire, spriteUrl+'typhlosion.png', 5, 0, 'Shellfish Pokemon', [4]),
+  new Pokemon(158, 'Totodile', water, spriteUrl+'totodile.png', 5, 0, 'Fossil Pokemon', [1, 4, 5, 6]),
+  new Pokemon(159, 'Croconaw', water, spriteUrl+'croconaw.png', 5, 0, 'Sleeping Pokemon', [4]),
+  new Pokemon(160, 'Feraligatr', water, spriteUrl+'feraligatr.png', 6, 0, 'Freeze Pokemon', [4]),
+  new Pokemon(161, 'Sentret', normal, spriteUrl+'sentret.png', 6, 0, 'Electric Pokemon', [4, 5]),
+  new Pokemon(162, 'Furret', normal, spriteUrl+'furret.png', 6, 0, 'Flame Pokemon', [4]),
+  new Pokemon(163, 'Hoothoot', flying, spriteUrl+'hoothoot.png', 4, 0, 'Dragon Pokemon', [4, 5]),
+  new Pokemon(164, 'Noctowl', flying, spriteUrl+'noctowl.png', 5, 0, 'Dragon Pokemon', [1, 4]),
+  new Pokemon(165, 'Ledyba', bug, spriteUrl+'ledyba.png', 6, 0, 'Dragon Pokemon', [4, 5]),
+  new Pokemon(166, 'Ledian', bug, spriteUrl+'ledian.png', 6, 0, 'Genetic Pokemon', [4]),
+  new Pokemon(167, 'Spinarak', bug, spriteUrl+'spinarak.png', 7, 0, 'New Species Pokemon', [4, 5]),
+  new Pokemon(168, 'Ariados', bug, spriteUrl+'ariados.png', 6, 0, 'Dragon Pokemon', [4]),
+  new Pokemon(169, 'Crobat', poison, spriteUrl+'crobat.png', 6, 0, 'Genetic Pokemon', [4]),
+  new Pokemon(170, 'Chinchou', electric, spriteUrl+'chinchou.png', 7, 0, 'New Species Pokemon', [4, 5]),
+  new Pokemon(171, 'Lanturn', electric, spriteUrl+'lanturn.png', 7, 0, 'New Species Pokemon', [4]),
+  new Pokemon(172, 'Pichu', electric, spriteUrl+'pichu.png', 7, 0, 'New Species Pokemon', [4]),
 ]
