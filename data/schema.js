@@ -137,6 +137,31 @@ const hidingSpotType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
+const hidingSpotType = new GraphQLObjectType({
+  name: 'HidingSpot',
+  description: 'A place where you might find treasure',
+  fields: () => ({
+    id: globalIdField('HidingSpot'),
+    hasBeenChecked: {
+      type: GraphQLBoolean,
+      description: 'True if this spot has already been checked for treasure',
+      resolve: (hidingSpot) => hidingSpot.hasBeenChecked,
+    },
+    hasTreasure: {
+      type: GraphQLBoolean,
+      description: 'True if this hiding spot holds treasure',
+      resolve: (hidingSpot) => {
+        if (hidingSpot.hasBeenChecked) {
+          return hidingSpot.hasTreasure;
+        } else {
+          return null;  // Shh... it's a secret!
+        }
+      },
+    },
+  }),
+  interfaces: [nodeInterface],
+});
+
 const pokemonType = new GraphQLObjectType({
   name: 'Pokemon',
   description: 'A Pokemon that will appear on the spot',
