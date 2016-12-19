@@ -31,113 +31,189 @@ import {
 
 import {
   // Import methods that your schema can use to interact with your database
-  User,
-  Widget,
-  getUser,
-  getViewer,
-  getWidget,
-  getWidgets,
+  Game,
+  HidingSpot,
+  checkHidingSpotForTreasure,
+  getGame,
+  getHidingSpot,
+  getHidingSpots,
+  getTurnsRemaining,
 } from './database';
 
-/**
- * We get the node interface and field from the Relay library.
- *
- * The first method defines the way we resolve an ID to its object.
- * The second defines the way we resolve an object to its GraphQL type.
- */
-var {nodeInterface, nodeField} = nodeDefinitions(
+import {
+  Pokemon,
+  getPokemon,
+  getPokemons
+} from './pokemons';
+
+const {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
-    var {type, id} = fromGlobalId(globalId);
-    if (type === 'User') {
-      return getUser(id);
-    } else if (type === 'Widget') {
-      return getWidget(id);
+    const {type, id} = fromGlobalId(globalId);
+    if (type === 'Game') {
+      return getGame(id);
+    } else if (type === 'HidingSpot') {
+      return getHidingSpot(id);
+    } else if (type === 'Pokemon') {
+      return getPokemon(id);
     } else {
       return null;
     }
   },
   (obj) => {
-    if (obj instanceof User) {
-      return userType;
-    } else if (obj instanceof Widget)  {
-      return widgetType;
+    if (obj instanceof Game) {
+      return gameType;
+    } else if (obj instanceof HidingSpot) {
+      return hidingSpotType;
+    } else if (obj instanceof Pokemon) {
+      return pokemonType;
     } else {
       return null;
     }
   }
 );
 
-/**
- * Define your own types here
- */
-
-var userType = new GraphQLObjectType({
-  name: 'User',
-  description: 'A person who uses our app',
+const gameType = new GraphQLObjectType({
+  name: 'Game',
+  description: 'A treasure search game',
   fields: () => ({
-    id: globalIdField('User'),
-    widgets: {
-      type: widgetConnection,
-      description: 'A person\'s collection of widgets',
+    id: globalIdField('Game'),
+    hidingSpots: {
+      type: hidingSpotConnection,
+      description: 'Places where treasure might be hidden',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getWidgets(), args),
+      resolve: (game, args) => connectionFromArray(getHidingSpots(), args),
+    },
+    pokemons: {
+      type: pokemonConnection,
+      description: 'Pokemons that can be found',
+      args: connectionArgs,
+      resolve: (game, args) => connectionFromArray(getPokemons(), args),
+    },
+    turnsRemaining: {
+      type: GraphQLInt,
+      description: 'The number of turns a player has left to find the treasure',
+      resolve: () => getTurnsRemaining(),
     },
   }),
   interfaces: [nodeInterface],
 });
 
-var widgetType = new GraphQLObjectType({
-  name: 'Widget',
-  description: 'A shiny widget',
+const hidingSpotType = new GraphQLObjectType({
+  name: 'HidingSpot',
+  description: 'A place where you might find treasure',
   fields: () => ({
-    id: globalIdField('Widget'),
+    id: globalIdField('HidingSpot'),
+    hasBeenChecked: {
+      type: GraphQLBoolean,
+      description: 'True if this spot has already been checked for treasure',
+      resolve: (hidingSpot) => hidingSpot.hasBeenChecked,
+    },
+    hasTreasure: {
+      type: GraphQLBoolean,
+      description: 'True if this hiding spot holds treasure',
+      resolve: (hidingSpot) => {
+        if (hidingSpot.hasBeenChecked) {
+          return hidingSpot.hasTreasure;
+        } else {
+          return null;  // Shh... it's a secret!
+        }
+      },
+    },
+  }),
+  interfaces: [nodeInterface],
+});
+
+const pokemonType = new GraphQLObjectType({
+  name: 'Pokemon',
+  description: 'A Pokemon that will appear on the spot',
+  fields: () => ({
+    id: globalIdField('Pokemon'),
+    entryNumber: {
+      type: GraphQLString,
+      description: 'The Pokédex entry number of the Pokémon',
+    },
     name: {
       type: GraphQLString,
-      description: 'The name of the widget',
+      description: 'The name of the Pokémon',
+    },
+    pokemonType: {
+      type: GraphQLString,
+      description: 'The type of the Pokémon',
+    },
+    image: {
+      type: GraphQLString,
+      description: 'The image of the Pokémon',
+    },
+    species: {
+      type: GraphQLString,
+      description: 'The species of the Pokémon',
     },
   }),
   interfaces: [nodeInterface],
 });
 
-/**
- * Define your own connection types here
- */
-var {connectionType: widgetConnection} =
-  connectionDefinitions({name: 'Widget', nodeType: widgetType});
+const {connectionType: hidingSpotConnection} =
+  connectionDefinitions({name: 'HidingSpot', nodeType: hidingSpotType});
+
+const {connectionType: pokemonConnection} =
+  connectionDefinitions({name: 'Pokemon', nodeType: pokemonType});
 
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
-var queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: () => ({
-    node: nodeField,
-    // Add your own root fields here
-    viewer: {
-      type: userType,
-      resolve: () => getViewer(),
+const queryType = new GraphQLObjectType({
+ name: 'Query',
+ fields: () => ({
+   node: nodeField,
+   game: {
+     type: gameType,
+     resolve: () => getGame(),
+   },
+ }),
+});
+
+const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
+  name: 'CheckHidingSpotForTreasure',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+  },
+  outputFields: {
+    hidingSpot: {
+      type: hidingSpotType,
+      //resolve: ({localHidingSpotId}) => getHidingSpot(localHidingSpotId),
+      resolve: ({localHidingSpotId}) => {
+        return getHidingSpot(localHidingSpotId);
+      }
     },
-  }),
+    game: {
+      type: gameType,
+      resolve: () => getGame(),
+    },
+  },
+  mutateAndGetPayload: ({id}) => {
+    const localHidingSpotId = fromGlobalId(id).id;
+    checkHidingSpotForTreasure(localHidingSpotId);
+    return {localHidingSpotId};
+  },
 });
 
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
  */
-var mutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => ({
-    // Add your own mutations here
-  })
-});
+ const mutationType = new GraphQLObjectType({
+   name: 'Mutation',
+   fields: () => ({
+     checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
+   }),
+ });
 
 /**
  * Finally, we construct our schema (whose starting query type is the query
  * type we defined above) and export it.
  */
-export var Schema = new GraphQLSchema({
-  query: queryType,
-  // Uncomment the following after adding some mutation fields:
-  // mutation: mutationType
-});
+ export const Schema = new GraphQLSchema({
+   query: queryType,
+   mutation: mutationType
+ });
