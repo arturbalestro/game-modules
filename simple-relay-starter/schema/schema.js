@@ -21,8 +21,6 @@ var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
   var idInfo = GraphQLRelay.fromGlobalId(globalId)
   if (idInfo.type == 'User') {
     return db.getUser(idInfo.id)
-  } else if (idInfo.type == 'Widget') {
-    return db.getWidget(idInfo.id)
   } else if (idInfo.type == 'Trainer') {
     return db.getTrainer(idInfo.id)
   } else if (idInfo.type == 'Pokemon') {
@@ -34,27 +32,6 @@ var nodeDefinitions = GraphQLRelay.nodeDefinitions(function(globalId) {
 })
 
 // We can now use the Node interface in the GraphQL types of our schema
-
-var widgetType = new GraphQL.GraphQLObjectType({
-  name: 'Widget',
-  description: 'A shiny widget',
-
-  // Relay will use this function to determine if an object in your system is
-  // of a particular GraphQL type
-  isTypeOf: function(obj) { return obj instanceof db.Widget },
-
-  // We can either declare our fields as an object of name-to-definition
-  // mappings or a closure that returns said object (see userType below)
-  fields: {
-    id: GraphQLRelay.globalIdField('Widget'),
-    name: {
-      type: GraphQL.GraphQLString,
-      description: 'The name of the widget',
-    },
-  },
-  // This declares this GraphQL type as a Node
-  interfaces: [nodeDefinitions.nodeInterface],
-})
 
 var pokemonType = new GraphQL.GraphQLObjectType({
   name: 'Pokemon',
@@ -231,12 +208,7 @@ var userType = new GraphQL.GraphQLObjectType({
 
         // argument to tell GraphQL which user to pass back
         // in the resolve block
-        args: {
-          id: {type: GraphQL.GraphQLID},
-          name: {type: GraphQL.GraphQLString},
-          attribute: {type: GraphQL.GraphQLString},
-          amount: {type: GraphQL.GraphQLInt},
-        },
+        args: GraphQLRelay.connectionArgs,
 
         // The resolve block will complete a query and pass back
         // data for the user id supplied by the arguments we pass in
@@ -273,7 +245,6 @@ var RenameTrainerMutation = GraphQLRelay.mutationWithClientMutationId({
 var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
   name: 'AddTokenMutation',
   inputFields: {
-    id: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
     userId: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLID)},
     name: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
     attribute: {type: new GraphQL.GraphQLNonNull(GraphQL.GraphQLString)},
@@ -282,19 +253,14 @@ var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
   outputFields: {
     token: {
       type: tokenType,
-      resolve: ({localTokenId}) => {
-        var token = db.getToken(localTokenId)
-        console.log('getting token...', token)
+      resolve: (id) => {
+        console.log('resolving id...', id)
+        const token = db.getToken(id)
         return {
-          cursor: GraphQLRelay.cursorForObjectInConnection(db.getTokensByUser(), localTokenId),
-          node: {
-            id: token.id,
-            userId: token.userId,
-            name: token.name,
-            attribute: token.attribute,
-            amount: token.amount,
-          },
-        }
+          cursor: GraphQLRelay.cursorForObjectInConnection(db.getTokensByUser(id), token),
+          node: token,
+        };
+        //return db.getAnonymousUser()
       },
     },
     user: {
@@ -302,12 +268,21 @@ var AddTokenMutation = GraphQLRelay.mutationWithClientMutationId({
       resolve: () => db.getAnonymousUser(),
     },
   },
-  mutateAndGetPayload: ({id, userId, name, attribute, amount}) => {
-    // var localTokenId = new db.Token(id, userId, name, attribute, amount)
-    console.log('..........', name, attribute, amount)
-    var localTokenId = db.addToken(name, attribute, amount)
-    console.log('getting payload...', localTokenId)
+  mutateAndGetPayload: ({userId, name, attribute, amount}) => {
+    console.log('mutating..........', userId, name, attribute, amount)
+    const localUserId = GraphQLRelay.fromGlobalId(userId).id
+    //const newToken = new db.Token(userId, '', name, attribute, amount)
+    console.log('creating token with data', name, attribute, amount)
+    const localTokenId = db.addToken(name, attribute, amount)
+    console.log('returning...', localTokenId)
     return {localTokenId}
+    //console.log('getting payload...', newToken, localUserId)
+    // return {
+    //   localUserId,
+    //   name,
+    //   attribute,
+    //   amount,
+    // }
   },
 })
 
