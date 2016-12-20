@@ -6,6 +6,9 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import {clean} from 'require-clean';
 import {exec} from 'child_process';
+var sass = require('dart-sass');
+
+var result = sass.renderSync({file: 'styles/memory.scss'});
 
 const APP_PORT = 3000;
 const GRAPHQL_PORT = 8080;
