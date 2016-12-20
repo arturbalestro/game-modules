@@ -123,36 +123,33 @@ class Tile extends React.Component {
     // }
     e.target.classList.add('activeTile');
 
-    const activeTile = document.getElementsByClassName('activeTile');
-    if(activeTile.length > 1) {
-      this.checkPair(activeTile);
+    const activeTiles = document.getElementsByClassName('activeTile');
+    if(activeTiles.length > 1) {
+      this.checkPair(activeTiles);
     }
 
-    Relay.Store.commitUpdate(
-      new CheckHidingSpotForTreasureMutation({
-        game: this.props.game,
-        hidingSpot,
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-          this.setState({ tileVisible: 'visible' });
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
+    // Relay.Store.commitUpdate(
+    //   new CheckHidingSpotForTreasureMutation({
+    //     game: this.props.game,
+    //     hidingSpot,
+    //   }),
+    //   {
+    //     onSuccess: (result) => {
+    //       console.log('Mutation worked!', result);
+    //       this.setState({ tileVisible: 'visible' });
+    //     },
+    //     onFailure: (result) => {
+    //       console.log('Mutation failed!', result);
+    //     },
+    //   }
+    // );
   }
   unrevealTile(tiles) {
     this.setState({ pairChecked: true });
     console.log('checking pair of tiles: ', tiles[0], tiles[1]);
     setTimeout(function() {
-      // tiles[0].classList.remove('activeTile');
-      // tiles[0].classList.remove('activeTile');
-
-      tiles[0].children[0].style.visibility = 'hidden';
-      tiles[1].children[0].style.visibility = 'hidden';
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
     },500);
   }
 
@@ -161,8 +158,17 @@ class Tile extends React.Component {
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0]);
 
+      console.log('this.props.spot', this.props.spot);
+
+      // for(var i = 0; i < tiles.length; i++) {
+      //   tiles[i].classList.add('correctTile');
+      //   tiles[i].classList.add('type-'+this.props.spot.pokemon.pokemonType);
+      //   tiles[i].classList.remove('activeTile');
+      // }
       tiles[0].classList.add('correctTile');
       tiles[1].classList.add('correctTile');
+      tiles[0].classList.add('type-'+this.props.spot.pokemon.pokemonType);
+      tiles[1].classList.add('type-'+this.props.spot.pokemon.pokemonType);
       tiles[0].classList.remove('activeTile');
       tiles[0].classList.remove('activeTile');
 
@@ -232,14 +238,15 @@ class Tile extends React.Component {
 
     return (
       <div
+        className="poketile"
         key={tile.id}
         id={tile.pokemon.name}
         onClick={this._handleHidingSpotClick.bind(this, tile)}
-        style={this._getHidingSpotStyle(tile)}
+        // style={this._getHidingSpotStyle(tile)}
       >
         <Image
           className="pokeimg"
-          style={{visibility: `${this.state.tileVisible}`}}
+          // style={{visibility: `${this.state.tileVisible}`}}
           src={tile.pokemon.image}
           alt={tile.pokemon.name}
           height="120"
