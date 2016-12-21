@@ -10,6 +10,7 @@
  // Model types
  export class Game {}
  export class HidingSpot {}
+ export class Token {}
 
  // Mock data
  const game = new Game();
@@ -42,6 +43,20 @@
    return hidingSpots.find(hs => hs.id === id);
  }
 
+ const tokens = [];
+ export function addTokenPayload(id, name, attribute, amount) {
+   const token = new Token();
+   token.id = id;
+   token.name = name;
+   token.attribute = attribute;
+   token.amount = amount;
+   tokens.push(token);
+ }
+ export function getToken(id) {
+   return tokens.find(tk => tk.id === id);
+ }
+
  export function getGame() { return game; }
  export function getHidingSpots() { return hidingSpots; }
+ export function getTokens() { return tokens; }
  export function getTurnsRemaining() { return turnsRemaining; }

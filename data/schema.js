@@ -33,10 +33,14 @@ import {
   // Import methods that your schema can use to interact with your database
   Game,
   HidingSpot,
+  Token,
   checkHidingSpotForTreasure,
+  addTokenPayload,
   getGame,
   getHidingSpot,
   getHidingSpots,
+  getToken,
+  getTokens,
   getTurnsRemaining,
 } from './database';
 
@@ -55,6 +59,8 @@ const {nodeInterface, nodeField} = nodeDefinitions(
       return getHidingSpot(id);
     } else if (type === 'Pokemon') {
       return getPokemon(id);
+    } else if (type === 'Token') {
+      return getToken(id);
     } else {
       return null;
     }
@@ -66,6 +72,8 @@ const {nodeInterface, nodeField} = nodeDefinitions(
       return hidingSpotType;
     } else if (obj instanceof Pokemon) {
       return pokemonType;
+    } else if (obj instanceof Token) {
+      return tokenType;
     } else {
       return null;
     }
@@ -88,6 +96,12 @@ const gameType = new GraphQLObjectType({
       description: 'Pokemons that can be found',
       args: connectionArgs,
       resolve: (game, args) => connectionFromArray(getPokemons(), args),
+    },
+    tokens: {
+      type: tokenConnection,
+      description: 'Tokens that can be earned when all pairs are found',
+      args: connectionArgs,
+      resolve: (game, args) => connectionFromArray(getTokens(), args),
     },
     turnsRemaining: {
       type: GraphQLInt,
@@ -152,11 +166,35 @@ const pokemonType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
+const tokenType = new GraphQLObjectType({
+  name: 'Token',
+  description: 'A token that can be earned when all pairs are found',
+  fields: () => ({
+    id: globalIdField('Token'),
+    name: {
+      type: GraphQLString,
+      description: 'The name of the correspondent Pokémon',
+    },
+    attribute: {
+      type: GraphQLString,
+      description: 'The type of the correspondent Pokémon',
+    },
+    amount: {
+      type: GraphQLInt,
+      description: 'The amount of tokens you have for each specific Pokémon',
+    },
+  }),
+  interfaces: [nodeInterface],
+});
+
 const {connectionType: hidingSpotConnection} =
   connectionDefinitions({name: 'HidingSpot', nodeType: hidingSpotType});
 
 const {connectionType: pokemonConnection} =
   connectionDefinitions({name: 'Pokemon', nodeType: pokemonType});
+
+const {connectionType: tokenConnection} =
+  connectionDefinitions({name: 'Token', nodeType: tokenType});
 
 /**
  * This is the type that will be the root of our query,
@@ -198,6 +236,31 @@ const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
   },
 });
 
+const AddTokenMutation = mutationWithClientMutationId({
+  name: 'AddToken',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    attribute: { type: new GraphQLNonNull(GraphQLString) },
+    amount: { type: new GraphQLNonNull(GraphQLInt) },
+  },
+  outputFields: {
+    token: {
+      type: tokenType,
+      resolve: ({localTokenId}) => getToken(localTokenId),
+    },
+    game: {
+      type: gameType,
+      resolve: () => getGame(),
+    },
+  },
+  mutateAndGetPayload: ({id, name, attribute, amount}) => {
+    const localTokenId = fromGlobalId(id).id;
+    addTokenPayload(localTokenId, name, attribute, amount);
+    return {localTokenId};
+  },
+});
+
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
@@ -206,6 +269,7 @@ const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
    name: 'Mutation',
    fields: () => ({
      checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
+     addToken: AddTokenMutation,
    }),
  });
 
