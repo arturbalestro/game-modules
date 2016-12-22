@@ -117,32 +117,20 @@ export default class Tile extends React.Component {
       const prizePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === lastFound.children[0].alt;
       });
-      console.log('prize pokemon is: ', prizePokemon);
       token = prizePokemon[0].node;
       //console.log('amount?', token.amount);
       //token.amount += 1;
-      token.amount = 0;
+      token.amount = 1;
       //tokenInventory.push(token);
       console.log('inventory after added: ', tokenInventory);
 
-      console.log('token', token)
+      setTimeout(function() {
+        for(var i = 0; i < tiles.length; i++) {
+          //tiles[i].classList.remove('correctTile');
+          tiles[i].setAttribute('class', 'poketile');
+        }
+      }, 100);
 
-      // Relay.Store.commitUpdate(
-      //   new AddTokenMutation({
-      //     user: this.props.user,
-      //     name: token.name,
-      //     attribute: token.pokemonType,
-      //     amount: token.amount
-      //   }),
-      //   {
-      //     onSuccess: (result) => {
-      //       console.log('Mutation worked!', result);
-      //     },
-      //     onFailure: (result) => {
-      //       console.log('Mutation failed!', result);
-      //     },
-      //   }
-      // );
       Relay.Store.commitUpdate(
         new AddTokenMutation({
           game: this.props.game,
@@ -156,15 +144,14 @@ export default class Tile extends React.Component {
         {
           onSuccess: (result) => {
             console.log('Mutation worked!', result);
+            this.setState({ gameCompleted: true, lastFound: token });
+            //this.props.gameCompleted();
           },
           onFailure: (result) => {
             console.log('Mutation failed!', result);
           },
         }
       );
-
-      this.setState({ gameCompleted: true, lastFound: token });
-      //this.props.gameCompleted();
     }
   }
 

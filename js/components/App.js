@@ -65,6 +65,7 @@ class App extends React.Component {
     return newSpots;
   }
   render() {
+    console.log('showing tokens graphql', this.props.game.tokens);
     let headerText;
     if (this.props.relay.getPendingTransactions(this.props.game)) {
       headerText = '\u2026';
@@ -115,7 +116,10 @@ export default Relay.createContainer(App, {
         tokens(first: 10000) {
           edges {
             node {
-              ${AddTokenMutation.getFragment('token')},
+              id
+              name
+              attribute
+              amount
             }
           }
         }

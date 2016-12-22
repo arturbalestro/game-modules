@@ -33,6 +33,16 @@ export default class AddTokenMutation extends Relay.Mutation {
         },
         game {
           turnsRemaining,
+          tokens(first: 10000) {
+            edges {
+              node {
+                id
+                name
+                attribute
+                amount
+              }
+            }
+          }
         },
       }
     `;
