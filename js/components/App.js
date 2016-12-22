@@ -2,8 +2,10 @@ import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForT
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
+import TypedTransition from '../../scripts/TypedTransition';
 //import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
 import Tile from './Tile';
+import TokenList from './TokenList';
 
 class App extends React.Component {
   constructor(props) {
@@ -58,6 +60,7 @@ class App extends React.Component {
           hidingSpots={this.props.game.hidingSpots}
           game={this.props.game}
           availablePokemon={availablePokemon}
+          restartGame={this.generateTiles}
         />
       );
     });
@@ -67,6 +70,7 @@ class App extends React.Component {
   render() {
     console.log('showing tokens graphql', this.props.game.tokens);
     let headerText;
+    let hasTokens = false;
     if (this.props.relay.getPendingTransactions(this.props.game)) {
       headerText = '\u2026';
     // } else if (this._hasFoundTreasure()) {
@@ -76,11 +80,22 @@ class App extends React.Component {
     } else {
       headerText = 'Match the pokémon pairs!';
     }
+
+    console.log('this.props.game.tokens', this.props.game.tokens);
+    if(this.props.game.tokens.edges.length > 0) {
+      hasTokens = true;
+    } else {
+      hasTokens = false;
+    }
+
     return (
       <div>
         <h1>{headerText}</h1>
         {this.generateTiles()}
         <p>Turns remaining: {this.props.game.turnsRemaining}</p>
+        {hasTokens &&
+          <TokenList tokens={this.props.game.tokens} pokemons={this.props.game.pokemons} />
+        }
       </div>
     );
   }

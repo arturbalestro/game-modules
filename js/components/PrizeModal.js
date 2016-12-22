@@ -1,6 +1,9 @@
 import React from 'react';
 import Relay from 'react-relay';
+import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
+import AddTokenMutation from '../mutations/AddTokenMutation';
+import App from './App';
 
 export default class PrizeModal extends React.Component {
   constructor(props) {
@@ -12,11 +15,39 @@ export default class PrizeModal extends React.Component {
 
     this.closeModal = this.closeModal.bind(this);
     //this.openModal = this.openModal.bind(this);
+    this.addToken = this.addToken.bind(this);
+  }
+
+  addToken() {
+    Relay.Store.commitUpdate(
+      new AddTokenMutation({
+        game: this.props.game,
+        token: {
+          id: this.props.prize.id,
+          name: this.props.prize.name,
+          attribute: this.props.prize.pokemonType,
+          amount: this.props.prize.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
   }
 
   closeModal() {
     this.setState({ showModal: false });
-    window.location.reload();
+    this.addToken();
+
+    //TypedTransition.from(this).to(App, this.props.game.id);
+    // setTimeout(function() {
+    //   window.location.reload();
+    // }, 800);
   }
 
   render() {
@@ -41,3 +72,9 @@ export default class PrizeModal extends React.Component {
     )
   }
 }
+
+// export function path() {
+//   return '/';
+// }
+//
+// PrizeModal.contextTypes = TypedTransition.contextTypes();

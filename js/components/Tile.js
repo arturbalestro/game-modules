@@ -126,32 +126,11 @@ export default class Tile extends React.Component {
 
       setTimeout(function() {
         for(var i = 0; i < tiles.length; i++) {
-          //tiles[i].classList.remove('correctTile');
           tiles[i].setAttribute('class', 'poketile');
         }
-      }, 100);
+      }, 200);
 
-      Relay.Store.commitUpdate(
-        new AddTokenMutation({
-          game: this.props.game,
-          token: {
-            id: token.id,
-            name: token.name,
-            attribute: token.pokemonType,
-            amount: token.amount,
-          },
-        }),
-        {
-          onSuccess: (result) => {
-            console.log('Mutation worked!', result);
-            this.setState({ gameCompleted: true, lastFound: token });
-            //this.props.gameCompleted();
-          },
-          onFailure: (result) => {
-            console.log('Mutation failed!', result);
-          },
-        }
-      );
+      this.setState({ gameCompleted: true, lastFound: token });
     }
   }
 
@@ -183,7 +162,7 @@ export default class Tile extends React.Component {
           height="120"
         />
         {this.state.gameCompleted &&
-          <PrizeModal prize={this.state.lastFound} showModal={true} />
+          <PrizeModal game={this.props.game} prize={this.state.lastFound} showModal={true} restartGame={this.props.restartGame} />
         }
       </div>
     )
