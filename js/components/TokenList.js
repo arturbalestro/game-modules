@@ -16,7 +16,7 @@ export default class TokenList extends React.Component {
           <h3>Current tokens you have:</h3>
         </Col>
         {this.props.tokens.edges.map(function(token, index) {
-          const pokemon = pokemonList.edges.filter((pokemon) => pokemon.node.name === token.node.name );
+          const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
           return (
             <Col md={2} key={token.node.id} className="text-center">
               <div className={"token type-"+token.node.attribute}>

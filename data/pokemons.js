@@ -173,8 +173,19 @@ var pokemons = [
 ]
 
 export function getPokemon(id) {
-  console.log('getPokemon: ', id, pokemons.find(pk => pk.id === id));
   return pokemons.find(pk => pk.id === id);
 }
 
 export function getPokemons() { return pokemons; }
+
+export function getPokemonsByTrainer(trainerId) {
+  var confs = []
+  pokemons.forEach(function(conf) {
+    conf.owners.forEach(function(trainer) {
+      if (trainer == trainerId) {
+        confs.push(conf)
+      }
+    })
+  })
+  return confs
+}

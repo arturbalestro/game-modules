@@ -45,9 +45,9 @@ export default class PrizeModal extends React.Component {
     this.addToken();
 
     //TypedTransition.from(this).to(App, this.props.game.id);
-    // setTimeout(function() {
-    //   window.location.reload();
-    // }, 800);
+    setTimeout(function() {
+      window.location.reload();
+    }, 800);
   }
 
   render() {

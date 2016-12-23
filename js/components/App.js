@@ -19,7 +19,11 @@ class App extends React.Component {
   }
   generateTiles() {
     //Step 1: get the pokemon available for the wild
-    const availablePokemon = this.props.game.pokemons.edges;
+    const trainers = this.props.game.trainers.edges;
+    const wildGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === "Wild";
+    });
+    const availablePokemon = wildGroup[0].node.pokemons.edges;
 
     //Step 2: Select a group of random pokemon to appear in the tiles
     const tileGroup = [];
@@ -68,7 +72,6 @@ class App extends React.Component {
     return newSpots;
   }
   render() {
-    console.log('showing tokens graphql', this.props.game.tokens);
     let headerText;
     let hasTokens = false;
     if (this.props.relay.getPendingTransactions(this.props.game)) {
@@ -81,7 +84,12 @@ class App extends React.Component {
       headerText = 'Match the pokémon pairs!';
     }
 
-    console.log('this.props.game.tokens', this.props.game.tokens);
+    const trainers = this.props.game.trainers.edges;
+    const wildGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === "Wild";
+    });
+    const availablePokemon = wildGroup[0].node.pokemons.edges;
+
     if(this.props.game.tokens.edges.length > 0) {
       hasTokens = true;
     } else {
@@ -94,7 +102,7 @@ class App extends React.Component {
         {this.generateTiles()}
         <p>Turns remaining: {this.props.game.turnsRemaining}</p>
         {hasTokens &&
-          <TokenList tokens={this.props.game.tokens} pokemons={this.props.game.pokemons} />
+          <TokenList tokens={this.props.game.tokens} pokemons={availablePokemon} />
         }
       </div>
     );
@@ -116,15 +124,25 @@ export default Relay.createContainer(App, {
             }
           }
         },
-        pokemons(first: 10000) {
+        trainers(first: 10000) {
           edges {
             node {
               id
-              entryNumber
               name
-              pokemonType
-              image
-              species
+              specialty
+              weakness
+              pokemons(first: 10000) {
+                edges {
+                  node {
+                    id
+                    entryNumber
+                    name
+                    pokemonType
+                    image
+                    species
+                  }
+                }
+              }
             }
           }
         }

@@ -45,9 +45,16 @@ import {
 } from './database';
 
 import {
+  Trainer,
+  getTrainer,
+  getTrainers
+} from './trainers';
+
+import {
   Pokemon,
   getPokemon,
-  getPokemons
+  getPokemons,
+  getPokemonsByTrainer
 } from './pokemons';
 
 const {nodeInterface, nodeField} = nodeDefinitions(
@@ -57,6 +64,8 @@ const {nodeInterface, nodeField} = nodeDefinitions(
       return getGame(id);
     } else if (type === 'HidingSpot') {
       return getHidingSpot(id);
+    } else if (type === 'Trainer') {
+      return getTrainer(id);
     } else if (type === 'Pokemon') {
       return getPokemon(id);
     } else if (type === 'Token') {
@@ -70,6 +79,8 @@ const {nodeInterface, nodeField} = nodeDefinitions(
       return gameType;
     } else if (obj instanceof HidingSpot) {
       return hidingSpotType;
+    } else if (obj instanceof Trainer) {
+      return trainerType;
     } else if (obj instanceof Pokemon) {
       return pokemonType;
     } else if (obj instanceof Token) {
@@ -91,12 +102,18 @@ const gameType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (game, args) => connectionFromArray(getHidingSpots(), args),
     },
-    pokemons: {
-      type: pokemonConnection,
-      description: 'Pokemons that can be found',
+    trainers: {
+      type: trainerConnection,
+      description: 'Trainers that have Pokémon',
       args: connectionArgs,
-      resolve: (game, args) => connectionFromArray(getPokemons(), args),
+      resolve: (game, args) => connectionFromArray(getTrainers(), args),
     },
+    // pokemons: {
+    //   type: pokemonConnection,
+    //   description: 'Pokemons that can be found',
+    //   args: connectionArgs,
+    //   resolve: (game, args) => connectionFromArray(getPokemons(), args),
+    // },
     tokens: {
       type: tokenConnection,
       description: 'Tokens that can be earned when all pairs are found',
@@ -166,6 +183,35 @@ const pokemonType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
+const trainerType = new GraphQLObjectType({
+  name: 'Trainer',
+  description: 'A person that trains pokémon',
+  fields: () => ({
+    id: globalIdField('Trainer'),
+    name: {
+      type: GraphQLString,
+      description: 'The name of the Trainer',
+    },
+    specialty: {
+      type: GraphQLString,
+      description: 'The specialty of the Trainer (type of pokémon they use the most).',
+    },
+    weakness: {
+      type: GraphQLString,
+      description: 'The type of the Pokémon they have the most problems with.',
+    },
+
+    // We can set up a relationship between trainers and pokémons here
+    pokemons: {
+      description: 'A listing of the trainer\'s Pokémons',
+      type: pokemonConnection,
+      args: connectionArgs,
+      resolve: (trainer, args) => connectionFromArray(getPokemonsByTrainer(trainer.id), args),
+    },
+  }),
+  interfaces: [nodeInterface],
+});
+
 const tokenType = new GraphQLObjectType({
   name: 'Token',
   description: 'A token that can be earned when all pairs are found',
@@ -189,6 +235,9 @@ const tokenType = new GraphQLObjectType({
 
 const {connectionType: hidingSpotConnection} =
   connectionDefinitions({name: 'HidingSpot', nodeType: hidingSpotType});
+
+const {connectionType: trainerConnection} =
+  connectionDefinitions({name: 'Trainer', nodeType: trainerType});
 
 const {connectionType: pokemonConnection} =
   connectionDefinitions({name: 'Pokemon', nodeType: pokemonType});
@@ -261,6 +310,31 @@ const AddTokenMutation = mutationWithClientMutationId({
   },
 });
 
+const EditTokenMutation = mutationWithClientMutationId({
+  name: 'EditToken',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    attribute: { type: new GraphQLNonNull(GraphQLString) },
+    amount: { type: new GraphQLNonNull(GraphQLInt) },
+  },
+  outputFields: {
+    token: {
+      type: tokenType,
+      resolve: ({localTokenId}) => getToken(localTokenId),
+    },
+    game: {
+      type: gameType,
+      resolve: () => getGame(),
+    },
+  },
+  mutateAndGetPayload: ({id, amount}) => {
+    const localTokenId = fromGlobalId(id).id;
+    addTokenPayload(amount);
+    return {localTokenId};
+  },
+});
+
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
@@ -270,6 +344,7 @@ const AddTokenMutation = mutationWithClientMutationId({
    fields: () => ({
      checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
      addToken: AddTokenMutation,
+     editToken: EditTokenMutation,
    }),
  });
 
