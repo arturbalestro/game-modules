@@ -52,7 +52,13 @@
    token.amount = amount;
    tokens.push(token);
  }
+ export function editTokenPayload(id) {
+   const token = tokens.filter(tk => tk.id === id);
+   token[0].amount = token[0].amount + 1;
+ }
  export function getToken(id) {
+   //console.log('trying to get token: ', id, 'among ', tokens);
+   //console.log(tokens.find(tk => tk.id === id));
    return tokens.find(tk => tk.id === id);
  }
 

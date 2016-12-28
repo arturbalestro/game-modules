@@ -1,6 +1,6 @@
 import Relay from 'react-relay';
 
-export default class AddTokenMutation extends Relay.Mutation {
+export default class EditTokenMutation extends Relay.Mutation {
   static fragments = {
     game: () => Relay.QL`
       fragment on Game {
@@ -18,14 +18,14 @@ export default class AddTokenMutation extends Relay.Mutation {
     `,
   };
   getMutation() {
-    return Relay.QL`mutation{addToken}`;
+    return Relay.QL`mutation{editToken}`;
   }
   // getCollisionKey() {
   //   return `check_${this.props.game.id}`;
   // }
   getFatQuery() {
     return Relay.QL`
-      fragment on AddTokenPayload @relay(pattern: true) {
+      fragment on EditTokenPayload @relay(pattern: true) {
         token {
           name,
           attribute,
@@ -61,7 +61,7 @@ export default class AddTokenMutation extends Relay.Mutation {
       id: this.props.token.id,
       name: this.props.token.name,
       attribute: this.props.token.attribute,
-      amount: this.props.token.amount,
+      amount: this.props.token.amount + 1,
     };
   }
   getOptimisticResponse() {
@@ -70,10 +70,7 @@ export default class AddTokenMutation extends Relay.Mutation {
         turnsRemaining: this.props.game.turnsRemaining - 1,
       },
       token: {
-        id: this.props.token.id,
-        name: this.props.token.name,
-        attribute: this.props.token.attribute,
-        amount: this.props.token.amount,
+        amount: this.props.token.amount + 1,
       },
     };
   }

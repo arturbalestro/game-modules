@@ -8,6 +8,9 @@ export default class TokenList extends React.Component {
   }
 
   render() {
+    // console.log('props', this.props);
+    // const pokemonList = this.props.game.trainers.edges.map(trainer => trainer.node.pokemons.edges);
+    // console.log('pokemonList found: ', pokemonList);
     const pokemonList = this.props.pokemons;
 
     return (
@@ -30,3 +33,58 @@ export default class TokenList extends React.Component {
     )
   }
 }
+
+export function path() {
+  return '/tokens';
+}
+
+// export default Relay.createContainer(TokenList, {
+//   fragments: {
+//     game: () => Relay.QL`
+//       fragment on Game {
+//         turnsRemaining,
+//         hidingSpots(first: 9) {
+//           edges {
+//             node {
+//               hasBeenChecked,
+//               hasTreasure,
+//               id,
+//             }
+//           }
+//         },
+//         trainers(first: 10000) {
+//           edges {
+//             node {
+//               id
+//               name
+//               specialty
+//               weakness
+//               pokemons(first: 10000) {
+//                 edges {
+//                   node {
+//                     id
+//                     entryNumber
+//                     name
+//                     pokemonType
+//                     image
+//                     species
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//         tokens(first: 10000) {
+//           edges {
+//             node {
+//               id
+//               name
+//               attribute
+//               amount
+//             }
+//           }
+//         }
+//       }
+//     `,
+//   },
+// });

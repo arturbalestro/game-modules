@@ -3,7 +3,9 @@ import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
 import AddTokenMutation from '../mutations/AddTokenMutation';
-import App from './App';
+import EditTokenMutation from '../mutations/EditTokenMutation';
+import * as app from './App';
+import * as tokenList from './TokenList';
 
 export default class PrizeModal extends React.Component {
   constructor(props) {
@@ -40,14 +42,46 @@ export default class PrizeModal extends React.Component {
     );
   }
 
+  editToken() {
+    Relay.Store.commitUpdate(
+      new EditTokenMutation({
+        game: this.props.game,
+        token: {
+          id: this.props.prize.id,
+          name: this.props.prize.name,
+          attribute: this.props.prize.pokemonType,
+          amount: this.props.prize.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
+  }
+
   closeModal() {
     this.setState({ showModal: false });
-    this.addToken();
 
-    //TypedTransition.from(this).to(App, this.props.game.id);
-    setTimeout(function() {
-      window.location.reload();
-    }, 800);
+    const currentPrizeName = this.props.prize.name;
+    const existingToken = this.props.game.tokens.edges.filter(function(token) {
+      return token.node.name === currentPrizeName;
+    });
+
+    if(existingToken.length > 0) {
+      this.editToken();
+    }else{
+      this.addToken();
+    }
+
+    TypedTransition.from(this).to(tokenList, this.props.game.id);
+    // setTimeout(function() {
+    //   window.location.reload();
+    // }, 800);
   }
 
   render() {
@@ -74,7 +108,7 @@ export default class PrizeModal extends React.Component {
 }
 
 // export function path() {
-//   return '/';
+//   return '/game';
 // }
-//
-// PrizeModal.contextTypes = TypedTransition.contextTypes();
+
+PrizeModal.contextTypes = TypedTransition.contextTypes();

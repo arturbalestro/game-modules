@@ -1,5 +1,6 @@
 import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForTreasureMutation';
 import AddTokenMutation from '../mutations/AddTokenMutation';
+import EditTokenMutation from '../mutations/EditTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
@@ -109,6 +110,10 @@ class App extends React.Component {
   }
 }
 
+export function path() {
+  return '/game';
+}
+
 export default Relay.createContainer(App, {
   fragments: {
     game: () => Relay.QL`
@@ -157,6 +162,7 @@ export default Relay.createContainer(App, {
           }
         }
         ${AddTokenMutation.getFragment('game')},
+        ${EditTokenMutation.getFragment('game')},
         ${CheckHidingSpotForTreasureMutation.getFragment('game')},
       }
     `,

@@ -118,11 +118,7 @@ export default class Tile extends React.Component {
         return pokemon.node.name === lastFound.children[0].alt;
       });
       token = prizePokemon[0].node;
-      //console.log('amount?', token.amount);
-      //token.amount += 1;
       token.amount = 1;
-      //tokenInventory.push(token);
-      console.log('inventory after added: ', tokenInventory);
 
       setTimeout(function() {
         for(var i = 0; i < tiles.length; i++) {

@@ -36,6 +36,7 @@ import {
   Token,
   checkHidingSpotForTreasure,
   addTokenPayload,
+  editTokenPayload,
   getGame,
   getHidingSpot,
   getHidingSpots,
@@ -330,7 +331,9 @@ const EditTokenMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({id, amount}) => {
     const localTokenId = fromGlobalId(id).id;
-    addTokenPayload(amount);
+    if(localTokenId != undefined) {
+      editTokenPayload(localTokenId);
+    }
     return {localTokenId};
   },
 });
