@@ -102,9 +102,9 @@ class App extends React.Component {
         <h1>{headerText}</h1>
         {this.generateTiles()}
         <p>Turns remaining: {this.props.game.turnsRemaining}</p>
-        {hasTokens &&
+        {/* {hasTokens &&
           <TokenList tokens={this.props.game.tokens} pokemons={availablePokemon} />
-        }
+        } */}
       </div>
     );
   }
@@ -118,6 +118,7 @@ export default Relay.createContainer(App, {
   fragments: {
     game: () => Relay.QL`
       fragment on Game {
+        id,
         turnsRemaining,
         hidingSpots(first: 9) {
           edges {

@@ -50,6 +50,7 @@ const routes = (
     <Route
       path={tokenList.path()}
       component={TokenList}
+      queries={routeQuery()}
       renderFailure={renderFailure}
     />
 

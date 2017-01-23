@@ -20,7 +20,6 @@ export default class TypedTransition {
    *
    */
   constructor(view) {
-    console.log('VIEW ', view);
     this.view = view;
   }
 

@@ -1,3 +1,5 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import chokidar from 'chokidar';
 import express from 'express';
 import graphQLHTTP from 'express-graphql';
@@ -9,6 +11,7 @@ import {exec} from 'child_process';
 var sass = require('dart-sass');
 
 var result = sass.renderSync({file: 'styles/memory.scss'});
+const PageTransition = require('react-router-page-transition').default(React, ReactDOM);
 
 const APP_PORT = 3000;
 const GRAPHQL_PORT = 8080;

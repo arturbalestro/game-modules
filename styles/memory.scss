@@ -182,3 +182,33 @@ body {
     left: 0;
   }
 }
+
+.trasition-wrapper {
+  position: relative;
+  z-index: 1;
+  .transition-item {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+.token-list {
+
+  .token-menu {
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  &.transition-appear {
+    transform: scale(0);
+  }
+
+  &.transition-appear.transition-appear-active {
+    transform: scale(1);
+  }
+}

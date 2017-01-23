@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
@@ -6,6 +7,7 @@ import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
 import * as app from './App';
 import * as tokenList from './TokenList';
+import PageTransition from 'react-router-page-transition';
 
 export default class PrizeModal extends React.Component {
   constructor(props) {
@@ -78,15 +80,14 @@ export default class PrizeModal extends React.Component {
       this.addToken();
     }
 
-    TypedTransition.from(this).to(tokenList, this.props.game.id);
+    TypedTransition.from(this).to(tokenList);
+
     // setTimeout(function() {
     //   window.location.reload();
     // }, 800);
   }
 
   render() {
-    console.log('here is your prize ', this.props.prize);
-
     return (
       <Modal show={this.state.showModal} onHide={this.closeModal}>
         <Modal.Header closeButton>
@@ -100,7 +101,9 @@ export default class PrizeModal extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.closeModal}>Close</Button>
+          <div className="transition-item list-page">
+            <Button onClick={this.closeModal}>Close</Button>
+          </div>
         </Modal.Footer>
       </Modal>
     )

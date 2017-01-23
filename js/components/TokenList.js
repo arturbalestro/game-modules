@@ -1,24 +1,41 @@
 import React from 'react';
 import Relay from 'react-relay';
-import { Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Image, Button, Glyphicon } from 'react-bootstrap';
+import TypedTransition from '../../scripts/TypedTransition';
+import * as app from './App';
 
-export default class TokenList extends React.Component {
+export class TokenList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.backToGame = this.backToGame.bind(this);
+  }
+
+  backToGame() {
+    TypedTransition.from(this).to(app);
   }
 
   render() {
-    // console.log('props', this.props);
-    // const pokemonList = this.props.game.trainers.edges.map(trainer => trainer.node.pokemons.edges);
-    // console.log('pokemonList found: ', pokemonList);
-    const pokemonList = this.props.pokemons;
+    const trainers = this.props.game.trainers.edges;
+    const wildGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === "Wild";
+    });
+    const pokemonList = wildGroup[0].node.pokemons.edges;
 
     return (
-      <Row className="token-list">
+      <Row className="token-list transition-item">
         <Col md={12}>
           <h3>Current tokens you have:</h3>
+          <ul className="token-menu text-right">
+            <li>
+              <Button onClick={this.backToGame}>
+                <Glyphicon glyph="menu-left" />
+              </Button>
+              {/* <a href="#/game">Back to the game</a> */}
+            </li>
+          </ul>
         </Col>
-        {this.props.tokens.edges.map(function(token, index) {
+        {this.props.game.tokens.edges.map(function(token, index) {
           const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
           return (
             <Col md={2} key={token.node.id} className="text-center">
@@ -38,53 +55,56 @@ export function path() {
   return '/tokens';
 }
 
-// export default Relay.createContainer(TokenList, {
-//   fragments: {
-//     game: () => Relay.QL`
-//       fragment on Game {
-//         turnsRemaining,
-//         hidingSpots(first: 9) {
-//           edges {
-//             node {
-//               hasBeenChecked,
-//               hasTreasure,
-//               id,
-//             }
-//           }
-//         },
-//         trainers(first: 10000) {
-//           edges {
-//             node {
-//               id
-//               name
-//               specialty
-//               weakness
-//               pokemons(first: 10000) {
-//                 edges {
-//                   node {
-//                     id
-//                     entryNumber
-//                     name
-//                     pokemonType
-//                     image
-//                     species
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//         tokens(first: 10000) {
-//           edges {
-//             node {
-//               id
-//               name
-//               attribute
-//               amount
-//             }
-//           }
-//         }
-//       }
-//     `,
-//   },
-// });
+TokenList.contextTypes = TypedTransition.contextTypes();
+
+export default Relay.createContainer(TokenList, {
+  fragments: {
+    game: () => Relay.QL`
+      fragment on Game {
+        id
+        turnsRemaining,
+        hidingSpots(first: 9) {
+          edges {
+            node {
+              hasBeenChecked,
+              hasTreasure,
+              id,
+            }
+          }
+        },
+        trainers(first: 10000) {
+          edges {
+            node {
+              id
+              name
+              specialty
+              weakness
+              pokemons(first: 10000) {
+                edges {
+                  node {
+                    id
+                    entryNumber
+                    name
+                    pokemonType
+                    image
+                    species
+                  }
+                }
+              }
+            }
+          }
+        }
+        tokens(first: 10000) {
+          edges {
+            node {
+              id
+              name
+              attribute
+              amount
+            }
+          }
+        }
+      }
+    `,
+  },
+});
