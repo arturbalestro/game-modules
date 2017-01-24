@@ -127,6 +127,9 @@ export default class Tile extends React.Component {
       }, 200);
 
       this.setState({ gameCompleted: true, lastFound: token });
+
+      //Allows game to be played and completed once again.
+      pairsFound.splice(0, pairsFound.length);
     }
   }
 
