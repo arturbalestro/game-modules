@@ -4,6 +4,9 @@ import App from './components/App';
 import * as app from './components/App';
 import TokenList from './components/TokenList';
 import * as tokenList from './components/TokenList';
+import PowerPlant from './components/stages/PowerPlant';
+import * as powerPlant from './components/stages/PowerPlant';
+
 import AppHomeRoute from './routes/AppHomeRoute';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -54,12 +57,14 @@ const routes = (
       renderFailure={renderFailure}
     />
 
-    {/*  /return/<commerceOrderId> */}
-    {/* <Route
-      path={orderReturn.path()}
-      component={OrderReturnView}
+    {/*  STAGES */}
+    {/*  /power-plant */}
+    <Route
+      path={powerPlant.path()}
+      component={PowerPlant}
+      queries={routeQuery()}
       renderFailure={renderFailure}
-    /> */}
+    />
 
     {/*  /orders  */}
     {/* <Route

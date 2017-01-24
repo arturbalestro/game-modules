@@ -1,21 +1,18 @@
-import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForTreasureMutation';
-import AddTokenMutation from '../mutations/AddTokenMutation';
-import EditTokenMutation from '../mutations/EditTokenMutation';
+import CheckHidingSpotForTreasureMutation from '../../mutations/CheckHidingSpotForTreasureMutation';
+import AddTokenMutation from '../../mutations/AddTokenMutation';
+import EditTokenMutation from '../../mutations/EditTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
-import TypedTransition from '../../scripts/TypedTransition';
-import { Nav, NavItem } from 'react-bootstrap';
-import Tile from './Tile';
-import TokenList from './TokenList';
-import PowerPlant from './stages/PowerPlant';
-import * as powerPlant from './stages/PowerPlant';
+import TypedTransition from '../../../scripts/TypedTransition';
+//import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
+import Tile from '../Tile';
+import TokenList from '../TokenList';
 
-class App extends React.Component {
+class PowerPlant extends React.Component {
   constructor(props) {
     super(props);
 
     this.generateTiles = this.generateTiles.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
   }
 
   randomNumber(x) {
@@ -25,9 +22,11 @@ class App extends React.Component {
     //Step 1: get the pokemon available for the wild
     const trainers = this.props.game.trainers.edges;
     const wildGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === "Ash";
+      return trainer.node.name === "Wild";
     });
-    const availablePokemon = wildGroup[0].node.pokemons.edges;
+    const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
+      return pokemon.node.type === "Electric";
+    });
 
     //Step 2: Select a group of random pokemon to appear in the tiles
     const tileGroup = [];
@@ -86,11 +85,6 @@ class App extends React.Component {
 
     return newSpots;
   }
-
-  handleSelect(selectedKey) {
-    TypedTransition.from(this).to(powerPlant);
-  }
-
   render() {
     let headerText;
     let hasTokens = false;
@@ -108,7 +102,9 @@ class App extends React.Component {
     const wildGroup = trainers.filter(function(trainer) {
       return trainer.node.name === "Wild";
     });
-    const availablePokemon = wildGroup[0].node.pokemons.edges;
+    const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
+      return pokemon.node.type === "Electric";
+    });
 
     if(this.props.game.tokens.edges.length > 0) {
       hasTokens = true;
@@ -117,31 +113,23 @@ class App extends React.Component {
     }
 
     return (
-      <div>
-        {/* <h1>{headerText}</h1>
+      <div className="power-plant type-electric">
+        <h1>{headerText}</h1>
         {this.generateTiles()}
-        <p>Turns remaining: {this.props.game.turnsRemaining}</p> */}
+        <p>Turns remaining: {this.props.game.turnsRemaining}</p>
         {/* {hasTokens &&
           <TokenList tokens={this.props.game.tokens} pokemons={availablePokemon} />
         } */}
-        <h1>Go to:</h1>
-        <Nav bsStyle="pills" stacked activeKey={1} onSelect={this.handleSelect}>
-          <NavItem eventKey={1} href="#/power-plant">Power Plant</NavItem>
-          <NavItem eventKey={2} disabled>Viridian Forest</NavItem>
-          <NavItem eventKey={3} disabled>Cerulean Cave</NavItem>
-        </Nav>
       </div>
     );
   }
 }
 
 export function path() {
-  return '/game';
+  return '/power-plant';
 }
 
-App.contextTypes = TypedTransition.contextTypes();
-
-export default Relay.createContainer(App, {
+export default Relay.createContainer(PowerPlant, {
   fragments: {
     game: () => Relay.QL`
       fragment on Game {

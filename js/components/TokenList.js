@@ -18,7 +18,7 @@ export class TokenList extends React.Component {
   render() {
     const trainers = this.props.game.trainers.edges;
     const wildGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === "Wild";
+      return trainer.node.name === "Red";
     });
     const pokemonList = wildGroup[0].node.pokemons.edges;
 
@@ -31,7 +31,6 @@ export class TokenList extends React.Component {
               <Button onClick={this.backToGame}>
                 <Glyphicon glyph="menu-left" />
               </Button>
-              {/* <a href="#/game">Back to the game</a> */}
             </li>
           </ul>
         </Col>

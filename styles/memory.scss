@@ -183,7 +183,7 @@ body {
   }
 }
 
-.trasition-wrapper {
+.transition-wrapper {
   position: relative;
   z-index: 1;
   .transition-item {
@@ -195,6 +195,10 @@ body {
 }
 
 .token-list {
+  padding: 20px;
+  transition: transform 0.5s;
+  height: 100vh;
+  box-sizing: border-box;
 
   .token-menu {
     padding: 0;
