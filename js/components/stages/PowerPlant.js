@@ -174,6 +174,7 @@ export default Relay.createContainer(PowerPlant, {
             node {
               id
               name
+              entryNumber
               attribute
               amount
             }

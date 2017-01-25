@@ -12,6 +12,7 @@ export default class AddTokenMutation extends Relay.Mutation {
       fragment on Token {
         id,
         name,
+        entryNumber,
         attribute,
         amount,
       }
@@ -28,6 +29,7 @@ export default class AddTokenMutation extends Relay.Mutation {
       fragment on AddTokenPayload @relay(pattern: true) {
         token {
           name,
+          entryNumber,
           attribute,
           amount,
         },
@@ -38,6 +40,7 @@ export default class AddTokenMutation extends Relay.Mutation {
               node {
                 id
                 name
+                entryNumber
                 attribute
                 amount
               }
@@ -60,6 +63,7 @@ export default class AddTokenMutation extends Relay.Mutation {
     return {
       id: this.props.token.id,
       name: this.props.token.name,
+      entryNumber: this.props.token.entryNumber,
       attribute: this.props.token.attribute,
       amount: this.props.token.amount,
     };
@@ -72,6 +76,7 @@ export default class AddTokenMutation extends Relay.Mutation {
       token: {
         id: this.props.token.id,
         name: this.props.token.name,
+        entryNumber: this.props.token.entryNumber,
         attribute: this.props.token.attribute,
         amount: this.props.token.amount,
       },

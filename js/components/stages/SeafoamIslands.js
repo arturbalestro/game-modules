@@ -26,7 +26,8 @@ class SeafoamIslands extends React.Component {
       return trainer.node.name === "Wild";
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
-      return pokemon.node.pokemonType === "Water" || pokemon.node.pokemonType === "Ice";
+      return pokemon.node.pokemonType === "Water"
+          || pokemon.node.pokemonType === "Ice";
     });
     return availablePokemon;
   }

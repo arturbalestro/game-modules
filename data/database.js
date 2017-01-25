@@ -44,10 +44,11 @@
  }
 
  const tokens = [];
- export function addTokenPayload(id, name, attribute, amount) {
+ export function addTokenPayload(id, name, entryNumber, attribute, amount) {
    const token = new Token();
    token.id = id;
    token.name = name;
+   token.entryNumber = entryNumber;
    token.attribute = attribute;
    token.amount = amount;
    tokens.push(token);

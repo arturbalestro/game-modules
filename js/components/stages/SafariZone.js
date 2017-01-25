@@ -26,7 +26,8 @@ class SafariZone extends React.Component {
       return trainer.node.name === "Wild";
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
-      return pokemon.node.pokemonType === "Grass" || pokemon.node.pokemonType === "Normal";
+      return pokemon.node.pokemonType === "Grass"
+          || pokemon.node.pokemonType === "Normal";
     });
     return availablePokemon;
   }

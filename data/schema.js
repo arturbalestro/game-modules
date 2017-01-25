@@ -161,7 +161,7 @@ const pokemonType = new GraphQLObjectType({
   fields: () => ({
     id: globalIdField('Pokemon'),
     entryNumber: {
-      type: GraphQLString,
+      type: GraphQLInt,
       description: 'The Pokédex entry number of the Pokémon',
     },
     name: {
@@ -221,6 +221,10 @@ const tokenType = new GraphQLObjectType({
     name: {
       type: GraphQLString,
       description: 'The name of the correspondent Pokémon',
+    },
+    entryNumber: {
+      type: GraphQLInt,
+      description: 'The Pokédex entry number of the correspondent Pokémon',
     },
     attribute: {
       type: GraphQLString,
@@ -291,6 +295,7 @@ const AddTokenMutation = mutationWithClientMutationId({
   inputFields: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     name: { type: new GraphQLNonNull(GraphQLString) },
+    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
     attribute: { type: new GraphQLNonNull(GraphQLString) },
     amount: { type: new GraphQLNonNull(GraphQLInt) },
   },
@@ -304,9 +309,9 @@ const AddTokenMutation = mutationWithClientMutationId({
       resolve: () => getGame(),
     },
   },
-  mutateAndGetPayload: ({id, name, attribute, amount}) => {
+  mutateAndGetPayload: ({id, name, entryNumber, attribute, amount}) => {
     const localTokenId = fromGlobalId(id).id;
-    addTokenPayload(localTokenId, name, attribute, amount);
+    addTokenPayload(localTokenId, name, entryNumber, attribute, amount);
     return {localTokenId};
   },
 });
@@ -316,6 +321,7 @@ const EditTokenMutation = mutationWithClientMutationId({
   inputFields: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     name: { type: new GraphQLNonNull(GraphQLString) },
+    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
     attribute: { type: new GraphQLNonNull(GraphQLString) },
     amount: { type: new GraphQLNonNull(GraphQLInt) },
   },

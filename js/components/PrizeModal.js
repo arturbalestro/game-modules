@@ -20,6 +20,33 @@ export default class PrizeModal extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     //this.openModal = this.openModal.bind(this);
     this.addToken = this.addToken.bind(this);
+    this.editToken = this.editToken.bind(this);
+    this.getAllPokemon = this.getAllPokemon.bind(this);
+    this.checkTokenAmount = this.checkTokenAmount.bind(this);
+  }
+
+  getAllPokemon() {
+    const trainers = this.props.game.trainers.edges;
+    const fullGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === "Red";
+    });
+    return fullGroup[0].node.pokemons.edges;
+  }
+
+  checkTokenAmount() {
+    console.log('token: ', this.props.prize, this.props.game.tokens);
+    const allPokemon = this.getAllPokemon();
+    const amountReached = this.props.game.tokens.edges.filter(function(token) {
+      return token.node.amount >= 2;
+    });
+    console.log('----', amountReached);
+    amountReached.map(function(token) {
+      console.log('Found a '+token.node.name+' token. His evolution can be unlocked.');
+      const matchingPokemon = allPokemon.filter(function(pokemon) {
+        return pokemon.node.entryNumber === token.node.entryNumber;
+      });
+      console.log('found entry number: ', matchingPokemon[0].node.entryNumber);
+    });
   }
 
   addToken() {
@@ -29,6 +56,7 @@ export default class PrizeModal extends React.Component {
         token: {
           id: this.props.prize.id,
           name: this.props.prize.name,
+          entryNumber: this.props.prize.entryNumber,
           attribute: this.props.prize.pokemonType,
           amount: this.props.prize.amount,
         },
@@ -42,6 +70,8 @@ export default class PrizeModal extends React.Component {
         },
       }
     );
+
+    this.checkTokenAmount();
   }
 
   editToken() {
@@ -51,6 +81,7 @@ export default class PrizeModal extends React.Component {
         token: {
           id: this.props.prize.id,
           name: this.props.prize.name,
+          entryNumber: this.props.prize.entryNumber,
           attribute: this.props.prize.pokemonType,
           amount: this.props.prize.amount,
         },
@@ -64,6 +95,8 @@ export default class PrizeModal extends React.Component {
         },
       }
     );
+
+    this.checkTokenAmount();
   }
 
   closeModal() {
@@ -81,10 +114,6 @@ export default class PrizeModal extends React.Component {
     }
 
     TypedTransition.from(this).to(tokenList);
-
-    // setTimeout(function() {
-    //   window.location.reload();
-    // }, 800);
   }
 
   render() {

@@ -74,6 +74,7 @@ class App extends React.Component {
       <div>
         <h1>Select the stage:</h1>
         <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
+          {/*Note: Add verification to prevent pairs to be found near each other */}
           <NavItem eventKey={1}>Power Plant</NavItem>
           <NavItem eventKey={2}>Viridian Forest</NavItem>
           <NavItem eventKey={3}>Cinnabar Island</NavItem>
@@ -139,6 +140,7 @@ export default Relay.createContainer(App, {
             node {
               id
               name
+              entryNumber
               attribute
               amount
             }
