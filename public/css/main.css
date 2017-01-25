@@ -163,22 +163,27 @@ body {
     right: 0;
     left: 0; }
 
-.trasition-wrapper {
+.transition-wrapper {
   position: relative;
   z-index: 1; }
-  .trasition-wrapper .transition-item {
+  .transition-wrapper .transition-item {
     position: fixed;
     top: 0;
     left: 0;
     right: 0; }
 
-.token-list .token-menu {
-  padding: 0; }
-  .token-list .token-menu li {
-    list-style: none; }
-.token-list.transition-appear {
-  transform: scale(0); }
-.token-list.transition-appear.transition-appear-active {
-  transform: scale(1); }
+.token-list {
+  padding: 20px;
+  transition: transform 0.5s;
+  height: 100vh;
+  box-sizing: border-box; }
+  .token-list .token-menu {
+    padding: 0; }
+    .token-list .token-menu li {
+      list-style: none; }
+  .token-list.transition-appear {
+    transform: scale(0); }
+  .token-list.transition-appear.transition-appear-active {
+    transform: scale(1); }
 
 /*# sourceMappingURL=main.css.map */

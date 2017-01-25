@@ -8,7 +8,7 @@ import TypedTransition from '../../../scripts/TypedTransition';
 import Tile from '../Tile';
 import TokenList from '../TokenList';
 
-class PowerPlant extends React.Component {
+class VictoryRoad extends React.Component {
   constructor(props) {
     super(props);
 
@@ -26,7 +26,8 @@ class PowerPlant extends React.Component {
       return trainer.node.name === "Wild";
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
-      return pokemon.node.pokemonType === "Electric";
+      return pokemon.node.pokemonType === "Fighting"
+          || pokemon.node.pokemonType === "Flying";
     });
     return availablePokemon;
   }
@@ -114,8 +115,8 @@ class PowerPlant extends React.Component {
     }
 
     return (
-      <div className="power-plant">
-        <h1>Power Plant</h1>
+      <div className="victory-road">
+        <h1>Victory Road</h1>
         <h2>{headerText}</h2>
         {this.generateTiles()}
         <p>Turns remaining: {this.props.game.turnsRemaining}</p>
@@ -128,10 +129,10 @@ class PowerPlant extends React.Component {
 }
 
 export function path() {
-  return '/power-plant';
+  return '/victory-road';
 }
 
-export default Relay.createContainer(PowerPlant, {
+export default Relay.createContainer(VictoryRoad, {
   fragments: {
     game: () => Relay.QL`
       fragment on Game {
