@@ -3,3 +3,5 @@ node_modules
 npm-debug.log
 data/schema.graphql
 .idea/
+.sass-cache/dd5a0da1af13735adb41e1d658fa09e932d838f3/
+public/css/main.css.map

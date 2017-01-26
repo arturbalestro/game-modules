@@ -37,7 +37,7 @@ export class TokenList extends React.Component {
         {this.props.game.tokens.edges.map(function(token, index) {
           const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
           return (
-            <Col md={2} key={token.node.id} className="text-center">
+            <Col md={2} sm={1} lg={2} key={token.node.id} className="text-center">
               <div className={"token type-"+token.node.attribute}>
                 <Image src={pokemon[0].node.image} />
               </div>

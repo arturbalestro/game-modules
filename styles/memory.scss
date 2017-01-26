@@ -131,7 +131,10 @@ body {
 }
 
 .poketile {
-  background: #000;
+  background: url('/img/tile-bg.jpg') no-repeat center center;
+  background-size: 120px;
+  border: 1px solid #BBB;
+  border-radius: 100px;
   position: relative;
   display: inline-block;
   padding: 0;
@@ -157,6 +160,7 @@ body {
     text-align: center;
   }
   &.activeTile, &.correctTile {
+    background: #000;
     .pokeimg {
       display: block;
     }
@@ -214,5 +218,35 @@ body {
 
   &.transition-appear.transition-appear-active {
     transform: scale(1);
+  }
+}
+
+.stage-menu {
+  background: #EEE;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  margin: 0 10px;
+  padding: 15px;
+
+  button, li {
+    background: #FFF;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 45%;
+    margin: 5px;
+
+    a {
+      color: inherit;
+      outline: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .glyphicon {
+      font-size: 40px;
+    }
   }
 }

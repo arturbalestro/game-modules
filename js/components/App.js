@@ -4,7 +4,7 @@ import EditTokenMutation from '../mutations/EditTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
-import { Nav, NavItem } from 'react-bootstrap';
+import { Row, Col, Nav, NavItem, Panel, Button, Glyphicon } from 'react-bootstrap';
 import Tile from './Tile';
 import TokenList from './TokenList';
 import * as powerPlant from './stages/PowerPlant';
@@ -71,22 +71,52 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Row className="text-center">
         <h1>Select the stage:</h1>
-        <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
+        <Nav className="stage-menu" bsStyle="pills" stacked onSelect={this.handleSelect}>
           {/*Note: Add verification to prevent pairs to be found near each other */}
-          <NavItem eventKey={1}>Power Plant</NavItem>
-          <NavItem eventKey={2}>Viridian Forest</NavItem>
-          <NavItem eventKey={3}>Cinnabar Island</NavItem>
-          <NavItem eventKey={4}>Seafoam Islands</NavItem>
-          <NavItem eventKey={5}>Rock Tunnel</NavItem>
-          <NavItem eventKey={6}>Safari Zone</NavItem>
-          <NavItem eventKey={7}>Mt. Moon</NavItem>
-          <NavItem eventKey={8}>Underground Path</NavItem>
-          <NavItem eventKey={9}>Lavender Tower</NavItem>
-          <NavItem eventKey={10}>Victory Road</NavItem>
+          <NavItem eventKey={1}>
+            <Glyphicon glyph="flash" />
+            <p>Power Plant</p>
+          </NavItem>
+          <NavItem eventKey={2}>
+            <Glyphicon glyph="tree-deciduous" />
+            <p>Viridian Forest</p>
+          </NavItem>
+          <NavItem eventKey={3}>
+            <Glyphicon glyph="fire" />
+            <p>Cinnabar Island</p>
+          </NavItem>
+          <NavItem eventKey={4}>
+            <Glyphicon glyph="tint" />
+            <p>Seafoam Islands</p>
+          </NavItem>
+          <NavItem eventKey={5}>
+            <Glyphicon glyph="certificate" />
+            <p>Rock Tunnel</p>
+          </NavItem>
+          <NavItem eventKey={6}>
+            <Glyphicon glyph="leaf" />
+            <p>Safari Zone</p>
+          </NavItem>
+          <NavItem eventKey={7}>
+            <Glyphicon glyph="star-empty" />
+            <p>Mt. Moon</p>
+          </NavItem>
+          <NavItem eventKey={8}>
+            <Glyphicon glyph="download-alt" />
+            <p>Underground Path</p>
+          </NavItem>
+          <NavItem eventKey={9}>
+            <Glyphicon glyph="tower" />
+            <p>Lavender Tower</p>
+          </NavItem>
+          <NavItem eventKey={10}>
+            <Glyphicon glyph="road" />
+            <p>Victory Road</p>
+          </NavItem>
         </Nav>
-      </div>
+      </Row>
     );
   }
 }

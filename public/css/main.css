@@ -123,7 +123,10 @@ body {
   text-align: center; }
 
 .poketile {
-  background: #000;
+  background: url("/img/tile-bg.jpg") no-repeat center center;
+  background-size: 120px;
+  border: 1px solid #BBB;
+  border-radius: 100px;
   position: relative;
   display: inline-block;
   padding: 0;
@@ -143,8 +146,10 @@ body {
     left: 0;
     margin: 0 auto;
     text-align: center; }
-  .poketile.activeTile .pokeimg, .poketile.correctTile .pokeimg {
-    display: block; }
+  .poketile.activeTile, .poketile.correctTile {
+    background: #000; }
+    .poketile.activeTile .pokeimg, .poketile.correctTile .pokeimg {
+      display: block; }
 
 .token {
   overflow: hidden;
@@ -185,5 +190,26 @@ body {
     transform: scale(0); }
   .token-list.transition-appear.transition-appear-active {
     transform: scale(1); }
+
+.stage-menu {
+  background: #EEE;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  margin: 0 10px;
+  padding: 15px; }
+  .stage-menu button, .stage-menu li {
+    background: #FFF;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 45%;
+    margin: 5px; }
+    .stage-menu button a, .stage-menu li a {
+      color: inherit;
+      outline: none; }
+      .stage-menu button a:focus, .stage-menu li a:focus {
+        outline: none; }
+    .stage-menu button .glyphicon, .stage-menu li .glyphicon {
+      font-size: 40px; }
 
 /*# sourceMappingURL=main.css.map */
