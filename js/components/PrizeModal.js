@@ -15,6 +15,7 @@ export default class PrizeModal extends React.Component {
 
     this.state = {
       showModal: this.props.showModal,
+      unlockedPokemon: false,
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -23,30 +24,68 @@ export default class PrizeModal extends React.Component {
     this.editToken = this.editToken.bind(this);
     this.getAllPokemon = this.getAllPokemon.bind(this);
     this.checkTokenAmount = this.checkTokenAmount.bind(this);
+    this.checkUnlockables = this.checkUnlockables.bind(this);
   }
 
-  getAllPokemon() {
+  getAllPokemon(trainerFilter) {
     const trainers = this.props.game.trainers.edges;
     const fullGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === "Red";
+      return trainer.node.name === trainerFilter;
     });
     return fullGroup[0].node.pokemons.edges;
   }
 
   checkTokenAmount() {
-    console.log('token: ', this.props.prize, this.props.game.tokens);
-    const allPokemon = this.getAllPokemon();
-    const amountReached = this.props.game.tokens.edges.filter(function(token) {
+    const amountReached = [];
+    const allPokemon = this.getAllPokemon("Red");
+    const canUnlock = this.props.game.tokens.edges.filter(function(token) {
       return token.node.amount >= 2;
     });
+    amountReached.push(canUnlock);
     console.log('----', amountReached);
-    amountReached.map(function(token) {
+    const unlockablePokemon = amountReached[0].map(function(token) {
       console.log('Found a '+token.node.name+' token. His evolution can be unlocked.');
       const matchingPokemon = allPokemon.filter(function(pokemon) {
         return pokemon.node.entryNumber === token.node.entryNumber;
       });
-      console.log('found entry number: ', matchingPokemon[0].node.entryNumber);
+      console.log('found matchingPokemon', matchingPokemon);
+      return matchingPokemon[0].node;
     });
+
+    console.log(unlockablePokemon);
+    return unlockablePokemon;
+  }
+
+  checkUnlockables() {
+    const matchingPokemon = this.checkTokenAmount();
+    console.log('matchingPokemon', matchingPokemon);
+    // const unlockedPokemon = allPokemon.filter(function(pokemon) {
+    //   return pokemon.node.entryNumber === token.node.entryNumber + 1;
+    // });
+    // console.log('Can it evolve?', matchingPokemon[0].node.canEvolve);
+    // console.log(matchingPokemon[0].node.name+' can be unlocked!');
+    // if(matchingPokemon[0].node.canEvolve) {
+    //   return matchingPokemon[0].node;
+    // }
+
+    this.setState({ unlockedPokemon: true });
+  }
+
+  componentWillMount() {
+    const currentPrizeName = this.props.prize.name;
+    const existingToken = this.props.game.tokens.edges.filter(function(token) {
+      return token.node.name === currentPrizeName;
+    });
+
+    if(existingToken.length > 0) {
+      this.editToken();
+    }else{
+      this.addToken();
+    }
+  }
+
+  componentDidMount() {
+    this.checkUnlockables();
   }
 
   addToken() {
@@ -70,8 +109,6 @@ export default class PrizeModal extends React.Component {
         },
       }
     );
-
-    this.checkTokenAmount();
   }
 
   editToken() {
@@ -95,23 +132,10 @@ export default class PrizeModal extends React.Component {
         },
       }
     );
-
-    this.checkTokenAmount();
   }
 
   closeModal() {
     this.setState({ showModal: false });
-
-    const currentPrizeName = this.props.prize.name;
-    const existingToken = this.props.game.tokens.edges.filter(function(token) {
-      return token.node.name === currentPrizeName;
-    });
-
-    if(existingToken.length > 0) {
-      this.editToken();
-    }else{
-      this.addToken();
-    }
 
     TypedTransition.from(this).to(tokenList);
   }
@@ -128,6 +152,12 @@ export default class PrizeModal extends React.Component {
           <div className={"token type-"+this.props.prize.pokemonType}>
             <Image src={this.props.prize.image} />
           </div>
+          {this.state.unlockedPokemon &&
+            <div>
+              <p>Unlocked!</p>
+              {/* <p>You have unlocked ${this.checkUnlockables()} into your game!</p> */}
+            </div>
+          }
         </Modal.Body>
         <Modal.Footer>
           <div className="transition-item list-page">

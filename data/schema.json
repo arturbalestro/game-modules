@@ -918,6 +918,18 @@
               "deprecationReason": null
             },
             {
+              "name": "canEvolve",
+              "description": "Specifies if a Pokémon has a direct evolution.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "species",
               "description": "The species of the Pokémon",
               "args": [],

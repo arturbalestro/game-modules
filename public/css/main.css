@@ -216,8 +216,10 @@ body {
     .stage-menu button .glyphicon, .stage-menu li .glyphicon {
       font-size: 40px; }
 
+.stage h2 {
+  margin-top: 15px; }
 .stage ul {
-  margin-top: 10px; }
+  margin-top: 15px; }
   .stage ul li {
     list-style: none; }
 

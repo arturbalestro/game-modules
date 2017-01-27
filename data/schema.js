@@ -176,6 +176,10 @@ const pokemonType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The image of the Pokémon',
     },
+    canEvolve: {
+      type: GraphQLString,
+      description: 'Specifies if a Pokémon has a direct evolution.',
+    },
     species: {
       type: GraphQLString,
       description: 'The species of the Pokémon',
