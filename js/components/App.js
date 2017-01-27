@@ -7,16 +7,8 @@ import TypedTransition from '../../scripts/TypedTransition';
 import { Row, Col, Nav, NavItem, Panel, Button, Glyphicon } from 'react-bootstrap';
 import Tile from './Tile';
 import TokenList from './TokenList';
-import * as powerPlant from './stages/PowerPlant';
-import * as viridianForest from './stages/ViridianForest';
-import * as cinnabarIsland from './stages/CinnabarIsland';
-import * as seafoamIslands from './stages/SeafoamIslands';
-import * as rockTunnel from './stages/RockTunnel';
-import * as safariZone from './stages/SafariZone';
-import * as mtMoon from './stages/MtMoon';
-import * as undergroundPath from './stages/UndergroundPath';
-import * as lavenderTower from './stages/LavenderTower';
-import * as victoryRoad from './stages/VictoryRoad';
+import Stage from './Stage';
+import * as stage from './Stage';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,48 +17,8 @@ class App extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
-  handleSelect(selectedKey) {
-    switch(selectedKey) {
-      case 1:
-        TypedTransition.from(this).to(powerPlant);
-      break;
-
-      case 2:
-        TypedTransition.from(this).to(viridianForest);
-      break;
-
-      case 3:
-        TypedTransition.from(this).to(cinnabarIsland);
-      break;
-
-      case 4:
-        TypedTransition.from(this).to(seafoamIslands);
-      break;
-
-      case 5:
-        TypedTransition.from(this).to(rockTunnel);
-      break;
-
-      case 6:
-        TypedTransition.from(this).to(safariZone);
-      break;
-
-      case 7:
-        TypedTransition.from(this).to(mtMoon);
-      break;
-
-      case 8:
-        TypedTransition.from(this).to(undergroundPath);
-      break;
-
-      case 9:
-        TypedTransition.from(this).to(lavenderTower);
-      break;
-
-      case 10:
-        TypedTransition.from(this).to(victoryRoad);
-      break;
-    }
+  handleSelect(selectedKey, e) {
+    TypedTransition.from(this).with({ stage: selectedKey }).to(stage);
   }
 
   render() {
@@ -131,54 +83,7 @@ export default Relay.createContainer(App, {
   fragments: {
     game: () => Relay.QL`
       fragment on Game {
-        id,
-        turnsRemaining,
-        hidingSpots(first: 9) {
-          edges {
-            node {
-              hasBeenChecked,
-              hasTreasure,
-              id,
-              ${CheckHidingSpotForTreasureMutation.getFragment('hidingSpot')},
-            }
-          }
-        },
-        trainers(first: 10000) {
-          edges {
-            node {
-              id
-              name
-              specialty
-              weakness
-              pokemons(first: 10000) {
-                edges {
-                  node {
-                    id
-                    entryNumber
-                    name
-                    pokemonType
-                    image
-                    species
-                  }
-                }
-              }
-            }
-          }
-        }
-        tokens(first: 10000) {
-          edges {
-            node {
-              id
-              name
-              entryNumber
-              attribute
-              amount
-            }
-          }
-        }
-        ${AddTokenMutation.getFragment('game')},
-        ${EditTokenMutation.getFragment('game')},
-        ${CheckHidingSpotForTreasureMutation.getFragment('game')},
+        ${Stage.getFragment('game')},
       }
     `,
   },

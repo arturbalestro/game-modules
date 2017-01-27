@@ -6,6 +6,9 @@ import TokenList from './components/TokenList';
 import * as tokenList from './components/TokenList';
 
 //Importing stages
+import Stage from './components/Stage';
+import * as stage from './components/Stage';
+
 import PowerPlant from './components/stages/PowerPlant';
 import * as powerPlant from './components/stages/PowerPlant';
 import ViridianForest from './components/stages/ViridianForest';
@@ -54,14 +57,14 @@ export function routeQuery() {
  */
 const routes = (
   <Router history={hashHistory} render={applyRouterMiddleware(useRelay)} environment={Relay.Store}>
-    {/*  / ----> /game */}
+    {/* / ----> /game */}
     <Redirect
       from="/"
       to={app.path()}
       renderFailure={renderFailure}
     />
 
-    {/*  /game */}
+    {/* /game */}
     <Route
       path={app.path()}
       component={App}
@@ -69,7 +72,7 @@ const routes = (
       renderFailure={renderFailure}
     />
 
-    {/*  /token-list */}
+    {/* /token-list */}
     <Route
       path={tokenList.path()}
       component={TokenList}
@@ -77,74 +80,10 @@ const routes = (
       renderFailure={renderFailure}
     />
 
-    {/*  STAGES */}
-    {/*  /power-plant */}
+    {/* /stage */}
     <Route
-      path={powerPlant.path()}
-      component={PowerPlant}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /viridian-forest */}
-    <Route
-      path={viridianForest.path()}
-      component={ViridianForest}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /cinnabar-island */}
-    <Route
-      path={cinnabarIsland.path()}
-      component={CinnabarIsland}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /seafoam-islands */}
-    <Route
-      path={seafoamIslands.path()}
-      component={SeafoamIslands}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /rock-tunnel */}
-    <Route
-      path={rockTunnel.path()}
-      component={RockTunnel}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /safari-zone */}
-    <Route
-      path={safariZone.path()}
-      component={SafariZone}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /mt-moon */}
-    <Route
-      path={mtMoon.path()}
-      component={MtMoon}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /underground-path */}
-    <Route
-      path={undergroundPath.path()}
-      component={UndergroundPath}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /lavender-tower */}
-    <Route
-      path={lavenderTower.path()}
-      component={LavenderTower}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-    {/*  /victory-road */}
-    <Route
-      path={victoryRoad.path()}
-      component={VictoryRoad}
+      path={stage.path()}
+      component={Stage}
       queries={routeQuery()}
       renderFailure={renderFailure}
     />

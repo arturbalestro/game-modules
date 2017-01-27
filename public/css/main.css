@@ -110,6 +110,9 @@ body {
   margin: 0;
   padding: 0; }
 
+.no-padding {
+  padding: 0; }
+
 .pokepanel {
   text-align: center;
   padding-bottom: 20px; }
@@ -203,7 +206,8 @@ body {
     border-radius: 4px;
     display: inline-block;
     min-width: 45%;
-    margin: 5px; }
+    margin-bottom: 5px;
+    margin-right: 5px; }
     .stage-menu button a, .stage-menu li a {
       color: inherit;
       outline: none; }
@@ -211,5 +215,10 @@ body {
         outline: none; }
     .stage-menu button .glyphicon, .stage-menu li .glyphicon {
       font-size: 40px; }
+
+.stage ul {
+  margin-top: 10px; }
+  .stage ul li {
+    list-style: none; }
 
 /*# sourceMappingURL=main.css.map */

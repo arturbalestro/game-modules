@@ -113,6 +113,9 @@ body {
   margin: 0;
   padding: 0;
 }
+.no-padding {
+  padding: 0;
+}
 
 .pokepanel {
   text-align: center;
@@ -234,7 +237,8 @@ body {
     border-radius: 4px;
     display: inline-block;
     min-width: 45%;
-    margin: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
 
     a {
       color: inherit;
@@ -247,6 +251,19 @@ body {
 
     .glyphicon {
       font-size: 40px;
+    }
+  }
+}
+
+.stage {
+  h2 {
+    margin-top: 15px;
+  }
+  ul{
+    margin-top: 15px;
+
+    li {
+      list-style: none;
     }
   }
 }

@@ -4,11 +4,10 @@ import EditTokenMutation from '../mutations/EditTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
-import { Button, Glyphicon } from 'react-bootstrap';
+import { Row, Col, Button, Glyphicon } from 'react-bootstrap';
+import * as app from './App';
 import Tile from './Tile';
 import TokenList from './TokenList';
-import PowerPlant from './stages/PowerPlant';
-import * as powerPlant from './stages/PowerPlant';
 
 class Stage extends React.Component {
   constructor(props) {
@@ -18,35 +17,103 @@ class Stage extends React.Component {
       availablePokemon: {},
     };
 
+    this.backToGame = this.backToGame.bind(this);
+    this.getTiles = this.getTiles.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
+  }
+
+  backToGame() {
+    TypedTransition.from(this).to(app);
   }
 
   randomNumber(x) {
     return Math.floor((Math.random() * x) + 1);
   }
 
-  getAvailablePokemon() {
+  getAvailablePokemon(group, type, type2) {
     const trainers = this.props.game.trainers.edges;
     const wildGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === "Wild";
+      return trainer.node.name === group;
     });
     const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
-      return pokemon.node.pokemonType === "Electric";
+      if(type2 !== "") {
+        return pokemon.node.pokemonType === type
+            || pokemon.node.pokemonType === type2;
+      }else{
+        return pokemon.node.pokemonType === type;
+      }
     });
+    return availablePokemon;
+  }
+
+  getTiles() {
+    const stageNumber = this.props.location.query.stage;
+    let availablePokemon = [];
+    switch(stageNumber) {
+      case '1':
+        //power-plant
+        availablePokemon = this.getAvailablePokemon("Wild", "Electric", "");
+      break;
+
+      case '2':
+        //viridian-forest
+        availablePokemon = this.getAvailablePokemon("Wild", "Bug", "");
+      break;
+
+      case '3':
+        //cinnabar-island
+        availablePokemon = this.getAvailablePokemon("Wild", "Fire", "");
+      break;
+
+      case '4':
+        //seafoam-islands
+        availablePokemon = this.getAvailablePokemon("Wild", "Water", "Ice");
+      break;
+
+      case '5':
+        //rock-tunnel
+        availablePokemon = this.getAvailablePokemon("Wild", "Rock", "");
+      break;
+
+      case '6':
+        //safari-zone
+        availablePokemon = this.getAvailablePokemon("Wild", "Grass", "Normal");
+      break;
+
+      case '7':
+        //mt-moon
+        availablePokemon = this.getAvailablePokemon("Wild", "Fairy", "Flying");
+      break;
+
+      case '8':
+        //underground-path
+        availablePokemon = this.getAvailablePokemon("Wild", "Ground", "Poison");
+      break;
+
+      case '9':
+        //lavender-tower
+        availablePokemon = this.getAvailablePokemon("Wild", "Ghost", "Psychic");
+      break;
+
+      case '10':
+        //victory-road
+        availablePokemon = this.getAvailablePokemon("Wild", "Fighting", "Dragon");
+      break;
+    }
+
     return availablePokemon;
   }
 
   generateTiles() {
     //Step 1: get the pokemon available for the wild
-    const availablePokemon = this.getAvailablePokemon();
+    const tileList = this.getTiles();
 
     //Step 2: Select a group of random pokemon to appear in the tiles
     const tileGroup = [];
     const spotLength = this.props.game.hidingSpots.edges.length;
     for(let i = 0; i < spotLength / 2; i++) {
-      const randomPokemon = this.randomNumber(availablePokemon.length);
-      const chosenPokemon = availablePokemon[randomPokemon - 1];
-
+      const randomPokemon = this.randomNumber(tileList.length);
+      const chosenPokemon = tileList[randomPokemon - 1];
       const wasChosen = tileGroup.filter(function(pokemon) {
         return pokemon.name === chosenPokemon.node.name;
       });
@@ -89,7 +156,7 @@ class Stage extends React.Component {
           turnsRemaining={this.props.game.turnsRemaining}
           hidingSpots={this.props.game.hidingSpots}
           game={this.props.game}
-          availablePokemon={availablePokemon}
+          availablePokemon={tileList}
           restartGame={this.generateTiles}
         />
       );
@@ -117,22 +184,29 @@ class Stage extends React.Component {
     }
 
     return (
-      <div className="stage">
-        <PowerPlant getAvailablePokemon={this.props.getAvailablePokemon} />
-        <h2>{headerText}</h2>
-        <ul className="text-right">
-          <li>
-            <Button onClick={this.backToGame}>
-              <Glyphicon glyph="menu-left" />
-            </Button>
-          </li>
-        </ul>
-        {this.generateTiles()}
-        <p>Turns remaining: {this.props.game.turnsRemaining}</p>
+      <Row className="stage">
+        <Col md={1} className="no-padding">
+          <ul>
+            <li>
+              <Button onClick={this.backToGame}>
+                <Glyphicon glyph="menu-left" />
+              </Button>
+            </li>
+          </ul>
+        </Col>
+        <Col md={11} className="text-center no-padding">
+          <h2 className="text-center">{headerText}</h2>
+        </Col>
+        <Col md={12} className="text-center no-padding">
+          {this.generateTiles()}
+        </Col>
+        <Col md={12}>
+          <p>Turns remaining: {this.props.game.turnsRemaining}</p>
+        </Col>
         {/* {hasTokens &&
           <TokenList tokens={this.props.game.tokens} pokemons={availablePokemon} />
         } */}
-      </div>
+      </Row>
     );
   }
 }
@@ -144,6 +218,7 @@ export function path() {
 Stage.propTypes = {
   getAvailablePokemon: React.PropTypes.func,
 };
+Stage.contextTypes = TypedTransition.contextTypes();
 
 export default Relay.createContainer(Stage, {
   fragments: {
