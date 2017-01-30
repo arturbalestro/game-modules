@@ -15,77 +15,29 @@ export default class PrizeModal extends React.Component {
 
     this.state = {
       showModal: this.props.showModal,
-      unlockedPokemon: false,
+      pokemonUnlocked: this.props.pokemonUnlocked,
     };
 
     this.closeModal = this.closeModal.bind(this);
     //this.openModal = this.openModal.bind(this);
     this.addToken = this.addToken.bind(this);
     this.editToken = this.editToken.bind(this);
-    this.getAllPokemon = this.getAllPokemon.bind(this);
-    this.checkTokenAmount = this.checkTokenAmount.bind(this);
-    this.checkUnlockables = this.checkUnlockables.bind(this);
-  }
-
-  getAllPokemon(trainerFilter) {
-    const trainers = this.props.game.trainers.edges;
-    const fullGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === trainerFilter;
-    });
-    return fullGroup[0].node.pokemons.edges;
-  }
-
-  checkTokenAmount() {
-    const amountReached = [];
-    const allPokemon = this.getAllPokemon("Red");
-    const canUnlock = this.props.game.tokens.edges.filter(function(token) {
-      return token.node.amount >= 2;
-    });
-    amountReached.push(canUnlock);
-    console.log('----', amountReached);
-    const unlockablePokemon = amountReached[0].map(function(token) {
-      console.log('Found a '+token.node.name+' token. His evolution can be unlocked.');
-      const matchingPokemon = allPokemon.filter(function(pokemon) {
-        return pokemon.node.entryNumber === token.node.entryNumber;
-      });
-      console.log('found matchingPokemon', matchingPokemon);
-      return matchingPokemon[0].node;
-    });
-
-    console.log(unlockablePokemon);
-    return unlockablePokemon;
-  }
-
-  checkUnlockables() {
-    const matchingPokemon = this.checkTokenAmount();
-    console.log('matchingPokemon', matchingPokemon);
-    // const unlockedPokemon = allPokemon.filter(function(pokemon) {
-    //   return pokemon.node.entryNumber === token.node.entryNumber + 1;
-    // });
-    // console.log('Can it evolve?', matchingPokemon[0].node.canEvolve);
-    // console.log(matchingPokemon[0].node.name+' can be unlocked!');
-    // if(matchingPokemon[0].node.canEvolve) {
-    //   return matchingPokemon[0].node;
-    // }
-
-    this.setState({ unlockedPokemon: true });
   }
 
   componentWillMount() {
-    const currentPrizeName = this.props.prize.name;
-    const existingToken = this.props.game.tokens.edges.filter(function(token) {
-      return token.node.name === currentPrizeName;
-    });
+    if(!this.state.pokemonUnlocked) {
+      const currentPrizeName = this.props.prize.name;
+      const tokens = this.props.game.tokens.edges;
+      const existingToken = tokens.filter(function(token) {
+        return token.node.name === currentPrizeName;
+      });
 
-    if(existingToken.length > 0) {
-      this.editToken();
-    }else{
-      this.addToken();
+      if(existingToken.length > 0) {
+        this.editToken();
+      }else{
+        this.addToken();
+      }
     }
-  }
-
-  componentDidMount() {
-    this.checkUnlockables();
   }
 
   addToken() {
@@ -137,7 +89,30 @@ export default class PrizeModal extends React.Component {
   closeModal() {
     this.setState({ showModal: false });
 
-    TypedTransition.from(this).to(tokenList);
+    if(!this.state.pokemonUnlocked) {
+      TypedTransition.from(this).to(tokenList);
+    }
+  }
+
+  renderToken() {
+    return(
+      <div>
+        <h4>You found all the pairs!</h4>
+        <p>Received 1 {this.props.prize.name} Token.</p>
+        <div className={"token type-"+this.props.prize.pokemonType}>
+          <Image src={this.props.prize.image} />
+        </div>
+      </div>
+    );
+  }
+
+  renderPokemon() {
+    return(
+      <div>
+        <Image src={this.props.prize.image} />
+        <p>{`You have unlocked `+this.props.prize.name+` into your game!`}</p>
+      </div>
+    );
   }
 
   render() {
@@ -147,16 +122,11 @@ export default class PrizeModal extends React.Component {
           <Modal.Title>Congratulations!</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <h4>You found all the pairs!</h4>
-          <p>Received 1 {this.props.prize.name} Token.</p>
-          <div className={"token type-"+this.props.prize.pokemonType}>
-            <Image src={this.props.prize.image} />
-          </div>
-          {this.state.unlockedPokemon &&
-            <div>
-              <p>Unlocked!</p>
-              {/* <p>You have unlocked ${this.checkUnlockables()} into your game!</p> */}
-            </div>
+          {!this.state.pokemonUnlocked &&
+            this.renderToken()
+          }
+          {this.state.pokemonUnlocked &&
+            this.renderPokemon()
           }
         </Modal.Body>
         <Modal.Footer>

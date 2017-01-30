@@ -3,24 +3,68 @@ import Relay from 'react-relay';
 import { Row, Col, Image, Button, Glyphicon } from 'react-bootstrap';
 import TypedTransition from '../../scripts/TypedTransition';
 import * as app from './App';
+import PrizeModal from './PrizeModal';
+
+let pokemonUnlocked = false;
 
 export class TokenList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      pokemonUnlocked: false,
+    };
+
     this.backToGame = this.backToGame.bind(this);
+    this.getAllPokemon = this.getAllPokemon.bind(this);
+    this.checkTokenAmount = this.checkTokenAmount.bind(this);
   }
 
   backToGame() {
     TypedTransition.from(this).to(app);
   }
 
-  render() {
+  getAllPokemon(trainerFilter) {
     const trainers = this.props.game.trainers.edges;
-    const wildGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === "Red";
+    const fullGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === trainerFilter;
     });
-    const pokemonList = wildGroup[0].node.pokemons.edges;
+    return fullGroup[0].node.pokemons.edges;
+  }
+
+  checkTokenAmount(tokens) {
+    const allPokemon = this.getAllPokemon("Red");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2 && index + 1 === tokens.length;
+    });
+    const unlockablePokemon = canUnlock.map(function(token) {
+      console.log('Found a '+token.node.name+' token. His evolution can be unlocked.');
+      const matchingPokemon = allPokemon.filter(function(pokemon) {
+        return pokemon.node.entryNumber === token.node.entryNumber + 1;
+      });
+      return matchingPokemon[0].node;
+    });
+    console.log('and the unlocked pokémon will be...', unlockablePokemon);
+    return unlockablePokemon;
+  }
+
+  componentDidMount() {
+    const tokens = this.props.game.tokens.edges;
+    const unlockablePokemon = this.checkTokenAmount(tokens);
+    console.log('unlockablePokemon', unlockablePokemon, unlockablePokemon.length);
+
+    if(unlockablePokemon != undefined || unlockablePokemon.length > 0) {
+      this.setState({ unlockablePokemon: unlockablePokemon[0] });
+    }
+  }
+
+  render() {
+    pokemonUnlocked = false;
+    const pokemonList = this.getAllPokemon("Red");
+    console.log('this.state.unlockablePokemon', this.state.unlockablePokemon);
+    if(this.state.unlockablePokemon !== undefined) {
+      pokemonUnlocked = true;
+    }
 
     return (
       <Row className="token-list transition-item">
@@ -45,6 +89,15 @@ export class TokenList extends React.Component {
             </Col>
           )}
         )}
+        {pokemonUnlocked &&
+          <PrizeModal
+            game={this.props.game}
+            prize={this.state.unlockablePokemon !== undefined ? this.state.unlockablePokemon : []}
+            showModal={true}
+            restartGame={this.props.restartGame}
+            pokemonUnlocked={true}
+          />
+        }
       </Row>
     )
   }
@@ -99,6 +152,7 @@ export default Relay.createContainer(TokenList, {
             node {
               id
               name
+              entryNumber
               attribute
               amount
             }
