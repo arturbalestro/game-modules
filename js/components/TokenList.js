@@ -35,14 +35,15 @@ export class TokenList extends React.Component {
   checkTokenAmount(tokens) {
     const allPokemon = this.getAllPokemon("Red");
     const canUnlock = tokens.filter(function(token, index) {
-      return token.node.amount >= 2 && index + 1 === tokens.length;
+      return token.node.amount >= 2;
     });
-    const unlockablePokemon = canUnlock.map(function(token) {
-      console.log('Found a '+token.node.name+' token. His evolution can be unlocked.');
-      const matchingPokemon = allPokemon.filter(function(pokemon) {
-        return pokemon.node.entryNumber === token.node.entryNumber + 1;
-      });
-      return matchingPokemon[0].node;
+    const lastUnlockable = canUnlock.filter(function(token, index) {
+      console.log(token.node.name, index, ' - ', (index+1) === canUnlock.length );
+      return index + 1 === canUnlock.length;
+    });
+    console.log('lastUnlockable', lastUnlockable);
+    const unlockablePokemon = allPokemon.filter(function(pokemon) {
+      return pokemon.node.entryNumber === lastUnlockable[0].node.entryNumber + 1;
     });
     console.log('and the unlocked pokémon will be...', unlockablePokemon);
     return unlockablePokemon;
@@ -61,10 +62,10 @@ export class TokenList extends React.Component {
   render() {
     pokemonUnlocked = false;
     const pokemonList = this.getAllPokemon("Red");
-    console.log('this.state.unlockablePokemon', this.state.unlockablePokemon);
     if(this.state.unlockablePokemon !== undefined) {
       pokemonUnlocked = true;
     }
+    console.log('this.state.unlockablePokemon', this.state.unlockablePokemon);
 
     return (
       <Row className="token-list transition-item">
@@ -78,6 +79,18 @@ export class TokenList extends React.Component {
             </li>
           </ul>
         </Col>
+        {pokemonList.map(function(pokemon, index) {
+          //const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
+          return (
+            <Col md={2} sm={1} lg={2} key={pokemon.node.id} className="text-center">
+              <div className={"token type-"+pokemon.node.attribute}>
+                <Image src={pokemon.node.image} />
+              </div>
+              <p className="text-center">{pokemon.node.name}</p>
+            </Col>
+          )}
+        )}
+
         {this.props.game.tokens.edges.map(function(token, index) {
           const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
           return (

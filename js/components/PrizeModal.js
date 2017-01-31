@@ -109,13 +109,14 @@ export default class PrizeModal extends React.Component {
   renderPokemon() {
     return(
       <div>
-        <Image src={this.props.prize.image} />
-        <p>{`You have unlocked `+this.props.prize.name+` into your game!`}</p>
+        <Image src={this.props.prize.node.image} />
+        <p>{`You have unlocked `+this.props.prize.node.name+` into your game!`}</p>
       </div>
     );
   }
 
   render() {
+    console.log('prize: ', this.props.prize);
     return (
       <Modal show={this.state.showModal} onHide={this.closeModal}>
         <Modal.Header closeButton>
