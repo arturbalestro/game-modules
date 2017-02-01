@@ -180,6 +180,10 @@ const pokemonType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Specifies if a Pokémon has a direct evolution.',
     },
+    unlocked: {
+      type: GraphQLBoolean,
+      description: 'Specifies if a Pokémon was unlocked into the game.',
+    },
     species: {
       type: GraphQLString,
       description: 'The species of the Pokémon',

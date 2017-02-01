@@ -158,6 +158,7 @@ export default Relay.createContainer(TokenList, {
                     pokemonType
                     image
                     canEvolve
+                    unlocked
                     species
                   }
                 }

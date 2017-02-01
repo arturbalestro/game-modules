@@ -252,6 +252,7 @@ export default Relay.createContainer(Stage, {
                     pokemonType
                     image
                     canEvolve
+                    unlocked
                     species
                   }
                 }

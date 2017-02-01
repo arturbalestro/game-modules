@@ -116,7 +116,6 @@ export default class PrizeModal extends React.Component {
   }
 
   render() {
-    console.log('prize: ', this.props.prize);
     return (
       <Modal show={this.state.showModal} onHide={this.closeModal}>
         <Modal.Header closeButton>
