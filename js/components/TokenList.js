@@ -1,6 +1,6 @@
 import React from 'react';
 import Relay from 'react-relay';
-import { Row, Col, Image, Button, Glyphicon } from 'react-bootstrap';
+import { Row, Col, Image, Button, Glyphicon, Label } from 'react-bootstrap';
 import TypedTransition from '../../scripts/TypedTransition';
 import * as app from './App';
 import PrizeModal from './PrizeModal';
@@ -38,79 +38,84 @@ export class TokenList extends React.Component {
       return token.node.amount >= 2;
     });
     const lastUnlockable = canUnlock.filter(function(token, index) {
-      console.log(token.node.name, index, ' - ', (index+1) === canUnlock.length );
       return index + 1 === canUnlock.length;
     });
-    console.log('lastUnlockable', lastUnlockable);
-    const unlockablePokemon = allPokemon.filter(function(pokemon) {
-      return pokemon.node.entryNumber === lastUnlockable[0].node.entryNumber + 1;
-    });
-    console.log('and the unlocked pokémon will be...', unlockablePokemon);
-    return unlockablePokemon;
+    if(lastUnlockable.length > 0) {
+      const unlockablePokemon = allPokemon.filter(function(pokemon) {
+        return pokemon.node.entryNumber === lastUnlockable[0].node.entryNumber + 1;
+      });
+      return unlockablePokemon;
+    }
   }
 
   componentDidMount() {
     const tokens = this.props.game.tokens.edges;
-    const unlockablePokemon = this.checkTokenAmount(tokens);
-    console.log('unlockablePokemon', unlockablePokemon, unlockablePokemon.length);
 
-    if(unlockablePokemon != undefined || unlockablePokemon.length > 0) {
-      this.setState({ unlockablePokemon: unlockablePokemon[0] });
+    if(tokens.length > 0) {
+      const unlockablePokemon = this.checkTokenAmount(tokens);
+      if(unlockablePokemon != undefined && unlockablePokemon.length > 0) {
+        this.setState({ unlockablePokemon: unlockablePokemon[0] });
+      }
     }
   }
 
   render() {
     pokemonUnlocked = false;
+    const tokens = this.props.game.tokens.edges;
     const pokemonList = this.getAllPokemon("Red");
     if(this.state.unlockablePokemon !== undefined) {
       pokemonUnlocked = true;
     }
-    console.log('this.state.unlockablePokemon', this.state.unlockablePokemon);
 
     return (
       <Row className="token-list transition-item">
-        <Col md={12}>
-          <h3>Current tokens you have:</h3>
-          <ul className="token-menu text-right">
-            <li>
-              <Button onClick={this.backToGame}>
-                <Glyphicon glyph="menu-left" />
-              </Button>
-            </li>
-          </ul>
+        <Col md={1} className="text-center">
+          <Button onClick={this.backToGame}>
+            <Glyphicon glyph="menu-left" />
+          </Button>
         </Col>
-        {pokemonList.map(function(pokemon, index) {
-          //const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
-          return (
-            <Col md={2} sm={1} lg={2} key={pokemon.node.id} className="text-center">
-              <div className={"token type-"+pokemon.node.attribute}>
-                <Image src={pokemon.node.image} />
-              </div>
-              <p className="text-center">{pokemon.node.name}</p>
-            </Col>
-          )}
-        )}
-
-        {this.props.game.tokens.edges.map(function(token, index) {
-          const pokemon = pokemonList.filter((pokemon) => pokemon.node.name === token.node.name );
-          return (
-            <Col md={2} sm={1} lg={2} key={token.node.id} className="text-center">
-              <div className={"token type-"+token.node.attribute}>
-                <Image src={pokemon[0].node.image} />
-              </div>
-              <p className="text-center">{token.node.name} - {token.node.amount}</p>
-            </Col>
-          )}
-        )}
-        {pokemonUnlocked &&
-          <PrizeModal
-            game={this.props.game}
-            prize={this.state.unlockablePokemon !== undefined ? this.state.unlockablePokemon : []}
-            showModal={true}
-            restartGame={this.props.restartGame}
-            pokemonUnlocked={true}
-          />
-        }
+        <Col md={10} className="text-center no-padding">
+          <h2 className="text-center">Tokens</h2>
+        </Col>
+        <Col md={1} className="text-center">
+          <Button disabled>
+            <Glyphicon glyph="menu-hamburger" />
+          </Button>
+        </Col>
+        <Col md={12}>
+          {pokemonList.map(function(pokemon, index) {
+            const token = tokens.filter((token) => token.node.name === pokemon.node.name );
+            if(token.length > 0) {
+              return (
+                <Col md={2} sm={1} lg={2} key={token[0].node.id} className="token-box text-center">
+                  <Label className="token-amount">{token[0].node.amount}</Label>
+                  <div className={"token type-"+token[0].node.attribute}>
+                    <Image src={pokemon.node.image} />
+                  </div>
+                  <Label className="token-name text-center">{pokemon.node.name}</Label>
+                </Col>
+              )
+            } else {
+              return (
+                <Col md={2} sm={1} lg={2} key={pokemon.node.id} className="token-box text-center inactive">
+                  <div className="token">
+                    <Image src={pokemon.node.image} />
+                  </div>
+                  <Label className="token-name text-center">{pokemon.node.name}</Label>
+                </Col>
+              )
+            }
+          })}
+          {pokemonUnlocked &&
+            <PrizeModal
+              game={this.props.game}
+              prize={this.state.unlockablePokemon !== undefined ? this.state.unlockablePokemon : []}
+              showModal={true}
+              restartGame={this.props.restartGame}
+              pokemonUnlocked={true}
+            />
+          }
+        </Col>
       </Row>
     )
   }

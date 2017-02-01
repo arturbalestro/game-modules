@@ -171,6 +171,24 @@ body {
     right: 0;
     left: 0; }
 
+.token-box {
+  position: relative; }
+  .token-box.inactive {
+    opacity: 0.2; }
+  .token-box .token-amount {
+    background: #333;
+    border-radius: 100px;
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    padding: 4px 6px;
+    z-index: 1; }
+  .token-box .token-name {
+    background: #333;
+    border-radius: 100px;
+    position: relative;
+    top: -15px; }
+
 .transition-wrapper {
   position: relative;
   z-index: 1; }
@@ -185,9 +203,11 @@ body {
   transition: transform 0.5s;
   height: 100vh;
   box-sizing: border-box; }
-  .token-list .token-menu {
-    padding: 0; }
-    .token-list .token-menu li {
+  .token-list h2 {
+    margin-top: 0; }
+  .token-list ul {
+    margin-top: 15px; }
+    .token-list ul li {
       list-style: none; }
   .token-list.transition-appear {
     transform: scale(0); }

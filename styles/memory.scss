@@ -190,6 +190,31 @@ body {
   }
 }
 
+.token-box {
+  position: relative;
+
+  &.inactive {
+    opacity: 0.2;
+  }
+
+  .token-amount {
+    background: #333;
+    border-radius: 100px;
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    padding: 4px 6px;
+    z-index: 1;
+  }
+
+  .token-name {
+    background: #333;
+    border-radius: 100px;
+    position: relative;
+    top: -15px;
+  }
+}
+
 .transition-wrapper {
   position: relative;
   z-index: 1;
@@ -207,8 +232,11 @@ body {
   height: 100vh;
   box-sizing: border-box;
 
-  .token-menu {
-    padding: 0;
+  h2 {
+    margin-top: 0;
+  }
+  ul{
+    margin-top: 15px;
 
     li {
       list-style: none;
