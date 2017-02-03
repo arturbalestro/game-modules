@@ -194,7 +194,7 @@ export function getPokemonsByTrainer(trainerId) {
 export function addPokemonPayload(trainerId, entryNumber, unlocked) {
   console.log('payload', trainerId, entryNumber, unlocked);
   const pokemon = pokemons.filter(pk => pk.entryNumber === entryNumber);
-  pokemon[0].owners.push(trainerId);
+  pokemon[0].owners.push(0);
   pokemon[0].unlocked = unlocked;
   console.log('pokemon?', pokemon);
 }
