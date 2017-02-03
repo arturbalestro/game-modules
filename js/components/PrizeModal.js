@@ -5,6 +5,7 @@ import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import * as app from './App';
 import * as tokenList from './TokenList';
 import PageTransition from 'react-router-page-transition';
@@ -22,9 +23,11 @@ export default class PrizeModal extends React.Component {
     //this.openModal = this.openModal.bind(this);
     this.addToken = this.addToken.bind(this);
     this.editToken = this.editToken.bind(this);
+    this.addPokemon = this.addPokemon.bind(this);
   }
 
   componentWillMount() {
+    console.log('unlocked? ', this.state.pokemonUnlocked);
     if(!this.state.pokemonUnlocked) {
       const currentPrizeName = this.props.prize.name;
       const tokens = this.props.game.tokens.edges;
@@ -37,6 +40,8 @@ export default class PrizeModal extends React.Component {
       }else{
         this.addToken();
       }
+    }else{
+      this.addPokemon();
     }
   }
 
@@ -73,6 +78,30 @@ export default class PrizeModal extends React.Component {
           entryNumber: this.props.prize.entryNumber,
           attribute: this.props.prize.pokemonType,
           amount: this.props.prize.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
+  }
+
+  addPokemon() {
+    console.log('props: ', this.props);
+    Relay.Store.commitUpdate(
+      new AddPokemonMutation({
+        game: this.props.game,
+        trainer: {
+          id: this.props.game.trainers.edges[0].node.id,
+        },
+        pokemon: {
+          entryNumber: this.props.prize.node.entryNumber,
+          unlocked: true,
         },
       }),
       {

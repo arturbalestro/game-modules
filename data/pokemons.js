@@ -190,3 +190,11 @@ export function getPokemonsByTrainer(trainerId) {
   })
   return confs
 }
+
+export function addPokemonPayload(trainerId, entryNumber, unlocked) {
+  console.log('payload', trainerId, entryNumber, unlocked);
+  const pokemon = pokemons.filter(pk => pk.entryNumber === entryNumber);
+  pokemon[0].owners.push(trainerId);
+  pokemon[0].unlocked = unlocked;
+  console.log('pokemon?', pokemon);
+}

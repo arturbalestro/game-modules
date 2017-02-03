@@ -55,7 +55,8 @@ import {
   Pokemon,
   getPokemon,
   getPokemons,
-  getPokemonsByTrainer
+  getPokemonsByTrainer,
+  addPokemonPayload,
 } from './pokemons';
 
 const {nodeInterface, nodeField} = nodeDefinitions(
@@ -352,6 +353,36 @@ const EditTokenMutation = mutationWithClientMutationId({
   },
 });
 
+const AddPokemonMutation = mutationWithClientMutationId({
+  name: 'AddPokemon',
+  inputFields: {
+    trainerId: { type: new GraphQLNonNull(GraphQLID) },
+    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
+    unlocked: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  outputFields: {
+    trainer: {
+      type: trainerType,
+      resolve: ({localTrainerId}) => getTrainer(localTrainerId),
+    },
+    pokemon: {
+      type: pokemonType,
+      resolve: ({localPokemonId}) => getPokemon(localPokemonId),
+    },
+    game: {
+      type: gameType,
+      resolve: () => getGame(),
+    },
+  },
+  mutateAndGetPayload: ({trainerId, entryNumber, unlocked}) => {
+    console.log('-------', trainerId, entryNumber, unlocked);
+    const localTrainerId = fromGlobalId(trainerId).id;
+    console.log('localTrainerId', localTrainerId);
+    addPokemonPayload(localTrainerId, entryNumber, unlocked);
+    return {localTrainerId};
+  },
+});
+
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
@@ -362,6 +393,7 @@ const EditTokenMutation = mutationWithClientMutationId({
      checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
      addToken: AddTokenMutation,
      editToken: EditTokenMutation,
+     addPokemon: AddPokemonMutation,
    }),
  });
 

@@ -52,52 +52,52 @@ class Stage extends React.Component {
     switch(stageNumber) {
       case '1':
         //power-plant
-        availablePokemon = this.getAvailablePokemon("Wild", "Electric", "");
+        availablePokemon = this.getAvailablePokemon("Embar", "Electric", "");
       break;
 
       case '2':
         //viridian-forest
-        availablePokemon = this.getAvailablePokemon("Wild", "Bug", "");
+        availablePokemon = this.getAvailablePokemon("Embar", "Bug", "");
       break;
 
       case '3':
         //cinnabar-island
-        availablePokemon = this.getAvailablePokemon("Wild", "Fire", "");
+        availablePokemon = this.getAvailablePokemon("Embar", "Fire", "");
       break;
 
       case '4':
         //seafoam-islands
-        availablePokemon = this.getAvailablePokemon("Wild", "Water", "Ice");
+        availablePokemon = this.getAvailablePokemon("Embar", "Water", "Ice");
       break;
 
       case '5':
         //rock-tunnel
-        availablePokemon = this.getAvailablePokemon("Wild", "Rock", "");
+        availablePokemon = this.getAvailablePokemon("Embar", "Rock", "");
       break;
 
       case '6':
         //safari-zone
-        availablePokemon = this.getAvailablePokemon("Wild", "Grass", "Normal");
+        availablePokemon = this.getAvailablePokemon("Embar", "Grass", "Normal");
       break;
 
       case '7':
         //mt-moon
-        availablePokemon = this.getAvailablePokemon("Wild", "Fairy", "Flying");
+        availablePokemon = this.getAvailablePokemon("Embar", "Fairy", "Flying");
       break;
 
       case '8':
         //underground-path
-        availablePokemon = this.getAvailablePokemon("Wild", "Ground", "Poison");
+        availablePokemon = this.getAvailablePokemon("Embar", "Ground", "Poison");
       break;
 
       case '9':
         //lavender-tower
-        availablePokemon = this.getAvailablePokemon("Wild", "Ghost", "Psychic");
+        availablePokemon = this.getAvailablePokemon("Embar", "Ghost", "Psychic");
       break;
 
       case '10':
         //victory-road
-        availablePokemon = this.getAvailablePokemon("Wild", "Fighting", "Dragon");
+        availablePokemon = this.getAvailablePokemon("Embar", "Fighting", "Dragon");
       break;
     }
 
