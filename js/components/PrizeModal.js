@@ -16,7 +16,8 @@ export default class PrizeModal extends React.Component {
 
     this.state = {
       showModal: this.props.showModal,
-      pokemonUnlocked: this.props.pokemonUnlocked,
+      pokemonUnlocked: false,
+      unlockablePokemon: null,
     };
 
     this.closeModal = this.closeModal.bind(this);
@@ -26,22 +27,62 @@ export default class PrizeModal extends React.Component {
     this.addPokemon = this.addPokemon.bind(this);
   }
 
-  componentWillMount() {
-    console.log('unlocked? ', this.state.pokemonUnlocked);
-    if(!this.state.pokemonUnlocked) {
-      const currentPrizeName = this.props.prize.name;
-      const tokens = this.props.game.tokens.edges;
-      const existingToken = tokens.filter(function(token) {
-        return token.node.name === currentPrizeName;
+  getAllPokemon(trainerFilter) {
+    const trainers = this.props.game.trainers.edges;
+    const fullGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === trainerFilter;
+    });
+    return fullGroup[0].node.pokemons.edges;
+  }
+
+  checkTokenAmount(tokens, prize) {
+    const allPokemon = this.getAllPokemon("Red");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.entryNumber === prize.entryNumber
+          && token.node.amount >= 2;
+    });
+    if(canUnlock.length > 0) {
+      const matchingPokemon = allPokemon.filter(function(pokemon) {
+        return pokemon.node.entryNumber === canUnlock[0].node.entryNumber;
       });
 
-      if(existingToken.length > 0) {
-        this.editToken();
-      }else{
-        this.addToken();
+      if(matchingPokemon.length > 0) {
+        const unlockablePokemon = allPokemon.filter(function(pokemon) {
+          if(matchingPokemon[0].node.canEvolve === true) {
+            return pokemon.node.entryNumber === matchingPokemon[0].node.entryNumber + 1;
+          }
+        });
+
+        return unlockablePokemon;
       }
+    }
+  }
+
+  componentWillMount() {
+    const currentPrizeName = this.props.prize.name;
+    const tokens = this.props.game.tokens.edges;
+    const existingToken = tokens.filter(function(token) {
+      return token.node.name === currentPrizeName;
+    });
+
+    if(existingToken.length > 0) {
+      this.editToken();
     }else{
-      this.addPokemon();
+      this.addToken();
+    }
+  }
+
+  componentDidMount() {
+    const tokens = this.props.game.tokens.edges;
+
+    if(tokens.length > 0) {
+      const unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
+
+      if(unlockablePokemon != undefined && unlockablePokemon.length > 0) {
+        if(!unlockablePokemon[0].node.unlocked) {
+          this.setState({ unlockablePokemon: unlockablePokemon[0], pokemonUnlocked: true });
+        }
+      }
     }
   }
 
@@ -92,35 +133,38 @@ export default class PrizeModal extends React.Component {
   }
 
   addPokemon() {
-    console.log('props: ', this.props);
-    Relay.Store.commitUpdate(
-      new AddPokemonMutation({
-        game: this.props.game,
-        trainer: {
-          id: this.props.game.trainers.edges[0].node.id,
-        },
-        pokemon: {
-          entryNumber: this.props.prize.node.entryNumber,
-          unlocked: true,
-        },
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
+    if(!this.state.unlockablePokemon.node.unlocked) {
+      Relay.Store.commitUpdate(
+        new AddPokemonMutation({
+          game: this.props.game,
+          trainer: {
+            id: this.props.game.trainers.edges[0].node.id,
+          },
+          pokemon: {
+            entryNumber: this.state.unlockablePokemon.node.entryNumber,
+            unlocked: true,
+          },
+        }),
+        {
+          onSuccess: (result) => {
+            console.log('Mutation worked!', result);
+          },
+          onFailure: (result) => {
+            console.log('Mutation failed!', result);
+          },
+        }
+      );
+    }
   }
 
   closeModal() {
     this.setState({ showModal: false });
 
-    if(!this.state.pokemonUnlocked) {
-      TypedTransition.from(this).to(tokenList);
+    if(this.state.unlockablePokemon != null) {
+      this.addPokemon();
     }
+
+    TypedTransition.from(this).to(tokenList);
   }
 
   renderToken() {
@@ -136,10 +180,11 @@ export default class PrizeModal extends React.Component {
   }
 
   renderPokemon() {
+    const unlocked = this.state.unlockablePokemon.node;
     return(
       <div>
-        <Image src={this.props.prize.node.image} />
-        <p>{`You have unlocked `+this.props.prize.node.name+` into your game!`}</p>
+        <Image src={unlocked.image} />
+        <p>{`You have unlocked `+unlocked.name+` into your game!`}</p>
       </div>
     );
   }
@@ -151,9 +196,7 @@ export default class PrizeModal extends React.Component {
           <Modal.Title>Congratulations!</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          {!this.state.pokemonUnlocked &&
-            this.renderToken()
-          }
+          {this.renderToken()}
           {this.state.pokemonUnlocked &&
             this.renderPokemon()
           }

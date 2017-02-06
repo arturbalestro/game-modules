@@ -375,7 +375,6 @@ const AddPokemonMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({trainerId, entryNumber, unlocked}) => {
-    console.log('-------', trainerId, entryNumber, unlocked);
     const localTrainerId = fromGlobalId(trainerId).id;
     console.log('localTrainerId', localTrainerId);
     addPokemonPayload(localTrainerId, entryNumber, unlocked);

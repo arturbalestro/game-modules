@@ -17,7 +17,6 @@ export class TokenList extends React.Component {
 
     this.backToGame = this.backToGame.bind(this);
     this.getAllPokemon = this.getAllPokemon.bind(this);
-    this.checkTokenAmount = this.checkTokenAmount.bind(this);
   }
 
   backToGame() {
@@ -32,51 +31,9 @@ export class TokenList extends React.Component {
     return fullGroup[0].node.pokemons.edges;
   }
 
-  checkTokenAmount(tokens) {
-    const allPokemon = this.getAllPokemon("Red");
-    const canUnlock = tokens.filter(function(token, index) {
-      return token.node.amount == 2;
-    });
-    console.log('canUnlock', canUnlock);
-    const lastUnlockable = canUnlock.filter(function(token, index) {
-      return index + 1 === canUnlock.length;
-    });
-    if(lastUnlockable.length > 0) {
-      const matchingPokemon = allPokemon.filter(function(pokemon) {
-          return pokemon.node.entryNumber === lastUnlockable[0].node.entryNumber;
-      });
-      console.log('found matching pokemon', matchingPokemon);
-
-      const unlockablePokemon = allPokemon.filter(function(pokemon) {
-        console.log('canevolve?', matchingPokemon[0].node.canEvolve);
-        if(matchingPokemon[0].node.canEvolve === true) {
-          return pokemon.node.entryNumber === matchingPokemon[0].node.entryNumber + 1;
-        }
-      });
-
-      return unlockablePokemon;
-    }
-  }
-
-  componentDidMount() {
-    const tokens = this.props.game.tokens.edges;
-
-    if(tokens.length > 0) {
-      const unlockablePokemon = this.checkTokenAmount(tokens);
-      console.log('unlockablePokemon', unlockablePokemon);
-      if(unlockablePokemon != undefined && unlockablePokemon.length > 0) {
-        this.setState({ unlockablePokemon: unlockablePokemon[0] });
-      }
-    }
-  }
-
   render() {
-    pokemonUnlocked = false;
     const tokens = this.props.game.tokens.edges;
     const pokemonList = this.getAllPokemon("Red");
-    if(this.state.unlockablePokemon !== undefined) {
-      pokemonUnlocked = true;
-    }
 
     return (
       <Row className="token-list transition-item">
@@ -117,15 +74,6 @@ export class TokenList extends React.Component {
               )
             }
           })}
-          {pokemonUnlocked &&
-            <PrizeModal
-              game={this.props.game}
-              prize={this.state.unlockablePokemon !== undefined ? this.state.unlockablePokemon : []}
-              showModal={true}
-              restartGame={this.props.restartGame}
-              pokemonUnlocked={true}
-            />
-          }
         </Col>
       </Row>
     )

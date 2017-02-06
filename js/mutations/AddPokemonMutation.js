@@ -23,9 +23,6 @@ export default class AddPokemonMutation extends Relay.Mutation {
   getMutation() {
     return Relay.QL`mutation{addPokemon}`;
   }
-  // getCollisionKey() {
-  //   return `check_${this.props.game.id}`;
-  // }
   getFatQuery() {
     return Relay.QL`
       fragment on AddPokemonPayload @relay(pattern: true) {
@@ -60,7 +57,6 @@ export default class AddPokemonMutation extends Relay.Mutation {
     `;
   }
   getConfigs() {
-    console.log('-----GET CONFIGS!!!!', this.props);
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
