@@ -34,7 +34,7 @@ import {
   Game,
   HidingSpot,
   Token,
-  checkHidingSpotForTreasure,
+  checkTurns,
   addTokenPayload,
   editTokenPayload,
   getGame,
@@ -274,28 +274,21 @@ const queryType = new GraphQLObjectType({
  }),
 });
 
-const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
-  name: 'CheckHidingSpotForTreasure',
+const CheckTurnsMutation = mutationWithClientMutationId({
+  name: 'CheckTurns',
   inputFields: {
     id: { type: new GraphQLNonNull(GraphQLID) },
   },
   outputFields: {
-    hidingSpot: {
-      type: hidingSpotType,
-      //resolve: ({localHidingSpotId}) => getHidingSpot(localHidingSpotId),
-      resolve: ({localHidingSpotId}) => {
-        return getHidingSpot(localHidingSpotId);
-      }
-    },
     game: {
       type: gameType,
       resolve: () => getGame(),
     },
   },
   mutateAndGetPayload: ({id}) => {
-    const localHidingSpotId = fromGlobalId(id).id;
-    checkHidingSpotForTreasure(localHidingSpotId);
-    return {localHidingSpotId};
+    const localGameId = fromGlobalId(id).id;
+    checkTurns(localGameId);
+    return {localGameId};
   },
 });
 
@@ -389,7 +382,7 @@ const AddPokemonMutation = mutationWithClientMutationId({
  const mutationType = new GraphQLObjectType({
    name: 'Mutation',
    fields: () => ({
-     checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
+     checkTurns: CheckTurnsMutation,
      addToken: AddTokenMutation,
      editToken: EditTokenMutation,
      addPokemon: AddPokemonMutation,

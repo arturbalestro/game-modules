@@ -31,13 +31,8 @@
 
  let turnsRemaining = 8;
 
- export function checkHidingSpotForTreasure(id) {
-   if (hidingSpots.some(hs => hs.hasTreasure && hs.hasBeenChecked)) {
-     return;
-   }
+ export function checkTurns(id) {
    turnsRemaining--;
-   const hidingSpot = getHidingSpot(id);
-   hidingSpot.hasBeenChecked = true;
  }
  export function getHidingSpot(id) {
    return hidingSpots.find(hs => hs.id === id);

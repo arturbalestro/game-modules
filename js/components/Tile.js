@@ -3,6 +3,7 @@ import Relay from 'react-relay';
 import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
 import PrizeModal from './PrizeModal';
 import AddTokenMutation from '../mutations/AddTokenMutation';
+import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
 const pairsFound = [];
 let token = {};
@@ -51,23 +52,22 @@ export default class Tile extends React.Component {
     //const activeTiles = document.querySelectorAll('.activeTile > img');
     if(activeTiles.length > 1) {
       this.checkPair(activeTiles);
-    }
 
-    // Relay.Store.commitUpdate(
-    //   new CheckHidingSpotForTreasureMutation({
-    //     game: this.props.game,
-    //     hidingSpot,
-    //   }),
-    //   {
-    //     onSuccess: (result) => {
-    //       console.log('Mutation worked!', result);
-    //       this.setState({ tileVisible: 'visible' });
-    //     },
-    //     onFailure: (result) => {
-    //       console.log('Mutation failed!', result);
-    //     },
-    //   }
-    // );
+      // Relay.Store.commitUpdate(
+      //   new CheckTurnsMutation({
+      //     game: this.props.game,
+      //     // turnsRemaining: this.props.game.turnsRemaining,
+      //   }),
+      //   {
+      //     onSuccess: (result) => {
+      //       console.log('Mutation worked!', result);
+      //     },
+      //     onFailure: (result) => {
+      //       console.log('Mutation failed!', result);
+      //     },
+      //   }
+      // );
+    }
   }
   unrevealTile(tiles) {
     const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");

@@ -165,21 +165,26 @@ body {
   display: inline-block; }
   .token img {
     position: absolute;
-    margin: 0 auto;
+    margin: auto;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0; }
 
 .token-box {
-  position: relative; }
+  position: relative;
+  width: 120px;
+  margin: 0 12px;
+  padding: 0;
+  float: none;
+  display: inline-block; }
   .token-box.inactive {
     opacity: 0.2; }
   .token-box .token-amount {
     background: #333;
     border-radius: 100px;
     position: absolute;
-    right: 30px;
+    right: 10px;
     top: 10px;
     padding: 4px 6px;
     z-index: 1; }
@@ -214,12 +219,20 @@ body {
   .token-list.transition-appear.transition-appear-active {
     transform: scale(1); }
 
+.token-link {
+  padding-left: 0px;
+  position: relative;
+  right: 10px;
+  top: 8px; }
+  .token-link p {
+    margin-bottom: 0; }
+
 .stage-menu {
   background: #EEE;
   border: 1px solid transparent;
   border-radius: 4px;
-  margin: 0 10px;
-  padding: 15px; }
+  margin: 10px 0;
+  padding: 15px 0; }
   .stage-menu button, .stage-menu li {
     background: #FFF;
     border: 1px solid transparent;
@@ -236,11 +249,9 @@ body {
     .stage-menu button .glyphicon, .stage-menu li .glyphicon {
       font-size: 40px; }
 
+.stage .back-link {
+  margin-top: 15px; }
 .stage h2 {
   margin-top: 15px; }
-.stage ul {
-  margin-top: 15px; }
-  .stage ul li {
-    list-style: none; }
 
 /*# sourceMappingURL=main.css.map */

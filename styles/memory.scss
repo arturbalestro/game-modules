@@ -182,7 +182,7 @@ body {
 
   img {
     position: absolute;
-    margin: 0 auto;
+    margin: auto;
     top: 0;
     bottom: 0;
     right: 0;
@@ -192,6 +192,11 @@ body {
 
 .token-box {
   position: relative;
+  width: 120px;
+  margin: 0 12px;
+  padding: 0;
+  float: none;
+  display: inline-block;
 
   &.inactive {
     opacity: 0.2;
@@ -201,7 +206,7 @@ body {
     background: #333;
     border-radius: 100px;
     position: absolute;
-    right: 30px;
+    right: 10px;
     top: 10px;
     padding: 4px 6px;
     z-index: 1;
@@ -252,12 +257,23 @@ body {
   }
 }
 
+.token-link {
+  padding-left: 0px;
+  position: relative;
+  right: 10px;
+  top: 8px;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
 .stage-menu {
   background: #EEE;
   border: 1px solid transparent;
   border-radius: 4px;
-  margin: 0 10px;
-  padding: 15px;
+  margin: 10px 0;
+  padding: 15px 0;
 
   button, li {
     background: #FFF;
@@ -284,14 +300,10 @@ body {
 }
 
 .stage {
-  h2 {
+  .back-link {
     margin-top: 15px;
   }
-  ul{
+  h2 {
     margin-top: 15px;
-
-    li {
-      list-style: none;
-    }
   }
 }

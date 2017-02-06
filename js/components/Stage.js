@@ -1,6 +1,6 @@
-import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForTreasureMutation';
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
+import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
@@ -185,27 +185,21 @@ class Stage extends React.Component {
 
     return (
       <Row className="stage">
-        <Col md={1} className="no-padding">
-          <ul>
-            <li>
-              <Button onClick={this.backToGame}>
-                <Glyphicon glyph="menu-left" />
-              </Button>
-            </li>
-          </ul>
+        <Col md={1} sm={1} lg={1} xs={2} className="no-padding text-center back-link">
+          <Button onClick={this.backToGame}>
+            <Glyphicon glyph="menu-left" />
+          </Button>
         </Col>
-        <Col md={11} className="text-center no-padding">
+        <Col md={10} sm={10} lg={10} xs={8} className="text-center no-padding">
           <h2 className="text-center">{headerText}</h2>
         </Col>
-        <Col md={12} className="text-center no-padding">
+        <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
+        <Col md={12} className="text-center no-padding pull-left">
           {this.generateTiles()}
         </Col>
-        <Col md={12}>
+        <Col md={12} className="text-center">
           <p>Turns remaining: {this.props.game.turnsRemaining}</p>
         </Col>
-        {/* {hasTokens &&
-          <TokenList tokens={this.props.game.tokens} pokemons={availablePokemon} />
-        } */}
       </Row>
     );
   }
@@ -232,7 +226,6 @@ export default Relay.createContainer(Stage, {
               hasBeenChecked,
               hasTreasure,
               id,
-              ${CheckHidingSpotForTreasureMutation.getFragment('hidingSpot')},
             }
           }
         },
@@ -273,7 +266,7 @@ export default Relay.createContainer(Stage, {
         }
         ${AddTokenMutation.getFragment('game')},
         ${EditTokenMutation.getFragment('game')},
-        ${CheckHidingSpotForTreasureMutation.getFragment('game')},
+        ${CheckTurnsMutation.getFragment('game')},
       }
     `,
   },

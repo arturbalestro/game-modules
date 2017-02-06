@@ -37,20 +37,20 @@ export class TokenList extends React.Component {
 
     return (
       <Row className="token-list transition-item">
-        <Col md={1} className="text-center">
+        <Col md={1} sm={1} lg={1} xs={2} className="text-center">
           <Button onClick={this.backToGame}>
             <Glyphicon glyph="menu-left" />
           </Button>
         </Col>
-        <Col md={10} className="text-center no-padding">
+        <Col md={10} sm={10} lg={10} xs={8} className="text-center no-padding">
           <h2 className="text-center">Tokens</h2>
         </Col>
-        <Col md={1} className="text-center">
+        <Col md={1} sm={1} lg={1} xs={2} className="text-center">
           <Button disabled>
             <Glyphicon glyph="menu-hamburger" />
           </Button>
         </Col>
-        <Col md={12}>
+        <Col md={12} className="text-center pull-left">
           {pokemonList.map(function(pokemon, index) {
             const token = tokens.filter((token) => token.node.name === pokemon.node.name );
             if(token.length > 0) {

@@ -1134,7 +1134,7 @@
           "description": null,
           "fields": [
             {
-              "name": "checkHidingSpotForTreasure",
+              "name": "checkTurns",
               "description": null,
               "args": [
                 {
@@ -1145,7 +1145,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "CheckHidingSpotForTreasureInput",
+                      "name": "CheckTurnsInput",
                       "ofType": null
                     }
                   },
@@ -1154,7 +1154,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "CheckHidingSpotForTreasurePayload",
+                "name": "CheckTurnsPayload",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1249,7 +1249,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "CheckHidingSpotForTreasureInput",
+          "name": "CheckTurnsInput",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -1284,21 +1284,9 @@
         },
         {
           "kind": "OBJECT",
-          "name": "CheckHidingSpotForTreasurePayload",
+          "name": "CheckTurnsPayload",
           "description": null,
           "fields": [
-            {
-              "name": "hidingSpot",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "HidingSpot",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "game",
               "description": null,
