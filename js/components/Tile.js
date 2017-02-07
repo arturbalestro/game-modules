@@ -17,6 +17,7 @@ export default class Tile extends React.Component {
       gameCompleted: false,
       showModal: false,
       lastFound: {},
+      turnsRemaining: 8,
     };
   }
 
@@ -52,6 +53,8 @@ export default class Tile extends React.Component {
     //const activeTiles = document.querySelectorAll('.activeTile > img');
     if(activeTiles.length > 1) {
       this.checkPair(activeTiles);
+
+      this.setState({ turnsRemaining: this.state.turnsRemaining - 1 });
 
       // Relay.Store.commitUpdate(
       //   new CheckTurnsMutation({

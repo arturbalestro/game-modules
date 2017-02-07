@@ -194,10 +194,10 @@ class Stage extends React.Component {
           <h2 className="text-center">{headerText}</h2>
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
-        <Col md={12} className="text-center no-padding pull-left">
+        <Col md={12} className="text-center no-padding tile-board">
           {this.generateTiles()}
         </Col>
-        <Col md={12} className="text-center">
+        <Col md={12} className="text-center stage-bottom">
           <p>Turns remaining: {this.props.game.turnsRemaining}</p>
         </Col>
       </Row>

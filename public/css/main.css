@@ -253,5 +253,11 @@ body {
   margin-top: 15px; }
 .stage h2 {
   margin-top: 15px; }
+.stage .tile-board {
+  display: inline-block;
+  width: 100%; }
+.stage .stage-bottom {
+  display: inline-block;
+  width: 100%; }
 
 /*# sourceMappingURL=main.css.map */
