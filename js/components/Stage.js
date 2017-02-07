@@ -8,6 +8,11 @@ import { Row, Col, Button, Glyphicon } from 'react-bootstrap';
 import * as app from './App';
 import Tile from './Tile';
 import TokenList from './TokenList';
+import PrizeModal from './PrizeModal';
+
+let turnsRemaining = 8;
+const pairsFound = [];
+let token = {};
 
 class Stage extends React.Component {
   constructor(props) {
@@ -15,11 +20,18 @@ class Stage extends React.Component {
 
     this.state = {
       availablePokemon: {},
+      turnsRemaining: 8,
+      gameCompleted: false,
+      showModal: false,
+      lastFound: {},
+      pairChecked: false,
     };
 
     this.backToGame = this.backToGame.bind(this);
     this.getTiles = this.getTiles.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
+    this.checkPair = this.checkPair.bind(this);
+    this.getCurrentTile = this.getCurrentTile.bind(this);
   }
 
   backToGame() {
@@ -152,18 +164,114 @@ class Stage extends React.Component {
         <Tile
           key={spot.node.id}
           spot={spot.node}
-          hasOptimisticUpdate={this.props.relay.hasOptimisticUpdate(spot.node)}
-          turnsRemaining={this.props.game.turnsRemaining}
+          turnsRemaining={turnsRemaining}
           hidingSpots={this.props.game.hidingSpots}
           game={this.props.game}
-          availablePokemon={tileList}
+          tileList={tileList}
           restartGame={this.generateTiles}
+          selectTile={this.selectTile}
+          checkPair={this.checkPair}
+          getCurrentTile={this.getCurrentTile}
         />
       );
     });
 
     return newSpots;
   }
+
+  getCurrentTile(spot) {
+    return spot;
+  }
+  selectTile(hidingSpot, e) {
+    // if (this._isGameOver()) {
+    //   return;
+    // }
+    e.target.classList.add('activeTile');
+
+    const activeTiles = document.getElementsByClassName('activeTile');
+    if(activeTiles.length > 1) {
+      const currentTile = this.getCurrentTile();
+      this.checkPair(activeTiles, currentTile);
+    }
+  }
+  unrevealTile(tiles) {
+    const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
+    const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
+
+    for(var i = 0; i < hiddenTiles.length; i++) {
+      hiddenTiles[i].style.pointerEvents = 'none';
+    }
+
+    setTimeout(function() {
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+
+      for(var i = 0; i < incorrectTiles.length; i++) {
+        incorrectTiles[i].style.pointerEvents = 'auto';
+      }
+    },500);
+  }
+
+  checkPair(tiles, currentTile) {
+    if(tiles[0].id == tiles[1].id) {
+      pairsFound.push(tiles[0]);
+
+      for(var i = 0; i < tiles.length; i++) {
+        tiles[i].classList.add('correctTile');
+        tiles[i].classList.add('type-'+currentTile.props.spot.pokemon.pokemonType);
+      }
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+
+      this.checkCompletion(pairsFound, currentTile);
+    }else{
+      this.unrevealTile(tiles);
+    }
+
+    turnsRemaining--;
+    if(turnsRemaining == 0) {
+      console.log("Game Over!!");
+      turnsRemaining = this.props.game.turnsRemaining;
+    }
+    console.log('turnsRemaining', turnsRemaining);
+    //this.setState({ turnsRemaining: turnsRemaining - 1 });
+  }
+  checkCompletion(pairsFound, currentTile) {
+    const tiles = document.getElementsByClassName('poketile');
+    const lastFound = pairsFound.slice(-1)[0];
+    const tokenInventory = this.props.game.tokens;
+
+    /*You should get a token correspondent to the last pokemon pair you found.
+    A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
+    Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
+
+    if(pairsFound.length == tiles.length / 2) {
+      const tileList = currentTile.props.tileList;
+      const prizePokemon = tileList.filter(function(pokemon) {
+        return pokemon.node.name === lastFound.children[0].alt;
+      });
+      token = prizePokemon[0].node;
+      token.amount = 1;
+
+      setTimeout(function() {
+        for(var i = 0; i < tiles.length; i++) {
+          tiles[i].setAttribute('class', 'poketile');
+        }
+      }, 200);
+
+      this.setState({ gameCompleted: true, lastFound: token });
+
+      //Allows game to be played and completed once again.
+      pairsFound.splice(0, pairsFound.length);
+    }
+  }
+
+  generateStats() {
+    return(
+      <p>Turns remaining: {turnsRemaining}</p>
+    )
+  }
+
   render() {
     let headerText;
     let hasTokens = false;
@@ -198,8 +306,11 @@ class Stage extends React.Component {
           {this.generateTiles()}
         </Col>
         <Col md={12} className="text-center stage-bottom">
-          <p>Turns remaining: {this.props.game.turnsRemaining}</p>
+          {this.generateStats()}
         </Col>
+        {this.state.gameCompleted &&
+          <PrizeModal game={this.props.game} prize={this.state.lastFound} showModal={true} restartGame={this.props.restartGame} />
+        }
       </Row>
     );
   }
