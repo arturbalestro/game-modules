@@ -34,15 +34,55 @@ export default class PrizeModal extends React.Component {
     });
     return fullGroup[0].node.pokemons.edges;
   }
+  getAvailablePokemon(group, type, type2) {
+    const trainers = this.props.game.trainers.edges;
+    const wildGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === group;
+    });
+    const availablePokemon = wildGroup[0].node.pokemons.edges.filter(function(pokemon) {
+      if(type2 !== "") {
+        return pokemon.node.pokemonType === type
+            || pokemon.node.pokemonType === type2;
+      }else{
+        return pokemon.node.pokemonType === type;
+      }
+    });
+    return availablePokemon;
+  }
 
   checkTokenAmount(tokens, prize) {
     const allPokemon = this.getAllPokemon("Red");
+    const availablePokemon = this.getAvailablePokemon("Embar", "", "");
+    console.log('availablePokemon', availablePokemon);
     const canUnlock = tokens.filter(function(token, index) {
       return token.node.entryNumber === prize.entryNumber
           && token.node.amount >= 2;
     });
     if(canUnlock.length > 0) {
-      const matchingPokemon = allPokemon.filter(function(pokemon) {
+      const matchingPokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.entryNumber === canUnlock[0].node.entryNumber;
+      });
+
+      if(matchingPokemon.length > 0) {
+        const unlockablePokemon = allPokemon.filter(function(pokemon) {
+          if(matchingPokemon[0].node.canEvolve === true) {
+            return pokemon.node.entryNumber === matchingPokemon[0].node.entryNumber + 1;
+          }
+        });
+
+        return unlockablePokemon;
+      }
+    }
+  }
+
+  unlockZapdos(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Embar", "Electric", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.entryNumber === prize.entryNumber
+          && token.node.amount >= 2;
+    });
+    if(canUnlock.length > 0) {
+      const matchingPokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.entryNumber === canUnlock[0].node.entryNumber;
       });
 
@@ -76,6 +116,7 @@ export default class PrizeModal extends React.Component {
     const tokens = this.props.game.tokens.edges;
 
     if(tokens.length > 0) {
+      console.log('name: ', this.props.prize.name);
       const unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
 
       if(unlockablePokemon != undefined && unlockablePokemon.length > 0) {
