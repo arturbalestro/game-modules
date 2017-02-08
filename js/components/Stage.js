@@ -32,6 +32,8 @@ class Stage extends React.Component {
     this.generateTiles = this.generateTiles.bind(this);
     this.checkPair = this.checkPair.bind(this);
     this.getCurrentTile = this.getCurrentTile.bind(this);
+    this.addToken = this.addToken.bind(this);
+    this.editToken = this.editToken.bind(this);
   }
 
   backToGame() {
@@ -211,7 +213,6 @@ class Stage extends React.Component {
       }
     },500);
   }
-
   checkPair(tiles, currentTile) {
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0]);
@@ -246,6 +247,7 @@ class Stage extends React.Component {
     Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
 
     if(pairsFound.length == tiles.length / 2) {
+      const stage = this;
       const tileList = currentTile.props.tileList;
       const prizePokemon = tileList.filter(function(pokemon) {
         return pokemon.node.name === lastFound.children[0].alt;
@@ -253,17 +255,74 @@ class Stage extends React.Component {
       token = prizePokemon[0].node;
       token.amount = 1;
 
+      const currentPrizeName = token.name;
+      const tokens = stage.props.game.tokens.edges;
+      const existingToken = tokens.filter(function(token) {
+        return token.node.name === currentPrizeName;
+      });
+
+      if(existingToken.length > 0) {
+        const editToken = stage.editToken(token);
+      }else{
+        const addToken = stage.addToken(token);
+      }
+
       setTimeout(function() {
         for(var i = 0; i < tiles.length; i++) {
           tiles[i].setAttribute('class', 'poketile');
         }
-      }, 200);
 
-      this.setState({ gameCompleted: true, lastFound: token });
+        stage.setState({ gameCompleted: true, lastFound: token });
+      }, 200);
 
       //Allows game to be played and completed once again.
       pairsFound.splice(0, pairsFound.length);
     }
+  }
+
+  addToken(token) {
+    Relay.Store.commitUpdate(
+      new AddTokenMutation({
+        game: this.props.game,
+        token: {
+          id: token.id,
+          name: token.name,
+          entryNumber: token.entryNumber,
+          attribute: token.pokemonType,
+          amount: token.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
+  }
+  editToken(token) {
+    Relay.Store.commitUpdate(
+      new EditTokenMutation({
+        game: this.props.game,
+        token: {
+          id: token.id,
+          name: token.name,
+          entryNumber: token.entryNumber,
+          attribute: token.pokemonType,
+          amount: token.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
   }
 
   generateStats() {
@@ -309,7 +368,13 @@ class Stage extends React.Component {
           {this.generateStats()}
         </Col>
         {this.state.gameCompleted &&
-          <PrizeModal game={this.props.game} prize={this.state.lastFound} showModal={true} restartGame={this.props.restartGame} />
+          <PrizeModal
+            game={this.props.game}
+            tokens={this.state.tokens}
+            prize={this.state.lastFound}
+            showModal={true}
+            restartGame={this.props.restartGame}
+          />
         }
       </Row>
     );

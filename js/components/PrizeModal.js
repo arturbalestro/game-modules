@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
-import AddTokenMutation from '../mutations/AddTokenMutation';
-import EditTokenMutation from '../mutations/EditTokenMutation';
 import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import * as app from './App';
 import * as tokenList from './TokenList';
@@ -22,8 +20,6 @@ export default class PrizeModal extends React.Component {
 
     this.closeModal = this.closeModal.bind(this);
     //this.openModal = this.openModal.bind(this);
-    this.addToken = this.addToken.bind(this);
-    this.editToken = this.editToken.bind(this);
     this.addPokemon = this.addPokemon.bind(this);
   }
 
@@ -52,14 +48,12 @@ export default class PrizeModal extends React.Component {
 
   checkTokenAmount(tokens, prize) {
     const allPokemon = this.getAllPokemon("Red");
-    const availablePokemon = this.getAvailablePokemon("Embar", "", "");
-    console.log('availablePokemon', availablePokemon);
     const canUnlock = tokens.filter(function(token, index) {
       return token.node.entryNumber === prize.entryNumber
           && token.node.amount >= 2;
     });
     if(canUnlock.length > 0) {
-      const matchingPokemon = availablePokemon.filter(function(pokemon) {
+      const matchingPokemon = allPokemon.filter(function(pokemon) {
         return pokemon.node.entryNumber === canUnlock[0].node.entryNumber;
       });
 
@@ -76,48 +70,38 @@ export default class PrizeModal extends React.Component {
   }
 
   unlockZapdos(tokens, prize) {
-    const availablePokemon = this.getAvailablePokemon("Embar", "Electric", "");
+    const availablePokemon = this.getAvailablePokemon("Red", "Electric", "");
+    console.log('availablePokemon', availablePokemon);
     const canUnlock = tokens.filter(function(token, index) {
-      return token.node.entryNumber === prize.entryNumber
-          && token.node.amount >= 2;
+      return token.node.amount >= 2;
     });
-    if(canUnlock.length > 0) {
-      const matchingPokemon = availablePokemon.filter(function(pokemon) {
-        return pokemon.node.entryNumber === canUnlock[0].node.entryNumber;
+    console.log('canUnlock', canUnlock);
+    console.log('lengths: ', canUnlock.length, (availablePokemon.length - 2));
+    if(canUnlock.length === (availablePokemon.length - 2)) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Zapdos";
       });
+      console.log('unlocking Zapdos...', unlockablePokemon);
 
-      if(matchingPokemon.length > 0) {
-        const unlockablePokemon = allPokemon.filter(function(pokemon) {
-          if(matchingPokemon[0].node.canEvolve === true) {
-            return pokemon.node.entryNumber === matchingPokemon[0].node.entryNumber + 1;
-          }
-        });
-
-        return unlockablePokemon;
-      }
-    }
-  }
-
-  componentWillMount() {
-    const currentPrizeName = this.props.prize.name;
-    const tokens = this.props.game.tokens.edges;
-    const existingToken = tokens.filter(function(token) {
-      return token.node.name === currentPrizeName;
-    });
-
-    if(existingToken.length > 0) {
-      this.editToken();
-    }else{
-      this.addToken();
+      return unlockablePokemon;
     }
   }
 
   componentDidMount() {
     const tokens = this.props.game.tokens.edges;
+    console.log('found tokens...', tokens);
 
     if(tokens.length > 0) {
       console.log('name: ', this.props.prize.name);
-      const unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
+      let unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
+
+      if(this.props.prize.pokemonType === "Electric") {
+        const unlockZapdos = this.unlockZapdos(tokens, this.props.prize);
+        console.log('zapdos unlocked?', unlockZapdos);
+        if(unlockZapdos != undefined) {
+          unlockablePokemon = unlockZapdos;
+        }
+      }
 
       if(unlockablePokemon != undefined && unlockablePokemon.length > 0) {
         if(!unlockablePokemon[0].node.unlocked) {
@@ -125,52 +109,6 @@ export default class PrizeModal extends React.Component {
         }
       }
     }
-  }
-
-  addToken() {
-    Relay.Store.commitUpdate(
-      new AddTokenMutation({
-        game: this.props.game,
-        token: {
-          id: this.props.prize.id,
-          name: this.props.prize.name,
-          entryNumber: this.props.prize.entryNumber,
-          attribute: this.props.prize.pokemonType,
-          amount: this.props.prize.amount,
-        },
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
-  }
-
-  editToken() {
-    Relay.Store.commitUpdate(
-      new EditTokenMutation({
-        game: this.props.game,
-        token: {
-          id: this.props.prize.id,
-          name: this.props.prize.name,
-          entryNumber: this.props.prize.entryNumber,
-          attribute: this.props.prize.pokemonType,
-          amount: this.props.prize.amount,
-        },
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
   }
 
   addPokemon() {
