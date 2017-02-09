@@ -69,6 +69,54 @@ export default class PrizeModal extends React.Component {
     }
   }
 
+  unlockVaporeon(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "Water", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2
+          && token.node.name === "Eevee";
+    });
+    if(canUnlock.length > 0) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Vaporeon";
+      });
+      console.log('unlocking Vaporeon...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
+  unlockJolteon(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "Electric", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 4
+          && token.node.name === "Eevee";
+    });
+    if(canUnlock.length > 0) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Jolteon";
+      });
+      console.log('unlocking Jolteon...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
+  unlockFlareon(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "Fire", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 6
+          && token.node.name === "Eevee";
+    });
+    if(canUnlock.length > 0) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Flareon";
+      });
+      console.log('unlocking Flareon...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
   unlockArticuno(tokens, prize) {
     const availablePokemon = this.getAvailablePokemon("Red", "Water", "Ice");
     const canUnlock = tokens.filter(function(token, index) {
@@ -77,7 +125,7 @@ export default class PrizeModal extends React.Component {
           || token.node.amount >= 2
           && token.node.attribute === "Ice";
     });
-    if(canUnlock.length === (availablePokemon.length - 2)) {
+    if(canUnlock.length === (availablePokemon.length - 1)) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Articuno";
       });
@@ -93,7 +141,7 @@ export default class PrizeModal extends React.Component {
       return token.node.amount >= 2
           && token.node.attribute === "Electric";
     });
-    if(canUnlock.length === (availablePokemon.length - 2)) {
+    if(canUnlock.length === (availablePokemon.length - 1)) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Zapdos";
       });
@@ -109,7 +157,7 @@ export default class PrizeModal extends React.Component {
       return token.node.amount >= 2
           && token.node.attribute === "Fire";
     });
-    if(canUnlock.length === (availablePokemon.length - 2)) {
+    if(canUnlock.length === (availablePokemon.length - 1)) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Moltres";
       });
@@ -125,6 +173,29 @@ export default class PrizeModal extends React.Component {
 
     if(tokens.length > 0) {
       let unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
+
+      //Add Vaporeon, Jolteon and Flareon unlocking notification
+      if(this.props.prize.name === "Eevee") {
+        const unlockVaporeon = this.unlockVaporeon(tokens, this.props.prize);
+        const unlockJolteon = this.unlockJolteon(tokens, this.props.prize);
+        const unlockFlareon = this.unlockFlareon(tokens, this.props.prize);
+
+        console.log('vaporeon unlocked?', unlockVaporeon);
+        console.log('jolteon unlocked?', unlockJolteon);
+        console.log('flareon unlocked?', unlockFlareon);
+
+        if(unlockVaporeon != undefined) {
+          unlockablePokemon = unlockVaporeon;
+        }
+
+        if(unlockJolteon != undefined) {
+          unlockablePokemon = unlockJolteon;
+        }
+
+        if(unlockFlareon != undefined) {
+          unlockablePokemon = unlockFlareon;
+        }
+      }
 
       //Add Articuno unlocking notification
       if(this.props.prize.pokemonType === "Water" || this.props.prize.pokemonType === "Ice") {

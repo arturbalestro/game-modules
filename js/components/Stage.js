@@ -39,6 +39,10 @@ class Stage extends React.Component {
   }
 
   backToGame() {
+    /*Useful when you decide to back out of the game without finding all the
+    matches (specially due to not finding the Pokémon you need).*/
+    pairsFound.splice(0, pairsFound.length);
+
     TypedTransition.from(this).to(app);
   }
 
@@ -260,7 +264,7 @@ class Stage extends React.Component {
     A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
     Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
 
-    if(pairsFound.length == tiles.length / 2) {
+    if(pairsFound.length == (tiles.length / 2)) {
       const stage = this;
       const tileList = currentTile.props.tileList;
       const prizePokemon = tileList.filter(function(pokemon) {
