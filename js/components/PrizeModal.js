@@ -69,14 +69,30 @@ export default class PrizeModal extends React.Component {
     }
   }
 
+  unlockArticuno(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "Water", "Ice");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2
+          && token.node.attribute === "Water"
+          || token.node.amount >= 2
+          && token.node.attribute === "Ice";
+    });
+    if(canUnlock.length === (availablePokemon.length - 2)) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Articuno";
+      });
+      console.log('unlocking Articuno...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
   unlockZapdos(tokens, prize) {
     const availablePokemon = this.getAvailablePokemon("Red", "Electric", "");
-    console.log('availablePokemon', availablePokemon);
     const canUnlock = tokens.filter(function(token, index) {
-      return token.node.amount >= 2;
+      return token.node.amount >= 2
+          && token.node.attribute === "Electric";
     });
-    console.log('canUnlock', canUnlock);
-    console.log('lengths: ', canUnlock.length, (availablePokemon.length - 2));
     if(canUnlock.length === (availablePokemon.length - 2)) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Zapdos";
@@ -87,19 +103,53 @@ export default class PrizeModal extends React.Component {
     }
   }
 
+  unlockMoltres(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "Fire", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2
+          && token.node.attribute === "Fire";
+    });
+    if(canUnlock.length === (availablePokemon.length - 2)) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Moltres";
+      });
+      console.log('unlocking Moltres...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
   componentDidMount() {
     const tokens = this.props.game.tokens.edges;
     console.log('found tokens...', tokens);
 
     if(tokens.length > 0) {
-      console.log('name: ', this.props.prize.name);
       let unlockablePokemon = this.checkTokenAmount(tokens, this.props.prize);
 
+      //Add Articuno unlocking notification
+      if(this.props.prize.pokemonType === "Water" || this.props.prize.pokemonType === "Ice") {
+        const unlockArticuno = this.unlockArticuno(tokens, this.props.prize);
+        console.log('articuno unlocked?', unlockArticuno);
+        if(unlockArticuno != undefined) {
+          unlockablePokemon = unlockArticuno;
+        }
+      }
+
+      //Add Zapdos unlocking notification
       if(this.props.prize.pokemonType === "Electric") {
         const unlockZapdos = this.unlockZapdos(tokens, this.props.prize);
         console.log('zapdos unlocked?', unlockZapdos);
         if(unlockZapdos != undefined) {
           unlockablePokemon = unlockZapdos;
+        }
+      }
+
+      //Add Moltres unlocking notification
+      if(this.props.prize.pokemonType === "Fire") {
+        const unlockMoltres = this.unlockMoltres(tokens, this.props.prize);
+        console.log('moltres unlocked?', unlockMoltres);
+        if(unlockMoltres != undefined) {
+          unlockablePokemon = unlockMoltres;
         }
       }
 

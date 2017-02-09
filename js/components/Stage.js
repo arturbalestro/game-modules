@@ -25,10 +25,12 @@ class Stage extends React.Component {
       showModal: false,
       lastFound: {},
       pairChecked: false,
+      emptyBoard: false,
     };
 
     this.backToGame = this.backToGame.bind(this);
     this.getTiles = this.getTiles.bind(this);
+    this.generateEmptyBoard = this.generateEmptyBoard.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
     this.checkPair = this.checkPair.bind(this);
     this.getCurrentTile = this.getCurrentTile.bind(this);
@@ -178,7 +180,19 @@ class Stage extends React.Component {
       );
     });
 
-    return newSpots;
+    if(!this.state.gameCompleted) {
+      return newSpots;
+    }
+  }
+  generateEmptyBoard() {
+    const emptyTiles = [];
+    this.props.game.hidingSpots.edges.map((spot, index) => {
+      emptyTiles.push(
+        <div key={spot.node.id} className="poketile"></div>
+      );
+    });
+
+    return emptyTiles;
   }
 
   getCurrentTile(spot) {
@@ -261,17 +275,21 @@ class Stage extends React.Component {
         return token.node.name === currentPrizeName;
       });
 
-      if(existingToken.length > 0) {
-        const editToken = stage.editToken(token);
-      }else{
-        const addToken = stage.addToken(token);
-      }
-
       setTimeout(function() {
-        for(var i = 0; i < tiles.length; i++) {
-          tiles[i].setAttribute('class', 'poketile');
+        if(existingToken.length > 0) {
+          const editToken = stage.editToken(token);
+        }else{
+          const addToken = stage.addToken(token);
         }
 
+        stage.setState({ emptyBoard: true });
+      }, 50);
+
+      // for(var i = 0; i < tiles.length; i++) {
+      //   tiles[i].setAttribute('class', 'poketile');
+      // }
+
+      setTimeout(function() {
         stage.setState({ gameCompleted: true, lastFound: token });
       }, 200);
 
@@ -362,7 +380,12 @@ class Stage extends React.Component {
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
         <Col md={12} className="text-center no-padding tile-board">
-          {this.generateTiles()}
+          {!this.state.emptyBoard &&
+            this.generateTiles()
+          }
+          {this.state.emptyBoard &&
+            this.generateEmptyBoard()
+          }
         </Col>
         <Col md={12} className="text-center stage-bottom">
           {this.generateStats()}
