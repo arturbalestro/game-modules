@@ -167,6 +167,36 @@ export default class PrizeModal extends React.Component {
     }
   }
 
+  unlockMewtwo(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2;
+    });
+    if(canUnlock.length === 149) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Mewtwo";
+      });
+      console.log('unlocking Mewtwo...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
+  unlockMew(tokens, prize) {
+    const availablePokemon = this.getAvailablePokemon("Red", "", "");
+    const canUnlock = tokens.filter(function(token, index) {
+      return token.node.amount >= 2;
+    });
+    if(canUnlock.length === 150) {
+      const unlockablePokemon = availablePokemon.filter(function(pokemon) {
+        return pokemon.node.name === "Mew";
+      });
+      console.log('unlocking Mew...', unlockablePokemon);
+
+      return unlockablePokemon;
+    }
+  }
+
   componentDidMount() {
     const tokens = this.props.game.tokens.edges;
     console.log('found tokens...', tokens);
