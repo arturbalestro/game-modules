@@ -1,5 +1,6 @@
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 import React from 'react';
 import Relay from 'react-relay';
@@ -13,6 +14,7 @@ import PrizeModal from './PrizeModal';
 let turnsRemaining = 8;
 const pairsFound = [];
 let token = {};
+let pairChecked = false;
 
 class Stage extends React.Component {
   constructor(props) {
@@ -33,6 +35,7 @@ class Stage extends React.Component {
     this.generateEmptyBoard = this.generateEmptyBoard.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
     this.checkPair = this.checkPair.bind(this);
+    this.checkTurns = this.checkTurns.bind(this);
     this.getCurrentTile = this.getCurrentTile.bind(this);
     this.addToken = this.addToken.bind(this);
     this.editToken = this.editToken.bind(this);
@@ -247,13 +250,38 @@ class Stage extends React.Component {
       this.unrevealTile(tiles);
     }
 
-    turnsRemaining--;
-    if(turnsRemaining == 0) {
-      console.log("Game Over!!");
-      turnsRemaining = this.props.game.turnsRemaining;
+    pairChecked = true;
+    console.log('pairChecked', pairChecked);
+    this.checkTurns();
+  }
+  checkTurns() {
+    // Relay.Store.commitUpdate(
+    //   new CheckTurnsMutation({
+    //     game: this.props.game,
+    //   }),
+    //   {
+    //     onSuccess: (result) => {
+    //       console.log('Mutation worked!', result);
+    //     },
+    //     onFailure: (result) => {
+    //       console.log('Mutation failed!', result);
+    //     },
+    //   }
+    // );
+    if(pairChecked) {
+      turnsRemaining--;
+      if(turnsRemaining == 0) {
+        console.log("Game Over!!");
+        turnsRemaining = 8;
+      }
+      return(
+        <span>{turnsRemaining}</span>
+      );
+    }else{
+      return(
+        <span>{this.state.turnsRemaining}</span>
+      );
     }
-    console.log('turnsRemaining', turnsRemaining);
-    //this.setState({ turnsRemaining: turnsRemaining - 1 });
   }
   checkCompletion(pairsFound, currentTile) {
     const tiles = document.getElementsByClassName('poketile');
@@ -347,12 +375,6 @@ class Stage extends React.Component {
     );
   }
 
-  generateStats() {
-    return(
-      <p>Turns remaining: {turnsRemaining}</p>
-    )
-  }
-
   render() {
     let headerText;
     let hasTokens = false;
@@ -392,7 +414,7 @@ class Stage extends React.Component {
           }
         </Col>
         <Col md={12} className="text-center stage-bottom">
-          {this.generateStats()}
+          <p>Turns remaining: {this.checkTurns()}</p>
         </Col>
         {this.state.gameCompleted &&
           <PrizeModal

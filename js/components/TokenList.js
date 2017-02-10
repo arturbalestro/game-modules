@@ -4,6 +4,8 @@ import { Row, Col, Image, Button, Glyphicon, Label } from 'react-bootstrap';
 import TypedTransition from '../../scripts/TypedTransition';
 import * as app from './App';
 import PrizeModal from './PrizeModal';
+import AddTokenMutation from '../mutations/AddTokenMutation';
+import EditTokenMutation from '../mutations/EditTokenMutation';
 
 let pokemonUnlocked = false;
 
@@ -136,6 +138,8 @@ export default Relay.createContainer(TokenList, {
             }
           }
         }
+        ${AddTokenMutation.getFragment('game')},
+        ${EditTokenMutation.getFragment('game')},
       }
     `,
   },

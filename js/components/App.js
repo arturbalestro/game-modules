@@ -1,5 +1,6 @@
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddTokenMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';

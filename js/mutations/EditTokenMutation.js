@@ -6,15 +6,17 @@ export default class EditTokenMutation extends Relay.Mutation {
       fragment on Game {
         id,
         turnsRemaining,
-      }
-    `,
-    token: () => Relay.QL`
-      fragment on Token {
-        id,
-        name,
-        entryNumber,
-        attribute,
-        amount,
+        tokens(first: 10000) {
+          edges {
+            node {
+              id
+              name
+              entryNumber
+              attribute
+              amount
+            }
+          }
+        }
       }
     `,
   };
@@ -26,7 +28,7 @@ export default class EditTokenMutation extends Relay.Mutation {
   // }
   getFatQuery() {
     return Relay.QL`
-      fragment on EditTokenPayload @relay(pattern: true) {
+      fragment on EditTokenPayload @relay(plural: true) {
         token {
           name,
           entryNumber,
@@ -70,9 +72,6 @@ export default class EditTokenMutation extends Relay.Mutation {
   }
   getOptimisticResponse() {
     return {
-      game: {
-        turnsRemaining: this.props.game.turnsRemaining - 1,
-      },
       token: {
         amount: this.props.token.amount + 1,
       },

@@ -1,25 +1,14 @@
 import Relay from 'react-relay';
 
 export default class AddPokemonMutation extends Relay.Mutation {
-  static fragments = {
-    game: () => Relay.QL`
-      fragment on Game {
-        id,
-        turnsRemaining,
-      }
-    `,
-    trainer: () => Relay.QL`
-      fragment on Trainer {
-        id
-      }
-    `,
-    pokemon: () => Relay.QL`
-      fragment on Pokemon {
-        id
-        unlocked
-      }
-    `,
-  };
+  // static fragments = {
+  //   pokemon: () => Relay.QL`
+  //     fragment on Pokemon {
+  //       id
+  //       unlocked
+  //     }
+  //   `,
+  // };
   getMutation() {
     return Relay.QL`mutation{addPokemon}`;
   }

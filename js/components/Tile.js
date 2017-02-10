@@ -1,7 +1,6 @@
 import React from 'react';
 import Relay from 'react-relay';
 import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
-import AddTokenMutation from '../mutations/AddTokenMutation';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
 export default class Tile extends React.Component {
