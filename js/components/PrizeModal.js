@@ -168,11 +168,11 @@ export default class PrizeModal extends React.Component {
   }
 
   unlockMewtwo(tokens, prize) {
-    const availablePokemon = this.getAvailablePokemon("Red", "", "");
+    const availablePokemon = this.getAvailablePokemon("Red", "Psychic", "");
     const canUnlock = tokens.filter(function(token, index) {
       return token.node.amount >= 2;
     });
-    if(canUnlock.length === 149) {
+    if(canUnlock.length == 149) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Mewtwo";
       });
@@ -183,11 +183,11 @@ export default class PrizeModal extends React.Component {
   }
 
   unlockMew(tokens, prize) {
-    const availablePokemon = this.getAvailablePokemon("Red", "", "");
+    const availablePokemon = this.getAvailablePokemon("Red", "Psychic", "");
     const canUnlock = tokens.filter(function(token, index) {
       return token.node.amount >= 2;
     });
-    if(canUnlock.length === 150) {
+    if(canUnlock.length == 150) {
       const unlockablePokemon = availablePokemon.filter(function(pokemon) {
         return pokemon.node.name === "Mew";
       });
@@ -251,6 +251,24 @@ export default class PrizeModal extends React.Component {
         console.log('moltres unlocked?', unlockMoltres);
         if(unlockMoltres != undefined) {
           unlockablePokemon = unlockMoltres;
+        }
+      }
+
+      //Add Mewtwo unlocking notification
+      if(tokens.length == 149) {
+        const unlockMewtwo = this.unlockMewtwo(tokens, this.props.prize);
+        console.log('mewtwo unlocked?', unlockMewtwo);
+        if(unlockMewtwo != undefined) {
+          unlockablePokemon = unlockMewtwo;
+        }
+      }
+
+      //Add Mew unlocking notification
+      if(tokens.length == 150) {
+        const unlockMew = this.unlockMew(tokens, this.props.prize);
+        console.log('mew unlocked?', unlockMew);
+        if(unlockMew != undefined) {
+          unlockablePokemon = unlockMew;
         }
       }
 
