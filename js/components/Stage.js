@@ -10,6 +10,7 @@ import * as app from './App';
 import Tile from './Tile';
 import TokenList from './TokenList';
 import PrizeModal from './PrizeModal';
+import GameOverModal from './GameOverModal';
 
 let turnsRemaining = 8;
 const pairsFound = [];
@@ -300,6 +301,12 @@ class Stage extends React.Component {
       //insert game over modal here
       console.log("Game Over!!");
       document.getElementsByClassName('turns-text')[0].innerText = 8;
+      return(
+        <GameOverModal
+          game={this.props.game}
+          showModal={true}
+        />
+      );
     }
   }
   checkCompletion(pairsFound, currentTile) {
