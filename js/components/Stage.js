@@ -15,6 +15,7 @@ let turnsRemaining = 8;
 const pairsFound = [];
 let token = {};
 let pairChecked = false;
+let beginCounter = 0;
 
 class Stage extends React.Component {
   constructor(props) {
@@ -127,7 +128,8 @@ class Stage extends React.Component {
     return availablePokemon;
   }
 
-  generateTiles() {
+  generateTiles(tiles) {
+    console.log('tiles parameter: ', tiles);
     //Step 1: get the pokemon available for the wild
     const tileList = this.getTiles();
 
@@ -135,8 +137,8 @@ class Stage extends React.Component {
     const tileGroup = [];
     const spotLength = this.props.game.hidingSpots.edges.length;
     for(let i = 0; i < spotLength / 2; i++) {
-      const randomPokemon = this.randomNumber(tileList.length);
-      const chosenPokemon = tileList[randomPokemon - 1];
+      const randomPokemon = this.randomNumber(tiles.length);
+      const chosenPokemon = tiles[randomPokemon - 1];
       const wasChosen = tileGroup.filter(function(pokemon) {
         return pokemon.name === chosenPokemon.node.name;
       });
@@ -166,6 +168,14 @@ class Stage extends React.Component {
         tilePairs.splice(index, 1);
       }
     }
+
+    //beginCounter++;
+
+    return rearrangedTiles;
+  }
+  renderTiles(tileList) {
+    const rearrangedTiles = this.generateTiles(tileList);
+    console.log('found the rearrangedTiles', rearrangedTiles);
 
     //Step 5: Add each sorted pokémon to its correspondent tile.
     const newSpots = [];
@@ -268,19 +278,28 @@ class Stage extends React.Component {
     //     },
     //   }
     // );
-    if(pairChecked) {
-      turnsRemaining--;
-      if(turnsRemaining == 0) {
-        console.log("Game Over!!");
-        turnsRemaining = 8;
-      }
-      return(
-        <span>{turnsRemaining}</span>
-      );
-    }else{
-      return(
-        <span>{this.state.turnsRemaining}</span>
-      );
+    // if(pairChecked) {
+    //   turnsRemaining--;
+    //   if(turnsRemaining == 0) {
+    //     console.log("Game Over!!");
+    //     turnsRemaining = 8;
+    //   }
+    //   return(
+    //     <span>{turnsRemaining}</span>
+    //   );
+    // }else{
+    //   return(
+    //     <span>{this.state.turnsRemaining}</span>
+    //   );
+    // }
+    let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
+    console.log('turnsText', turnsText);
+    turnsText -= 1;
+    document.getElementsByClassName('turns-text')[0].innerText = turnsText;
+    if(turnsText == 0) {
+      //insert game over modal here
+      console.log("Game Over!!");
+      document.getElementsByClassName('turns-text')[0].innerText = 8;
     }
   }
   checkCompletion(pairsFound, currentTile) {
@@ -375,6 +394,10 @@ class Stage extends React.Component {
     );
   }
 
+  shouldComponentUpdate() {
+    return true;
+  }
+
   render() {
     let headerText;
     let hasTokens = false;
@@ -394,6 +417,8 @@ class Stage extends React.Component {
       hasTokens = false;
     }
 
+    const tiles = this.getTiles();
+
     return (
       <Row className="stage">
         <Col md={1} sm={1} lg={1} xs={2} className="no-padding text-center back-link">
@@ -406,15 +431,15 @@ class Stage extends React.Component {
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
         <Col md={12} className="text-center no-padding tile-board">
-          {!this.state.emptyBoard &&
-            this.generateTiles()
+          {!this.state.emptyBoard && beginCounter == 0 &&
+            this.renderTiles(tiles)
           }
           {this.state.emptyBoard &&
             this.generateEmptyBoard()
           }
         </Col>
         <Col md={12} className="text-center stage-bottom">
-          <p>Turns remaining: {this.checkTurns()}</p>
+          <p>Turns remaining: <span className="turns-text">{/*this.checkTurns()*/ this.state.turnsRemaining}</span></p>
         </Col>
         {this.state.gameCompleted &&
           <PrizeModal
