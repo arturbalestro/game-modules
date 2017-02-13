@@ -301,12 +301,7 @@ class Stage extends React.Component {
       //insert game over modal here
       console.log("Game Over!!");
       document.getElementsByClassName('turns-text')[0].innerText = 8;
-      return(
-        <GameOverModal
-          game={this.props.game}
-          showModal={true}
-        />
-      );
+      this.setState({ pairChecked: true });
     }
   }
   checkCompletion(pairsFound, currentTile) {
@@ -455,6 +450,12 @@ class Stage extends React.Component {
             prize={this.state.lastFound}
             showModal={true}
             restartGame={this.props.restartGame}
+          />
+        }
+        {this.state.pairChecked &&
+          <GameOverModal
+            game={this.props.game}
+            showModal={true}
           />
         }
       </Row>

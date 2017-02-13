@@ -25,7 +25,7 @@ export default class GameOverModal extends React.Component {
       this.addPokemon();
     }
 
-    TypedTransition.from(this).to(tokenList);
+    TypedTransition.from(this).to(app);
   }
 
   render() {
