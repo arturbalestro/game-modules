@@ -15,7 +15,6 @@ import GameOverModal from './GameOverModal';
 let turnsRemaining = 8;
 const pairsFound = [];
 let token = {};
-let pairChecked = false;
 let beginCounter = 0;
 
 class Stage extends React.Component {
@@ -28,7 +27,7 @@ class Stage extends React.Component {
       gameCompleted: false,
       showModal: false,
       lastFound: {},
-      pairChecked: false,
+      gameOver: false,
       emptyBoard: false,
     };
 
@@ -130,7 +129,6 @@ class Stage extends React.Component {
   }
 
   generateTiles(tiles) {
-    console.log('tiles parameter: ', tiles);
     //Step 1: get the pokemon available for the wild
     const tileList = this.getTiles();
 
@@ -162,7 +160,21 @@ class Stage extends React.Component {
     for(let j = tilePairs.length; j > 0; j--) {
       const randomPokemon = this.randomNumber(tilePairs.length);
       const chosenPokemon = tilePairs[randomPokemon - 1];
-      rearrangedTiles.push(chosenPokemon);
+      console.log('randomPokemon chosen is', chosenPokemon.name);
+
+      // const addedPokemon = rearrangedTiles.filter((pokemon, index) => {
+      //   const prevIndex = index - 1;
+      //   if(index > 0) {
+      //     console.log(rearrangedTiles[index].entryNumber, rearrangedTiles[prevIndex].entryNumber)
+      //     return rearrangedTiles[index].entryNumber === rearrangedTiles[prevIndex].entryNumber
+      //   }
+      // });
+      // console.log('addedPokemon', addedPokemon);
+      // if(addedPokemon.length <= 0) {
+        rearrangedTiles.push(chosenPokemon);
+      // }else{
+      //   j--;
+      // }
 
       const index = tilePairs.indexOf(chosenPokemon);
       if(index > -1) {
@@ -261,47 +273,15 @@ class Stage extends React.Component {
       this.unrevealTile(tiles);
     }
 
-    pairChecked = true;
-    console.log('pairChecked', pairChecked);
     this.checkTurns();
   }
   checkTurns() {
-    // Relay.Store.commitUpdate(
-    //   new CheckTurnsMutation({
-    //     game: this.props.game,
-    //   }),
-    //   {
-    //     onSuccess: (result) => {
-    //       console.log('Mutation worked!', result);
-    //     },
-    //     onFailure: (result) => {
-    //       console.log('Mutation failed!', result);
-    //     },
-    //   }
-    // );
-    // if(pairChecked) {
-    //   turnsRemaining--;
-    //   if(turnsRemaining == 0) {
-    //     console.log("Game Over!!");
-    //     turnsRemaining = 8;
-    //   }
-    //   return(
-    //     <span>{turnsRemaining}</span>
-    //   );
-    // }else{
-    //   return(
-    //     <span>{this.state.turnsRemaining}</span>
-    //   );
-    // }
     let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
     console.log('turnsText', turnsText);
-    turnsText -= 1;
+    turnsText--;
     document.getElementsByClassName('turns-text')[0].innerText = turnsText;
     if(turnsText == 0) {
-      //insert game over modal here
-      console.log("Game Over!!");
-      document.getElementsByClassName('turns-text')[0].innerText = 8;
-      this.setState({ pairChecked: true });
+      this.setState({ gameOver: true });
     }
   }
   checkCompletion(pairsFound, currentTile) {
@@ -452,7 +432,7 @@ class Stage extends React.Component {
             restartGame={this.props.restartGame}
           />
         }
-        {this.state.pairChecked &&
+        {this.state.gameOver &&
           <GameOverModal
             game={this.props.game}
             showModal={true}

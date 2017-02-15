@@ -31,17 +31,12 @@ export default class GameOverModal extends React.Component {
   render() {
     return (
       <Modal show={this.state.showModal} onHide={this.closeModal}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>You couldn't find all pairs in time!</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <Button onClick={this.closeModal}>Try Again</Button>
         </Modal.Body>
-        <Modal.Footer>
-          <div className="transition-item list-page">
-            <Button onClick={this.closeModal}>Close</Button>
-          </div>
-        </Modal.Footer>
       </Modal>
     )
   }
