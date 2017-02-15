@@ -14,13 +14,17 @@ export function Pokemon(entryNumber, name, pokemonType, image, canEvolve, caught
 var grass = 'Grass', water = 'Water', fire = 'Fire', bug = 'Bug',
 	psychic = 'Psychic', flying = 'Flying', ghost = 'Ghost', fighting = 'Fighting',
 	normal = 'Normal', poison = 'Poison', electric = 'Electric', ground = 'Ground',
-	fairy = 'Fairy', rock = 'Rock', ice = 'Ice', dragon = 'Dragon'
+	fairy = 'Fairy', rock = 'Rock', ice = 'Ice', dragon = 'Dragon', dark = 'Dark',
+  steel = 'Steel'
 
 var imageUrl = 'https://img.pokemondb.net/artwork/';
 //var spriteUrl = 'https://img.pokemondb.net/sprites/black-white/normal/';
-var spriteUrl = 'img/pokemons/kanto/back/';
+var region = 'kanto/';
+var position = 'front/';
+var spriteUrl = 'img/pokemons/'+ region + position;
 
 var pokemons = [
+  //Kanto
   new Pokemon(1, 'Bulbasaur', grass, spriteUrl+'bulbasaur.png', true, 0, 'Seed Pokemon', false, [0, 1, 4, 5, 6]),
   new Pokemon(2, 'Ivysaur', grass, spriteUrl+'ivysaur.png', true, 0, 'Seed Pokemon', false, [4]),
   new Pokemon(3, 'Venusaur', grass, spriteUrl+'venusaur.png', false, 0, 'Seed Pokemon', false, [4]),
@@ -172,6 +176,29 @@ var pokemons = [
   new Pokemon(149, 'Dragonite', dragon, spriteUrl+'dragonite.png', false, 0, 'Dragon Pokemon', false, [4]),
   new Pokemon(150, 'Mewtwo', psychic, spriteUrl+'mewtwo.png', false, 0, 'Genetic Pokemon', false, [4]),
   new Pokemon(151, 'Mew', psychic, spriteUrl+'mew.png', false, 0, 'New Species Pokemon', false, [4]),
+
+  //Johto
+  new Pokemon(152, 'Chikorita', grass, spriteUrl+'chikorita.png', true, 0, 'Leaf Pokemon', false, [0, 1, 4, 5, 6]),
+  new Pokemon(153, 'Bayleef', grass, spriteUrl+'bayleef.png', true, 0, ' Pokemon', false, [1, 4]),
+  new Pokemon(154, 'Meganium', grass, spriteUrl+'meganium.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(155, 'Cyndaquil', fire, spriteUrl+'cyndaquil.png', true, 0, ' Pokemon', false, [0, 1, 4, 5, 6]),
+  new Pokemon(156, 'Quilava', fire, spriteUrl+'quilava.png', true, 0, ' Pokemon', false, [4]),
+  new Pokemon(157, 'Typhlosion', fire, spriteUrl+'typhlosion.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(158, 'Totodile', water, spriteUrl+'totodile.png', true, 0, ' Pokemon', false, [0, 1, 4, 5, 6]),
+  new Pokemon(159, 'Croconaw', water, spriteUrl+'croconaw.png', true, 0, ' Pokemon', false, [4]),
+  new Pokemon(160, 'Feraligatr', water, spriteUrl+'feraligatr.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(161, 'Sentret', normal, spriteUrl+'sentret.png', true, 0, ' Pokemon', false, [0, 4, 5]),
+  new Pokemon(162, 'Furret', normal, spriteUrl+'furret.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(163, 'Hoothoot', flying, spriteUrl+'hoothoot.png', true, 0, ' Pokemon', false, [0, 4, 5]),
+  new Pokemon(164, 'Noctowl', flying, spriteUrl+'noctowl.png', false, 0, ' Pokemon', false, [1, 4]),
+  new Pokemon(165, 'Ledyba', bug, spriteUrl+'ledyba.png', true, 0, ' Pokemon', false, [0, 4, 5]),
+  new Pokemon(166, 'Ledian', bug, spriteUrl+'ledian.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(167, 'Spinarak', bug, spriteUrl+'spinarak.png', true, 0, ' Pokemon', false, [0, 4, 5]),
+  new Pokemon(168, 'Ariados', bug, spriteUrl+'ariados.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(169, 'Crobat', poison, spriteUrl+'crobat.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(170, 'Chinchou', electric, spriteUrl+'chinchou.png', true, 0, ' Pokemon', false, [0, 4, 5]),
+  new Pokemon(171, 'Lanturn', electric, spriteUrl+'lanturn.png', false, 0, ' Pokemon', false, [4]),
+  new Pokemon(172, 'Pichu', electric, spriteUrl+'pichu.png', false, 0, ' Pokemon', false, [0, 4]),
 ]
 
 export function getPokemon(id) {
