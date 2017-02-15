@@ -136,10 +136,18 @@ body {
   width: 120px;
   height: 120px;
   margin: 0 2px; }
+  .poketile div {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 100px; }
   .poketile:focus {
     outline: none; }
   .poketile .pokebg {
-    position: relative; }
+    position: relative;
+    max-width: 120px;
+    margin-top: -20px; }
   .poketile .pokeimg {
     display: none;
     position: absolute;
