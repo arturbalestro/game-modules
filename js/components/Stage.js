@@ -273,6 +273,7 @@ class Stage extends React.Component {
       this.unrevealTile(tiles);
     }
 
+    console.log('pairsFound', pairsFound);
     this.checkTurns();
   }
   checkTurns() {
@@ -281,6 +282,7 @@ class Stage extends React.Component {
     turnsText--;
     document.getElementsByClassName('turns-text')[0].innerText = turnsText;
     if(turnsText == 0) {
+      pairsFound.splice(0, pairsFound.length);
       this.setState({ gameOver: true });
     }
   }
@@ -293,7 +295,8 @@ class Stage extends React.Component {
     A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
     Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
 
-    if(pairsFound.length == (tiles.length / 2)) {
+    console.log(pairsFound.length, tiles.length);
+    if(pairsFound.length === tiles.length / 2) {
       const stage = this;
       const tileList = currentTile.props.tileList;
       const prizePokemon = tileList.filter(function(pokemon) {

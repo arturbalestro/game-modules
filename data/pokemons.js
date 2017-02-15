@@ -17,7 +17,8 @@ var grass = 'Grass', water = 'Water', fire = 'Fire', bug = 'Bug',
 	fairy = 'Fairy', rock = 'Rock', ice = 'Ice', dragon = 'Dragon'
 
 var imageUrl = 'https://img.pokemondb.net/artwork/';
-var spriteUrl = 'https://img.pokemondb.net/sprites/black-white/normal/';
+//var spriteUrl = 'https://img.pokemondb.net/sprites/black-white/normal/';
+var spriteUrl = 'img/pokemons/kanto/back/';
 
 var pokemons = [
   new Pokemon(1, 'Bulbasaur', grass, spriteUrl+'bulbasaur.png', true, 0, 'Seed Pokemon', false, [0, 1, 4, 5, 6]),
