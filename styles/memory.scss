@@ -134,8 +134,8 @@ body {
 }
 
 .poketile {
-  background: url('/img/tile-bg.jpg') no-repeat center center;
-  background-size: 120px;
+  //background: url('/img/tile-bg.jpg') no-repeat center center;
+  //background-size: 120px;
   border: 1px solid #BBB;
   border-radius: 100px;
   position: relative;
@@ -163,7 +163,7 @@ body {
     margin-top: -20px;
   }
   .pokeimg {
-    display: none;
+    //display: none;
     position: absolute;
     top: 0;
     bottom: 0;
