@@ -125,7 +125,20 @@ body {
   float: none;
   text-align: center; }
 
+.ReactFlipCard {
+  border: 1px solid #BBB;
+  border-radius: 100px;
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  width: 120px;
+  height: 120px;
+  margin: 0 2px;
+  overflow: hidden; }
+
 .poketile {
+  background: url("/img/tile-bg.jpg") no-repeat center center;
+  background-size: 120px;
   border: 1px solid #BBB;
   border-radius: 100px;
   position: relative;
@@ -147,6 +160,7 @@ body {
     max-width: 120px;
     margin-top: -20px; }
   .poketile .pokeimg {
+    display: none;
     position: absolute;
     top: 0;
     bottom: 0;
