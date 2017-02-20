@@ -5,9 +5,8 @@ import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 import React from 'react';
 import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
-import { Row, Col, Button, Glyphicon } from 'react-bootstrap';
+import { Row, Col, Button, Glyphicon, Image } from 'react-bootstrap';
 import * as app from './App';
-import Tile from './Tile';
 import TokenList from './TokenList';
 import PrizeModal from './PrizeModal';
 import GameOverModal from './GameOverModal';
@@ -54,6 +53,13 @@ class Stage extends React.Component {
     return Math.floor((Math.random() * x) + 1);
   }
 
+  getAllPokemon(trainerFilter) {
+    const trainers = this.props.game.trainers.edges;
+    const fullGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === trainerFilter;
+    });
+    return fullGroup[0].node.pokemons.edges;
+  }
   getAvailablePokemon(group, type, type2) {
     const trainers = this.props.game.trainers.edges;
     const wildGroup = trainers.filter(function(trainer) {
@@ -195,19 +201,32 @@ class Stage extends React.Component {
     this.props.game.hidingSpots.edges.map((spot, index) => {
       spot.node.pokemon = rearrangedTiles[index];
       newSpots.push(
-        <Tile
+        // <Tile
+        //   key={spot.node.id}
+        //   spot={spot.node}
+        //   turnsRemaining={turnsRemaining}
+        //   hidingSpots={this.props.game.hidingSpots}
+        //   game={this.props.game}
+        //   tileList={tileList}
+        //   restartGame={this.generateTiles}
+        //   selectTile={this.selectTile}
+        //   checkPair={this.checkPair}
+        //   getCurrentTile={this.getCurrentTile}
+        //   isFlipped={this.state.isFlipped}
+        // />
+        <div
+          className="poketile"
           key={spot.node.id}
-          spot={spot.node}
-          turnsRemaining={turnsRemaining}
-          hidingSpots={this.props.game.hidingSpots}
-          game={this.props.game}
-          tileList={tileList}
-          restartGame={this.generateTiles}
-          selectTile={this.selectTile}
-          checkPair={this.checkPair}
-          getCurrentTile={this.getCurrentTile}
-          isFlipped={this.state.isFlipped}
-        />
+          id={spot.node.pokemon.name}
+          onClick={this.selectTile.bind(this, spot.node)}
+        >
+          <Image
+            className="pokeimg"
+            src={spot.node.pokemon.image}
+            alt={spot.node.pokemon.name}
+            height="120"
+          />
+        </div>
       );
     });
 
@@ -229,15 +248,11 @@ class Stage extends React.Component {
   getCurrentTile(spot) {
     return spot;
   }
-  selectTile(hidingSpot, e) {
-    // if (this._isGameOver()) {
-    //   return;
-    // }
+  selectTile(currentTile, e) {
     e.target.classList.add('activeTile');
 
     const activeTiles = document.getElementsByClassName('activeTile');
     if(activeTiles.length > 1) {
-      const currentTile = this.getCurrentTile();
       this.checkPair(activeTiles, currentTile);
 
       return activeTiles;
@@ -267,7 +282,7 @@ class Stage extends React.Component {
 
       for(var i = 0; i < tiles.length; i++) {
         tiles[i].classList.add('correctTile');
-        tiles[i].classList.add('type-'+currentTile.props.spot.pokemon.pokemonType);
+        tiles[i].classList.add('type-'+currentTile.pokemon.pokemonType);
       }
       tiles[0].classList.remove('activeTile');
       tiles[0].classList.remove('activeTile');
@@ -305,7 +320,7 @@ class Stage extends React.Component {
 
     if(pairsFound.length === tiles.length / 2) {
       const stage = this;
-      const tileList = currentTile.props.tileList;
+      const tileList = this.getAllPokemon("Embar");
       const prizePokemon = tileList.filter(function(pokemon) {
         return pokemon.node.name === lastFound.children[0].alt;
       });
@@ -327,10 +342,6 @@ class Stage extends React.Component {
 
         stage.setState({ emptyBoard: true });
       }, 50);
-
-      // for(var i = 0; i < tiles.length; i++) {
-      //   tiles[i].setAttribute('class', 'poketile');
-      // }
 
       setTimeout(function() {
         stage.setState({ gameCompleted: true, lastFound: token });
@@ -391,17 +402,8 @@ class Stage extends React.Component {
   }
 
   render() {
-    let headerText;
+    let headerText = 'Match the pokémon pairs!';
     let hasTokens = false;
-    if (this.props.relay.getPendingTransactions(this.props.game)) {
-      headerText = '\u2026';
-    // } else if (this._hasFoundTreasure()) {
-    //   headerText = 'You win!';
-    // } else if (this._isGameOver()) {
-    //   headerText = 'Game over!';
-    } else {
-      headerText = 'Match the pokémon pairs!';
-    }
 
     if(this.props.game.tokens.edges.length > 0) {
       hasTokens = true;
