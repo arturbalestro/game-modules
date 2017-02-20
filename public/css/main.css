@@ -135,6 +135,11 @@ body {
   height: 120px;
   margin: 0 2px;
   overflow: hidden; }
+  .ReactFlipCard .poketile {
+    background: none;
+    border: none; }
+    .ReactFlipCard .poketile .pokeimg {
+      display: block; }
 
 .poketile {
   background: url("/img/tile-bg.jpg") no-repeat center center;

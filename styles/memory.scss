@@ -143,6 +143,16 @@ body {
   height: 120px;
   margin: 0 2px;
   overflow: hidden;
+
+  .poketile {
+    background: none;
+    border: none;
+    margin: 0;
+
+    .pokeimg {
+      display: block;
+    }
+  }
 }
 .poketile {
   background: url('/img/tile-bg.jpg') no-repeat center center;

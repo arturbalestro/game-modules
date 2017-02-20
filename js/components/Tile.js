@@ -4,6 +4,8 @@ import FlipCard from 'react-flipcard';
 import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
+const pairsFound = [];
+
 export default class Tile extends React.Component {
   constructor(props) {
     super(props);
@@ -11,12 +13,159 @@ export default class Tile extends React.Component {
     this.state = {
       turnsRemaining: this.props.turnsRemaining,
       isFlipped: this.props.isFlipped,
+      gameCompleted: false,
+      lastFound: {},
     };
 
-    this.checkPair = this.props.checkPair.bind(this);
-    this.getCurrentTile = this.props.getCurrentTile.bind(this.props.spot, this);
+    this.checkPair = this.checkPair.bind(this);
+    this.checkTurns = this.checkTurns.bind(this);
+    this.addToken = this.addToken.bind(this);
+    this.editToken = this.editToken.bind(this);
     this.showBack = this.showBack.bind(this, this.props.spot);
     this.showFront = this.showFront.bind(this, this.props.spot);
+  }
+
+  selectTile(currentTile, e) {
+    e.target.classList.add('activeTile');
+
+    const activeTiles = document.getElementsByClassName('activeTile');
+    if(activeTiles.length > 1) {
+      this.checkPair(activeTiles, currentTile);
+    }
+  }
+  unrevealTile(tiles) {
+    const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
+    const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
+
+    for(var i = 0; i < hiddenTiles.length; i++) {
+      hiddenTiles[i].style.pointerEvents = 'none';
+    }
+
+    setTimeout(function() {
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+
+      for(var i = 0; i < incorrectTiles.length; i++) {
+        incorrectTiles[i].style.pointerEvents = 'auto';
+      }
+    },500);
+  }
+  checkPair(tiles, currentTile) {
+    if(tiles[0].id == tiles[1].id) {
+      pairsFound.push(tiles[0]);
+
+      for(var i = 0; i < tiles.length; i++) {
+        tiles[i].classList.add('correctTile');
+        tiles[i].classList.add('type-'+currentTile.pokemon.pokemonType);
+      }
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+
+      this.checkCompletion(pairsFound, currentTile);
+    }else{
+      this.unrevealTile(tiles);
+    }
+
+    console.log('pairsFound', pairsFound);
+    this.checkTurns();
+  }
+  checkTurns() {
+    let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
+    console.log('turnsText', turnsText);
+    turnsText--;
+    document.getElementsByClassName('turns-text')[0].innerText = turnsText;
+    if(turnsText == 0) {
+      pairsFound.splice(0, pairsFound.length);
+      this.setState({ gameOver: true });
+    }
+  }
+  checkCompletion(pairsFound, currentTile) {
+    const tiles = document.getElementsByClassName('poketile');
+    const lastFound = pairsFound.slice(-1)[0];
+    const tokenInventory = this.props.game.tokens;
+
+    /*You should get a token correspondent to the last pokemon pair you found.
+    A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
+    Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
+
+    console.log(pairsFound.length, tiles.length);
+    if(pairsFound.length === tiles.length / 2) {
+      const stage = this;
+      const tileList = currentTile.props.tileList;
+      const prizePokemon = tileList.filter(function(pokemon) {
+        return pokemon.node.name === lastFound.children[0].alt;
+      });
+      token = prizePokemon[0].node;
+      token.amount = 1;
+
+      const currentPrizeName = token.name;
+      const tokens = stage.props.game.tokens.edges;
+      const existingToken = tokens.filter(function(token) {
+        return token.node.name === currentPrizeName;
+      });
+
+      setTimeout(function() {
+        if(existingToken.length > 0) {
+          const editToken = stage.editToken(token);
+        }else{
+          const addToken = stage.addToken(token);
+        }
+
+        stage.setState({ emptyBoard: true });
+      }, 50);
+
+      setTimeout(function() {
+        stage.setState({ gameCompleted: true, lastFound: token });
+      }, 200);
+
+      //Allows game to be played and completed once again.
+      pairsFound.splice(0, pairsFound.length);
+    }
+  }
+
+  addToken(token) {
+    Relay.Store.commitUpdate(
+      new AddTokenMutation({
+        game: this.props.game,
+        token: {
+          id: token.id,
+          name: token.name,
+          entryNumber: token.entryNumber,
+          attribute: token.pokemonType,
+          amount: token.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
+  }
+  editToken(token) {
+    Relay.Store.commitUpdate(
+      new EditTokenMutation({
+        game: this.props.game,
+        token: {
+          id: token.id,
+          name: token.name,
+          entryNumber: token.entryNumber,
+          attribute: token.pokemonType,
+          amount: token.amount,
+        },
+      }),
+      {
+        onSuccess: (result) => {
+          console.log('Mutation worked!', result);
+        },
+        onFailure: (result) => {
+          console.log('Mutation failed!', result);
+        },
+      }
+    );
   }
 
   showBack(tile, e) {
@@ -47,17 +196,6 @@ export default class Tile extends React.Component {
     });
   }
 
-  _hasFoundTreasure() {
-    return (
-      this.props.hidingSpots.edges.some(edge => {
-        return edge.node.hasTreasure
-      })
-    );
-  }
-  _isGameOver() {
-    return !this.props.turnsRemaining || this._hasFoundTreasure();
-  }
-
   render() {
     const tile = this.props.spot;
 
@@ -66,7 +204,7 @@ export default class Tile extends React.Component {
         className="poketile"
         key={tile.id}
         id={tile.pokemon.name}
-        onClick={this.props.selectTile.bind(this, tile)}
+        onClick={this.selectTile.bind(this, tile)}
       >
         <Image
           className="pokeimg"

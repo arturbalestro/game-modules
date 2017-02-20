@@ -1,18 +1,24 @@
-import AddTokenMutation from '../mutations/AddTokenMutation';
-import EditTokenMutation from '../mutations/EditTokenMutation';
-import AddPokemonMutation from '../mutations/AddPokemonMutation';
-import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
+//React plugins
 import React from 'react';
 import Relay from 'react-relay';
+import { Row, Col, Button, Glyphicon } from 'react-bootstrap';
+
+//Components
 import TypedTransition from '../../scripts/TypedTransition';
-import { Row, Col, Button, Glyphicon, Image } from 'react-bootstrap';
 import * as app from './App';
+import Tile from './Tile';
 import TokenList from './TokenList';
 import PrizeModal from './PrizeModal';
 import GameOverModal from './GameOverModal';
 
+//Mutations
+import AddTokenMutation from '../mutations/AddTokenMutation';
+import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddPokemonMutation';
+import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
+
+//Variables
 let turnsRemaining = 8;
-const pairsFound = [];
 let token = {};
 let beginCounter = 0;
 
@@ -25,7 +31,6 @@ class Stage extends React.Component {
       turnsRemaining: 8,
       gameCompleted: false,
       showModal: false,
-      lastFound: {},
       gameOver: false,
       emptyBoard: false,
     };
@@ -34,11 +39,6 @@ class Stage extends React.Component {
     this.getTiles = this.getTiles.bind(this);
     this.generateEmptyBoard = this.generateEmptyBoard.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
-    this.checkPair = this.checkPair.bind(this);
-    this.checkTurns = this.checkTurns.bind(this);
-    this.getCurrentTile = this.getCurrentTile.bind(this);
-    this.addToken = this.addToken.bind(this);
-    this.editToken = this.editToken.bind(this);
   }
 
   backToGame() {
@@ -53,13 +53,6 @@ class Stage extends React.Component {
     return Math.floor((Math.random() * x) + 1);
   }
 
-  getAllPokemon(trainerFilter) {
-    const trainers = this.props.game.trainers.edges;
-    const fullGroup = trainers.filter(function(trainer) {
-      return trainer.node.name === trainerFilter;
-    });
-    return fullGroup[0].node.pokemons.edges;
-  }
   getAvailablePokemon(group, type, type2) {
     const trainers = this.props.game.trainers.edges;
     const wildGroup = trainers.filter(function(trainer) {
@@ -201,32 +194,15 @@ class Stage extends React.Component {
     this.props.game.hidingSpots.edges.map((spot, index) => {
       spot.node.pokemon = rearrangedTiles[index];
       newSpots.push(
-        // <Tile
-        //   key={spot.node.id}
-        //   spot={spot.node}
-        //   turnsRemaining={turnsRemaining}
-        //   hidingSpots={this.props.game.hidingSpots}
-        //   game={this.props.game}
-        //   tileList={tileList}
-        //   restartGame={this.generateTiles}
-        //   selectTile={this.selectTile}
-        //   checkPair={this.checkPair}
-        //   getCurrentTile={this.getCurrentTile}
-        //   isFlipped={this.state.isFlipped}
-        // />
-        <div
-          className="poketile"
+        <Tile
           key={spot.node.id}
-          id={spot.node.pokemon.name}
-          onClick={this.selectTile.bind(this, spot.node)}
-        >
-          <Image
-            className="pokeimg"
-            src={spot.node.pokemon.image}
-            alt={spot.node.pokemon.name}
-            height="120"
-          />
-        </div>
+          spot={spot.node}
+          turnsRemaining={turnsRemaining}
+          hidingSpots={this.props.game.hidingSpots}
+          game={this.props.game}
+          tileList={tileList}
+          restartGame={this.generateTiles}
+        />
       );
     });
 
@@ -243,158 +219,6 @@ class Stage extends React.Component {
     });
 
     return emptyTiles;
-  }
-
-  getCurrentTile(spot) {
-    return spot;
-  }
-  selectTile(currentTile, e) {
-    e.target.classList.add('activeTile');
-
-    const activeTiles = document.getElementsByClassName('activeTile');
-    if(activeTiles.length > 1) {
-      this.checkPair(activeTiles, currentTile);
-
-      return activeTiles;
-    }
-  }
-  unrevealTile(tiles) {
-    const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
-    const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
-
-    for(var i = 0; i < hiddenTiles.length; i++) {
-      hiddenTiles[i].style.pointerEvents = 'none';
-    }
-
-    setTimeout(function() {
-      tiles[0].classList.remove('activeTile');
-      tiles[0].classList.remove('activeTile');
-
-      for(var i = 0; i < incorrectTiles.length; i++) {
-        incorrectTiles[i].style.pointerEvents = 'auto';
-      }
-    },500);
-  }
-  checkPair(tiles, currentTile) {
-    let isMatch = false;
-    if(tiles[0].id == tiles[1].id) {
-      pairsFound.push(tiles[0]);
-
-      for(var i = 0; i < tiles.length; i++) {
-        tiles[i].classList.add('correctTile');
-        tiles[i].classList.add('type-'+currentTile.pokemon.pokemonType);
-      }
-      tiles[0].classList.remove('activeTile');
-      tiles[0].classList.remove('activeTile');
-
-      isMatch = true;
-      this.checkCompletion(pairsFound, currentTile);
-    }else{
-      isMatch = false;
-      this.unrevealTile(tiles);
-    }
-
-    console.log('pairsFound', pairsFound);
-    this.checkTurns();
-
-    return isMatch;
-  }
-  checkTurns() {
-    let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
-    console.log('turnsText', turnsText);
-    turnsText--;
-    document.getElementsByClassName('turns-text')[0].innerText = turnsText;
-    if(turnsText == 0) {
-      pairsFound.splice(0, pairsFound.length);
-      this.setState({ gameOver: true });
-    }
-  }
-  checkCompletion(pairsFound, currentTile) {
-    const tiles = document.getElementsByClassName('poketile');
-    const lastFound = pairsFound.slice(-1)[0];
-    const tokenInventory = this.props.game.tokens;
-
-    /*You should get a token correspondent to the last pokemon pair you found.
-    A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
-    Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
-
-    if(pairsFound.length === tiles.length / 2) {
-      const stage = this;
-      const tileList = this.getAllPokemon("Embar");
-      const prizePokemon = tileList.filter(function(pokemon) {
-        return pokemon.node.name === lastFound.children[0].alt;
-      });
-      token = prizePokemon[0].node;
-      token.amount = 1;
-
-      const currentPrizeName = token.name;
-      const tokens = stage.props.game.tokens.edges;
-      const existingToken = tokens.filter(function(token) {
-        return token.node.name === currentPrizeName;
-      });
-
-      setTimeout(function() {
-        if(existingToken.length > 0) {
-          const editToken = stage.editToken(token);
-        }else{
-          const addToken = stage.addToken(token);
-        }
-
-        stage.setState({ emptyBoard: true });
-      }, 50);
-
-      setTimeout(function() {
-        stage.setState({ gameCompleted: true, lastFound: token });
-      }, 200);
-
-      //Allows game to be played and completed once again.
-      pairsFound.splice(0, pairsFound.length);
-    }
-  }
-
-  addToken(token) {
-    Relay.Store.commitUpdate(
-      new AddTokenMutation({
-        game: this.props.game,
-        token: {
-          id: token.id,
-          name: token.name,
-          entryNumber: token.entryNumber,
-          attribute: token.pokemonType,
-          amount: token.amount,
-        },
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
-  }
-  editToken(token) {
-    Relay.Store.commitUpdate(
-      new EditTokenMutation({
-        game: this.props.game,
-        token: {
-          id: token.id,
-          name: token.name,
-          entryNumber: token.entryNumber,
-          attribute: token.pokemonType,
-          amount: token.amount,
-        },
-      }),
-      {
-        onSuccess: (result) => {
-          console.log('Mutation worked!', result);
-        },
-        onFailure: (result) => {
-          console.log('Mutation failed!', result);
-        },
-      }
-    );
   }
 
   shouldComponentUpdate() {
