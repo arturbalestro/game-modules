@@ -12,6 +12,9 @@ import PrizeModal from './PrizeModal';
 import GameOverModal from './GameOverModal';
 
 //Mutations
+import AddTokenMutation from '../mutations/AddTokenMutation';
+import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
 //Variables
