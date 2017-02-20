@@ -29,63 +29,158 @@ class App extends React.Component {
 
   render() {
     return (
-      <Row className="text-center">
-        <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
-        <Col md={10} sm={10} lg={10} xs={8} className="text-center no-padding">
-          <h2 className="text-center">Select the stage</h2>
+      <div className="text-center">
+        <Col md={12} sm={12} lg={12} className="mapblock land">
+          <Row>
+            <Col md={12} sm={12} lg={12} className="mapblock land"></Col>
+            <Col md={8} sm={8} lg={8} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+
+            <Col md={8} sm={8} lg={8} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={3} sm={3} lg={3} className="mapblock land"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-bottom"></Col>
+            <Col md={3} sm={3} lg={3} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-border"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={4} sm={4} lg={4} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={4} sm={4} lg={4} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-border"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top no-bottom"></Col>
+            <Col md={4} sm={4} lg={4} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-border"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock seatrail no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock seatrail no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-right no-top"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top no-bottom"></Col>
+
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock seatrail no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={3} sm={3} lg={3} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={6} sm={6} lg={6} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock seatrail no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={3} sm={3} lg={3} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+
+            <Col md={6} sm={6} lg={6} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock seatrail no-right no-top"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top"></Col>
+
+            <Col md={7} sm={7} lg={7} className="mapblock water"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
+
+            <Col md={3} sm={3} lg={3} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock island"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock island"></Col>
+            <Col md={6} sm={6} lg={6} className="mapblock water"></Col>
+          </Row>
         </Col>
-        <Col md={1} sm={1} lg={1} xs={2} className="text-center token-link">
-          <Button onClick={this.handleTokenLink}>
-            <Glyphicon glyph="record" />
-            <p>Tokens</p>
-          </Button>
+        <Col md={12} sm={12} lg={12} className="mapblock water">
+
         </Col>
-        <Col md={12} sm={12} lg={12} className="text-center pull-left">
-          <Nav className="stage-menu" bsStyle="pills" stacked onSelect={this.handleSelectStage}>
-            {/*Note: Add verification to prevent pairs to be found near each other */}
-            <NavItem eventKey={1}>
-              <Glyphicon glyph="flash" />
-              <p>Power Plant</p>
-            </NavItem>
-            <NavItem eventKey={2}>
-              <Glyphicon glyph="tree-deciduous" />
-              <p>Viridian Forest</p>
-            </NavItem>
-            <NavItem eventKey={3}>
-              <Glyphicon glyph="fire" />
-              <p>Cinnabar Island</p>
-            </NavItem>
-            <NavItem eventKey={4}>
-              <Glyphicon glyph="tint" />
-              <p>Seafoam Islands</p>
-            </NavItem>
-            <NavItem eventKey={5}>
-              <Glyphicon glyph="certificate" />
-              <p>Rock Tunnel</p>
-            </NavItem>
-            <NavItem eventKey={6}>
-              <Glyphicon glyph="leaf" />
-              <p>Safari Zone</p>
-            </NavItem>
-            <NavItem eventKey={7}>
-              <Glyphicon glyph="star-empty" />
-              <p>Mt. Moon</p>
-            </NavItem>
-            <NavItem eventKey={8}>
-              <Glyphicon glyph="download-alt" />
-              <p>Underground Path</p>
-            </NavItem>
-            <NavItem eventKey={9}>
-              <Glyphicon glyph="tower" />
-              <p>Lavender Tower</p>
-            </NavItem>
-            <NavItem eventKey={10}>
-              <Glyphicon glyph="road" />
-              <p>Victory Road</p>
-            </NavItem>
-          </Nav>
-        </Col>
-      </Row>
+      </div>
     );
   }
 }

@@ -8,7 +8,8 @@
     "start": "babel-node ./server.js",
     "update-schema": "babel-node ./scripts/updateSchema.js",
     "build-css": "sass styles/memory.scss public/css/main.css",
-    "build": "npm run build-css && npm start",
+    "build-css-region": "sass styles/region-map.scss public/css/region-map.css",
+    "build": "npm run build-css && npm run build-css-region && npm start",
     "watch-css": "nodemon -e scss -x \"npm run build-css\""
   },
   "dependencies": {
