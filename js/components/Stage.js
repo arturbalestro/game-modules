@@ -1,4 +1,4 @@
-//React plugins
+//React Plugins
 import React from 'react';
 import Relay from 'react-relay';
 import { Row, Col, Button, Glyphicon } from 'react-bootstrap';
@@ -12,14 +12,10 @@ import PrizeModal from './PrizeModal';
 import GameOverModal from './GameOverModal';
 
 //Mutations
-import AddTokenMutation from '../mutations/AddTokenMutation';
-import EditTokenMutation from '../mutations/EditTokenMutation';
-import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
 //Variables
 let turnsRemaining = 8;
-let token = {};
 let beginCounter = 0;
 
 class Stage extends React.Component {

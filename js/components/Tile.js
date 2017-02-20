@@ -1,10 +1,18 @@
+//React Plugins
 import React from 'react';
 import Relay from 'react-relay';
 import FlipCard from 'react-flipcard';
 import { Label, Button, Row, Col, Image, Modal } from 'react-bootstrap';
+
+//Mutations
+import AddTokenMutation from '../mutations/AddTokenMutation';
+import EditTokenMutation from '../mutations/EditTokenMutation';
+import AddPokemonMutation from '../mutations/AddPokemonMutation';
 import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 
+//Variables
 const pairsFound = [];
+let token = {};
 
 export default class Tile extends React.Component {
   constructor(props) {
@@ -23,6 +31,14 @@ export default class Tile extends React.Component {
     this.editToken = this.editToken.bind(this);
     this.showBack = this.showBack.bind(this, this.props.spot);
     this.showFront = this.showFront.bind(this, this.props.spot);
+  }
+
+  getAllPokemon(trainerFilter) {
+    const trainers = this.props.game.trainers.edges;
+    const fullGroup = trainers.filter(function(trainer) {
+      return trainer.node.name === trainerFilter;
+    });
+    return fullGroup[0].node.pokemons.edges;
   }
 
   selectTile(currentTile, e) {
@@ -91,7 +107,7 @@ export default class Tile extends React.Component {
     console.log(pairsFound.length, tiles.length);
     if(pairsFound.length === tiles.length / 2) {
       const stage = this;
-      const tileList = currentTile.props.tileList;
+      const tileList = this.getAllPokemon("Embar");
       const prizePokemon = tileList.filter(function(pokemon) {
         return pokemon.node.name === lastFound.children[0].alt;
       });
