@@ -137,7 +137,8 @@ body {
   overflow: hidden; }
   .ReactFlipCard .poketile {
     background: none;
-    border: none; }
+    border: none;
+    margin: 0; }
     .ReactFlipCard .poketile .pokeimg {
       display: block; }
 

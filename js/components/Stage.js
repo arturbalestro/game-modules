@@ -20,6 +20,9 @@ import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 //Variables
 let turnsRemaining = 8;
 let beginCounter = 0;
+let gameCompleted = false;
+let lastFound = {};
+let pairsFound = [];
 
 class Stage extends React.Component {
   constructor(props) {
@@ -43,7 +46,8 @@ class Stage extends React.Component {
   backToGame() {
     /*Useful when you decide to back out of the game without finding all the
     matches (specially due to not finding the Pokémon you need).*/
-    pairsFound.splice(0, pairsFound.length);
+    console.log('pairsfound?', pairsFound);
+    //pairsFound.splice(0, pairsFound.length);
 
     TypedTransition.from(this).to(app);
   }
@@ -201,11 +205,15 @@ class Stage extends React.Component {
           game={this.props.game}
           tileList={tileList}
           restartGame={this.generateTiles}
+          completeGame={this.completeGame}
+          fetchPairs={this.fetchPairs}
+          resetPairs={this.resetPairs}
+          //backToGame={this.backToGame}
         />
       );
     });
 
-    if(!this.state.gameCompleted) {
+    if(!gameCompleted) {
       return newSpots;
     }
   }
@@ -219,9 +227,27 @@ class Stage extends React.Component {
 
     return emptyTiles;
   }
+  completeGame(tileComponent, token) {
+    const isCompleted = tileComponent.state.gameCompleted;
+    //this.stage.setState({ gameCompleted: true, lastFound: token });
 
-  shouldComponentUpdate() {
-    return true;
+    gameCompleted = true;
+    lastFound = token;
+  }
+  fetchPairs(pairsFound) {
+    console.log('fetching pairs...', pairsFound);
+    return pairsFound;
+  }
+  resetPairs(tileComponent, pairs) {
+    console.log('resetting pairs...', pairs);
+    pairsFound = pairs;
+    pairs.splice(0, pairs.length);
+    console.log('pairs should be clean now: ', pairs);
+    return pairs;
+  }
+
+  componentWillMount() {
+    gameCompleted = false;
   }
 
   render() {
@@ -258,11 +284,11 @@ class Stage extends React.Component {
         <Col md={12} className="text-center stage-bottom">
           <p>Turns remaining: <span className="turns-text">{/*this.checkTurns()*/ this.state.turnsRemaining}</span></p>
         </Col>
-        {this.state.gameCompleted &&
+        {gameCompleted &&
           <PrizeModal
             game={this.props.game}
             tokens={this.state.tokens}
-            prize={this.state.lastFound}
+            prize={lastFound}
             showModal={true}
             restartGame={this.props.restartGame}
           />

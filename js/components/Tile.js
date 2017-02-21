@@ -31,6 +31,10 @@ export default class Tile extends React.Component {
     this.editToken = this.editToken.bind(this);
     this.showBack = this.showBack.bind(this, this.props.spot);
     this.showFront = this.showFront.bind(this, this.props.spot);
+    this.completeGame = this.props.completeGame.bind(this, this.state.gameCompleted);
+    this.fetchPairs = this.props.fetchPairs.bind(this, pairsFound);
+    this.resetPairs = this.props.resetPairs.bind(this, pairsFound);
+    //this.backToGame = this.props.backToGame.bind(this, pairsFound);
   }
 
   getAllPokemon(trainerFilter) {
@@ -83,15 +87,16 @@ export default class Tile extends React.Component {
     }
 
     console.log('pairsFound', pairsFound);
+    this.props.fetchPairs(pairsFound);
     this.checkTurns();
   }
   checkTurns() {
     let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
-    console.log('turnsText', turnsText);
     turnsText--;
     document.getElementsByClassName('turns-text')[0].innerText = turnsText;
     if(turnsText == 0) {
-      pairsFound.splice(0, pairsFound.length);
+      //pairsFound.splice(0, pairsFound.length);
+      this.props.resetPairs(pairsFound);
       this.setState({ gameOver: true });
     }
   }
@@ -131,11 +136,15 @@ export default class Tile extends React.Component {
       }, 50);
 
       setTimeout(function() {
-        stage.setState({ gameCompleted: true, lastFound: token });
+        //stage.setState({ gameCompleted: true, lastFound: token });
       }, 200);
 
+      stage.props.completeGame(stage, token);
+
       //Allows game to be played and completed once again.
-      pairsFound.splice(0, pairsFound.length);
+      //pairsFound.splice(0, pairsFound.length);
+      console.log('game has ended...');
+      this.props.resetPairs(pairsFound);
     }
   }
 
@@ -210,6 +219,10 @@ export default class Tile extends React.Component {
     this.setState({
       isFlipped: false
     });
+  }
+
+  componentWillMount() {
+    this.props.fetchPairs(pairsFound);
   }
 
   render() {
