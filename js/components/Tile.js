@@ -72,7 +72,7 @@ export default class Tile extends React.Component {
   }
   checkPair(tiles, currentTile) {
     if(tiles[0].id == tiles[1].id) {
-      pairsFound.push(tiles[0]);
+      pairsFound.push(tiles[0].id);
 
       for(var i = 0; i < tiles.length; i++) {
         tiles[i].classList.add('correctTile');
@@ -114,7 +114,7 @@ export default class Tile extends React.Component {
       const stage = this;
       const tileList = this.getAllPokemon("Embar");
       const prizePokemon = tileList.filter(function(pokemon) {
-        return pokemon.node.name === lastFound.children[0].alt;
+        return pokemon.node.name === lastFound;
       });
       token = prizePokemon[0].node;
       token.amount = 1;

@@ -43,6 +43,7 @@ import {
   getToken,
   getTokens,
   getTurnsRemaining,
+  getPairsFound,
 } from './database';
 
 import {
@@ -127,6 +128,11 @@ const gameType = new GraphQLObjectType({
       description: 'The number of turns a player has left to find the treasure',
       resolve: () => getTurnsRemaining(),
     },
+    // pairsFound: {
+    //   type: GraphQLString,
+    //   description: 'The pairs you have found throughout each game session',
+    //   resolve: () => getPairsFound(),
+    // },
   }),
   interfaces: [nodeInterface],
 });
