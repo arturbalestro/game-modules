@@ -22,6 +22,7 @@ export default class Tile extends React.Component {
       turnsRemaining: this.props.turnsRemaining,
       isFlipped: this.props.isFlipped,
       gameCompleted: false,
+      gameOver: false,
       lastFound: {},
     };
 
@@ -33,6 +34,7 @@ export default class Tile extends React.Component {
     this.showFront = this.showFront.bind(this, this.props.spot);
     this.completeGame = this.props.completeGame.bind(this, this.state.gameCompleted);
     this.fetchPairs = this.props.fetchPairs.bind(this, pairsFound);
+    this.gameOver = this.props.gameOver.bind(this);
   }
 
   getAllPokemon(trainerFilter) {
@@ -50,6 +52,8 @@ export default class Tile extends React.Component {
     if(activeTiles.length > 1) {
       this.checkPair(activeTiles, currentTile);
     }
+
+    return activeTiles;
   }
   unrevealTile(tiles) {
     const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
@@ -92,7 +96,9 @@ export default class Tile extends React.Component {
     document.getElementsByClassName('turns-text')[0].innerText = turnsText;
     if(turnsText == 0) {
       pairsFound.splice(0, pairsFound.length);
-      this.setState({ gameOver: true });
+      //this.setState({ gameOver: true });
+      console.log('trying to apply game over here');
+      this.props.gameOver();
     }
   }
   checkCompletion(pairsFound, currentTile) {
@@ -188,10 +194,10 @@ export default class Tile extends React.Component {
   showBack(tile, e) {
     console.log('showBack', tile, e);
 
-    const activeTiles = this.props.selectTile(tile, e);
+    const activeTiles = this.selectTile(tile, e);
     console.log('#Tile render: activeTiles', activeTiles);
     if(activeTiles != undefined && activeTiles.length > 1) {
-      const isMatch = this.props.checkPair(activeTiles, this.props.spot);
+      const isMatch = this.checkPair(activeTiles, this.props.spot);
       console.log('is it a match?', isMatch);
 
       if(!isMatch) {
@@ -218,56 +224,56 @@ export default class Tile extends React.Component {
     const fetchPairs = this.props.fetchPairs(pairsFound);
 
     return (
-      <div
-        className="poketile"
-        key={tile.id}
-        id={tile.pokemon.entryNumber}
-        onClick={this.selectTile.bind(this, tile)}
-      >
-        <Image
-          className="pokeimg"
-          src={tile.pokemon.image}
-          alt={tile.pokemon.name}
-          height="120"
-        />
-        <input type="hidden" ref="pairsFound" value={pairsFound} />
-      </div>
-      // <FlipCard
-      //   disabled={true}
-      //   flipped={this.state.isFlipped}
-      //   // onClick={this.props.selectTile.bind(this, tile)}
+      // <div
+      //   className="poketile"
+      //   key={tile.id}
+      //   id={tile.pokemon.entryNumber}
+      //   onClick={this.selectTile.bind(this, tile)}
       // >
-      //   {/* The first child is used as the front of the card */}
-      //   <div
-      //     className="poketile"
-      //     key={tile.id}
-      //     id={tile.pokemon.name}
-      //     onClick={this.props.selectTile.bind(this, tile)}
-      //   >
-      //     <Image
-      //       className="pokebg"
-      //       id={tile.pokemon.name}
-      //       src="img/tile-bg.jpg"
-      //       onClick={this.showBack}
-      //     />
-      //   </div>
-      //   {/* The second child is used as the back of the card */}
-      //   <div
-      //     className="poketile"
-      //     key={tile.id}
-      //     id={tile.pokemon.name}
-      //     onClick={this.props.selectTile.bind(this, tile)}
-      //   >
-      //     <Image
-      //       className="pokeimg"
-      //       id={tile.pokemon.name}
-      //       src={tile.pokemon.image}
-      //       alt={tile.pokemon.name}
-      //       height="120"
-      //       onClick={this.showFront}
-      //     />
-      //   </div>
-      // </FlipCard>
+      //   <Image
+      //     className="pokeimg"
+      //     src={tile.pokemon.image}
+      //     alt={tile.pokemon.name}
+      //     height="120"
+      //   />
+      //   <input type="hidden" ref="pairsFound" value={pairsFound} />
+      // </div>
+      <FlipCard
+        disabled={true}
+        flipped={this.state.isFlipped}
+        // onClick={this.props.selectTile.bind(this, tile)}
+      >
+        {/* The first child is used as the front of the card */}
+        <div
+          className="poketile"
+          key={tile.id}
+          id={tile.pokemon.entryNumber}
+          //onClick={this.selectTile.bind(this, tile)}
+        >
+          <Image
+            className="pokebg"
+            id={tile.pokemon.name}
+            src="img/tile-bg.jpg"
+            onClick={this.showBack}
+          />
+        </div>
+        {/* The second child is used as the back of the card */}
+        <div
+          className="poketile"
+          key={tile.id}
+          id={tile.pokemon.entryNumber}
+          //onClick={this.selectTile.bind(this, tile)}
+        >
+          <Image
+            className="pokeimg"
+            id={tile.pokemon.name}
+            src={tile.pokemon.image}
+            alt={tile.pokemon.name}
+            height="120"
+            onClick={this.showFront}
+          />
+        </div>
+      </FlipCard>
     )
   }
 }

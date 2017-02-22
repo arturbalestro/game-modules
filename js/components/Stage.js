@@ -21,6 +21,7 @@ import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 let turnsRemaining = 8;
 let beginCounter = 0;
 let gameCompleted = false;
+let gameOver = false;
 let lastFound = {};
 let pairsFound = [];
 
@@ -205,6 +206,7 @@ class Stage extends React.Component {
           restartGame={this.generateTiles}
           completeGame={this.completeGame}
           fetchPairs={this.fetchPairs}
+          gameOver={this.gameOver}
         />
       );
     });
@@ -230,9 +232,14 @@ class Stage extends React.Component {
   fetchPairs(pairs) {
     pairsFound = pairs;
   }
+  gameOver() {
+    gameOver = true;
+    console.log('game over?', gameOver);
+  }
 
   componentWillMount() {
     gameCompleted = false;
+    //gameOver = false;
   }
 
   render() {
@@ -271,7 +278,7 @@ class Stage extends React.Component {
             restartGame={this.props.restartGame}
           />
         }
-        {this.state.gameOver &&
+        {gameOver &&
           <GameOverModal
             game={this.props.game}
             showModal={true}
