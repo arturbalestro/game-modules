@@ -58,24 +58,7 @@
    return tokens.find(tk => tk.id === id);
  }
 
- let pairsFound = [];
- export function addPair(id, name) {
-   const pair = new Pair();
-   pairsFound.id = id;
-   pairsFound.name = name;
-   pairsFound.push(pair);
- }
- // export function editPair(id) {
- //   const pair = pairs.filter(pr => pr.id === id);
- // }
- export function getPair(id) {
-   //console.log('trying to get token: ', id, 'among ', tokens);
-   //console.log(tokens.find(tk => tk.id === id));
-   return pairsFound.find(pr => pr.id === id);
- }
-
  export function getGame() { return game; }
  export function getHidingSpots() { return hidingSpots; }
  export function getTokens() { return tokens; }
  export function getTurnsRemaining() { return turnsRemaining; }
- export function getPairsFound() { return pairsFound; }

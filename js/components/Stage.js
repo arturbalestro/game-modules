@@ -46,8 +46,7 @@ class Stage extends React.Component {
   backToGame() {
     /*Useful when you decide to back out of the game without finding all the
     matches (specially due to not finding the Pokémon you need).*/
-    console.log('pairsfound?', pairsFound);
-    //pairsFound.splice(0, pairsFound.length);
+    pairsFound.splice(0, pairsFound.length);
 
     TypedTransition.from(this).to(app);
   }
@@ -162,7 +161,7 @@ class Stage extends React.Component {
     for(let j = tilePairs.length; j > 0; j--) {
       const randomPokemon = this.randomNumber(tilePairs.length);
       const chosenPokemon = tilePairs[randomPokemon - 1];
-      console.log('randomPokemon chosen is', chosenPokemon.name);
+      //console.log('randomPokemon chosen is', chosenPokemon.name);
 
       // const addedPokemon = rearrangedTiles.filter((pokemon, index) => {
       //   const prevIndex = index - 1;
@@ -190,7 +189,6 @@ class Stage extends React.Component {
   }
   renderTiles(tileList) {
     const rearrangedTiles = this.generateTiles(tileList);
-    console.log('found the rearrangedTiles', rearrangedTiles);
 
     //Step 5: Add each sorted pokémon to its correspondent tile.
     const newSpots = [];
@@ -207,8 +205,6 @@ class Stage extends React.Component {
           restartGame={this.generateTiles}
           completeGame={this.completeGame}
           fetchPairs={this.fetchPairs}
-          resetPairs={this.resetPairs}
-          //backToGame={this.backToGame}
         />
       );
     });
@@ -228,22 +224,11 @@ class Stage extends React.Component {
     return emptyTiles;
   }
   completeGame(tileComponent, token) {
-    const isCompleted = tileComponent.state.gameCompleted;
-    //this.stage.setState({ gameCompleted: true, lastFound: token });
-
     gameCompleted = true;
     lastFound = token;
   }
-  fetchPairs(pairsFound) {
-    console.log('fetching pairs...', pairsFound);
-    return pairsFound;
-  }
-  resetPairs(tileComponent, pairs) {
-    console.log('resetting pairs...', pairs);
+  fetchPairs(pairs) {
     pairsFound = pairs;
-    pairs.splice(0, pairs.length);
-    console.log('pairs should be clean now: ', pairs);
-    return pairs;
   }
 
   componentWillMount() {
@@ -252,13 +237,6 @@ class Stage extends React.Component {
 
   render() {
     let headerText = 'Match the pokémon pairs!';
-    let hasTokens = false;
-
-    if(this.props.game.tokens.edges.length > 0) {
-      hasTokens = true;
-    } else {
-      hasTokens = false;
-    }
 
     const tiles = this.getTiles();
 

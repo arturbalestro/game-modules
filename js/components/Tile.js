@@ -33,8 +33,6 @@ export default class Tile extends React.Component {
     this.showFront = this.showFront.bind(this, this.props.spot);
     this.completeGame = this.props.completeGame.bind(this, this.state.gameCompleted);
     this.fetchPairs = this.props.fetchPairs.bind(this, pairsFound);
-    this.resetPairs = this.props.resetPairs.bind(this, pairsFound);
-    //this.backToGame = this.props.backToGame.bind(this, pairsFound);
   }
 
   getAllPokemon(trainerFilter) {
@@ -86,8 +84,6 @@ export default class Tile extends React.Component {
       this.unrevealTile(tiles);
     }
 
-    console.log('pairsFound', pairsFound);
-    this.props.fetchPairs(pairsFound);
     this.checkTurns();
   }
   checkTurns() {
@@ -95,8 +91,7 @@ export default class Tile extends React.Component {
     turnsText--;
     document.getElementsByClassName('turns-text')[0].innerText = turnsText;
     if(turnsText == 0) {
-      //pairsFound.splice(0, pairsFound.length);
-      this.props.resetPairs(pairsFound);
+      pairsFound.splice(0, pairsFound.length);
       this.setState({ gameOver: true });
     }
   }
@@ -109,12 +104,11 @@ export default class Tile extends React.Component {
     A number of tokens can unlock the evolution of this pokemon, and some amount of tokens can unlock different and rarer pokemon.
     Also, as the game progresses the level of difficulty increases a bit (by adding more tiles and possibly other twists).*/
 
-    console.log(pairsFound.length, tiles.length);
     if(pairsFound.length === tiles.length / 2) {
       const stage = this;
       const tileList = this.getAllPokemon("Embar");
       const prizePokemon = tileList.filter(function(pokemon) {
-        return pokemon.node.name === lastFound;
+        return pokemon.node.entryNumber == lastFound;
       });
       token = prizePokemon[0].node;
       token.amount = 1;
@@ -142,9 +136,7 @@ export default class Tile extends React.Component {
       stage.props.completeGame(stage, token);
 
       //Allows game to be played and completed once again.
-      //pairsFound.splice(0, pairsFound.length);
-      console.log('game has ended...');
-      this.props.resetPairs(pairsFound);
+      pairsFound.splice(0, pairsFound.length);
     }
   }
 
@@ -221,18 +213,15 @@ export default class Tile extends React.Component {
     });
   }
 
-  componentWillMount() {
-    this.props.fetchPairs(pairsFound);
-  }
-
   render() {
     const tile = this.props.spot;
+    const fetchPairs = this.props.fetchPairs(pairsFound);
 
     return (
       <div
         className="poketile"
         key={tile.id}
-        id={tile.pokemon.name}
+        id={tile.pokemon.entryNumber}
         onClick={this.selectTile.bind(this, tile)}
       >
         <Image
@@ -241,6 +230,7 @@ export default class Tile extends React.Component {
           alt={tile.pokemon.name}
           height="120"
         />
+        <input type="hidden" ref="pairsFound" value={pairsFound} />
       </div>
       // <FlipCard
       //   disabled={true}
