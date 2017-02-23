@@ -46,37 +46,27 @@ export default class Tile extends React.Component {
   }
 
   selectTile(currentTile, e) {
-    e.target.parentNode.classList.add('activeTile');
-    console.log('selectTile.....', e.target);
+    this.setState({
+      isFlipped: true
+    });
 
-    const activeTiles = document.getElementsByClassName('activeTile');
-    // if(activeTiles.length > 1) {
-    //   this.checkPair(activeTiles, currentTile);
-    // }
+    e.target.parentNode.classList.add('activeTile');
+    console.log('selectTile.....', e.target.closest('.ReactFlipCard'));
+
+    const activeTiles = document.querySelectorAll('.activeTile');
+    console.log('found activeTiles', activeTiles);
+    if(activeTiles.length > 1) {
+      this.checkPair(activeTiles, currentTile);
+    }
 
     return activeTiles;
   }
-  unrevealTile(tiles) {
-    const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
-    const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
-
-    for(var i = 0; i < hiddenTiles.length; i++) {
-      hiddenTiles[i].style.pointerEvents = 'none';
-    }
-
-    setTimeout(function() {
-      tiles[0].classList.remove('activeTile');
-      tiles[0].classList.remove('activeTile');
-
-      for(var i = 0; i < incorrectTiles.length; i++) {
-        incorrectTiles[i].style.pointerEvents = 'auto';
-      }
-    },500);
-  }
   checkPair(tiles, currentTile) {
+    console.log('flipped elements', document.querySelectorAll(".ReactFlipCard--flipped"));
     console.log('checking pair...', tiles[0].id, tiles[1].id);
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0].id);
+      console.log('found a pair!!!', pairsFound);
 
       for(var i = 0; i < tiles.length; i++) {
         tiles[i].classList.add('correctTile');
@@ -91,6 +81,40 @@ export default class Tile extends React.Component {
     }
 
     this.checkTurns();
+  }
+  unrevealTile(tiles) {
+    const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
+    const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
+
+    for(var i = 0; i < hiddenTiles.length; i++) {
+      hiddenTiles[i].style.pointerEvents = 'none';
+    }
+
+    const tile = this;
+
+    setTimeout(function() {
+      tiles[0].classList.remove('activeTile');
+      tiles[0].classList.remove('activeTile');
+      const tile1 = tiles[0].closest('.ReactFlipCard--flipped');
+      const tile2 = tiles[1].closest('.ReactFlipCard--flipped');
+      console.log('tiles', tile1.children[0].children[0], tile2);
+
+      // tile1.children[0].children[1].style.display = 'none';
+      // tile1.children[0].children[0].style.display = 'block';
+      //
+      // tile2.children[0].children[1].style.display = 'none';
+      // tile2.children[0].children[0].style.display = 'block';
+
+      tile.setState({
+        isFlipped: false
+      });
+
+      for(var i = 0; i < incorrectTiles.length; i++) {
+        incorrectTiles[i].style.pointerEvents = 'auto';
+      }
+    },500);
+
+    console.log('flipped?', this.refs.flipCard.props.flipped);
   }
   checkTurns() {
     let turnsText = document.getElementsByClassName('turns-text')[0].innerText;
@@ -244,6 +268,7 @@ export default class Tile extends React.Component {
       <FlipCard
         disabled={true}
         flipped={this.state.isFlipped}
+        ref="flipCard"
         // onClick={this.props.selectTile.bind(this, tile)}
       >
         {/* The first child is used as the front of the card */}
@@ -251,7 +276,7 @@ export default class Tile extends React.Component {
           className="poketile"
           key={tile.id}
           id={tile.pokemon.entryNumber}
-          // onClick={this.selectTile.bind(this, tile)}
+          onClick={this.selectTile.bind(this, tile)}
         >
           <Image
             className="pokebg"
@@ -264,7 +289,7 @@ export default class Tile extends React.Component {
           className="poketile"
           key={tile.id}
           id={tile.pokemon.entryNumber}
-          onClick={this.selectTile.bind(this, tile)}
+          //onClick={this.selectTile.bind(this, tile)}
         >
           <Image
             className="pokeimg"
