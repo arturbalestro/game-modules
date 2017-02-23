@@ -46,12 +46,13 @@ export default class Tile extends React.Component {
   }
 
   selectTile(currentTile, e) {
-    e.target.classList.add('activeTile');
+    e.target.parentNode.classList.add('activeTile');
+    console.log('selectTile.....', e.target);
 
     const activeTiles = document.getElementsByClassName('activeTile');
-    if(activeTiles.length > 1) {
-      this.checkPair(activeTiles, currentTile);
-    }
+    // if(activeTiles.length > 1) {
+    //   this.checkPair(activeTiles, currentTile);
+    // }
 
     return activeTiles;
   }
@@ -73,6 +74,7 @@ export default class Tile extends React.Component {
     },500);
   }
   checkPair(tiles, currentTile) {
+    console.log('checking pair...', tiles[0].id, tiles[1].id);
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0].id);
 
@@ -193,6 +195,7 @@ export default class Tile extends React.Component {
 
   showBack(tile, e) {
     console.log('showBack', tile, e);
+    console.log('target.....', e.target);
 
     const activeTiles = this.selectTile(tile, e);
     console.log('#Tile render: activeTiles', activeTiles);
@@ -248,13 +251,12 @@ export default class Tile extends React.Component {
           className="poketile"
           key={tile.id}
           id={tile.pokemon.entryNumber}
-          //onClick={this.selectTile.bind(this, tile)}
+          // onClick={this.selectTile.bind(this, tile)}
         >
           <Image
             className="pokebg"
             id={tile.pokemon.name}
             src="img/tile-bg.jpg"
-            onClick={this.showBack}
           />
         </div>
         {/* The second child is used as the back of the card */}
@@ -262,7 +264,7 @@ export default class Tile extends React.Component {
           className="poketile"
           key={tile.id}
           id={tile.pokemon.entryNumber}
-          //onClick={this.selectTile.bind(this, tile)}
+          onClick={this.selectTile.bind(this, tile)}
         >
           <Image
             className="pokeimg"
@@ -270,7 +272,6 @@ export default class Tile extends React.Component {
             src={tile.pokemon.image}
             alt={tile.pokemon.name}
             height="120"
-            onClick={this.showFront}
           />
         </div>
       </FlipCard>
