@@ -13,6 +13,7 @@ import CheckTurnsMutation from '../mutations/CheckTurnsMutation';
 //Variables
 const pairsFound = [];
 let token = {};
+let previousTile = {};
 
 export default class Tile extends React.Component {
   constructor(props) {
@@ -45,6 +46,10 @@ export default class Tile extends React.Component {
     return fullGroup[0].node.pokemons.edges;
   }
 
+  componentDidUpdate() {
+
+  }
+
   selectTile(currentTile, e) {
     this.setState({
       isFlipped: true
@@ -55,34 +60,46 @@ export default class Tile extends React.Component {
 
     const activeTiles = document.querySelectorAll('.activeTile');
     console.log('found activeTiles', activeTiles);
+    console.log('activeTiles length: ', activeTiles.length);
+
+    if(activeTiles.length === 1) {
+      previousTile = this;
+      console.log('previousTile added: ', previousTile);
+    }
+
     if(activeTiles.length > 1) {
-      this.checkPair(activeTiles, currentTile);
+      this.checkPair(activeTiles, currentTile, previousTile);
     }
 
     return activeTiles;
   }
-  checkPair(tiles, currentTile) {
-    console.log('flipped elements', document.querySelectorAll(".ReactFlipCard--flipped"));
+  checkPair(tiles, currentTile, previousTile) {
+    console.log('found the previous tile...', previousTile);
     console.log('checking pair...', tiles[0].id, tiles[1].id);
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0].id);
       console.log('found a pair!!!', pairsFound);
 
       for(var i = 0; i < tiles.length; i++) {
+        console.log('currentTile', currentTile.pokemon.pokemonType);
+
         tiles[i].classList.add('correctTile');
         tiles[i].classList.add('type-'+currentTile.pokemon.pokemonType);
+
+        console.log('tiles', tiles[i]);
       }
       tiles[0].classList.remove('activeTile');
-      tiles[0].classList.remove('activeTile');
+      tiles[1].classList.remove('activeTile');
+      previousTile = {};
 
       this.checkCompletion(pairsFound, currentTile);
     }else{
-      this.unrevealTile(tiles);
+      this.unrevealTile(tiles, previousTile);
     }
 
     this.checkTurns();
   }
-  unrevealTile(tiles) {
+  unrevealTile(tiles, previousTile) {
     const hiddenTiles = document.querySelectorAll(".poketile:not(.activeTile)");
     const incorrectTiles = document.querySelectorAll(".poketile:not(.correctTile)");
 
@@ -94,18 +111,12 @@ export default class Tile extends React.Component {
 
     setTimeout(function() {
       tiles[0].classList.remove('activeTile');
-      tiles[0].classList.remove('activeTile');
-      const tile1 = tiles[0].closest('.ReactFlipCard--flipped');
-      const tile2 = tiles[1].closest('.ReactFlipCard--flipped');
-      console.log('tiles', tile1.children[0].children[0], tile2);
-
-      // tile1.children[0].children[1].style.display = 'none';
-      // tile1.children[0].children[0].style.display = 'block';
-      //
-      // tile2.children[0].children[1].style.display = 'none';
-      // tile2.children[0].children[0].style.display = 'block';
+      tiles[1].classList.remove('activeTile');
 
       tile.setState({
+        isFlipped: false
+      });
+      previousTile.setState({
         isFlipped: false
       });
 
