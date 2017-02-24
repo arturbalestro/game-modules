@@ -25,6 +25,7 @@ export default class Tile extends React.Component {
       gameCompleted: false,
       gameOver: false,
       lastFound: {},
+      emptyBoard: false,
     };
 
     this.checkPair = this.checkPair.bind(this);
@@ -36,6 +37,7 @@ export default class Tile extends React.Component {
     this.completeGame = this.props.completeGame.bind(this, this.state.gameCompleted);
     this.fetchPairs = this.props.fetchPairs.bind(this, pairsFound);
     this.gameOver = this.props.gameOver.bind(this);
+    this.makeBoardEmpty = this.props.makeBoardEmpty.bind(this);
   }
 
   getAllPokemon(trainerFilter) {
@@ -163,7 +165,7 @@ export default class Tile extends React.Component {
           const addToken = stage.addToken(token);
         }
 
-        stage.setState({ emptyBoard: true });
+        stage.props.makeBoardEmpty();
       }, 50);
 
       setTimeout(function() {

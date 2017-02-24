@@ -24,6 +24,7 @@ let gameCompleted = false;
 let gameOver = false;
 let lastFound = {};
 let pairsFound = [];
+let emptyBoard = false;
 
 class Stage extends React.Component {
   constructor(props) {
@@ -32,10 +33,8 @@ class Stage extends React.Component {
     this.state = {
       availablePokemon: {},
       turnsRemaining: 8,
-      gameCompleted: false,
       showModal: false,
       gameOver: false,
-      emptyBoard: false,
     };
 
     this.backToGame = this.backToGame.bind(this);
@@ -207,6 +206,7 @@ class Stage extends React.Component {
           completeGame={this.completeGame}
           fetchPairs={this.fetchPairs}
           gameOver={this.gameOver}
+          makeBoardEmpty={this.makeBoardEmpty}
         />
       );
     });
@@ -214,6 +214,9 @@ class Stage extends React.Component {
     if(!gameCompleted) {
       return newSpots;
     }
+  }
+  makeBoardEmpty() {
+    //emptyBoard = true;
   }
   generateEmptyBoard() {
     const emptyTiles = [];
@@ -259,10 +262,10 @@ class Stage extends React.Component {
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
         <Col md={12} className="text-center no-padding tile-board">
-          {!this.state.emptyBoard &&
+          {!emptyBoard &&
             this.renderTiles(tiles)
           }
-          {this.state.emptyBoard &&
+          {emptyBoard &&
             this.generateEmptyBoard()
           }
         </Col>
