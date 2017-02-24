@@ -233,7 +233,7 @@ class Stage extends React.Component {
     pairsFound = pairs;
   }
   gameOver() {
-    gameOver = true;
+    //gameOver = true;
     console.log('game over?', gameOver);
   }
 
@@ -259,7 +259,7 @@ class Stage extends React.Component {
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center" />
         <Col md={12} className="text-center no-padding tile-board">
-          {!this.state.emptyBoard && beginCounter == 0 &&
+          {!this.state.emptyBoard &&
             this.renderTiles(tiles)
           }
           {this.state.emptyBoard &&

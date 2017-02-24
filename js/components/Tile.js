@@ -56,15 +56,10 @@ export default class Tile extends React.Component {
     });
 
     e.target.parentNode.classList.add('activeTile');
-    console.log('selectTile.....', e.target.closest('.ReactFlipCard'));
 
     const activeTiles = document.querySelectorAll('.activeTile');
-    console.log('found activeTiles', activeTiles);
-    console.log('activeTiles length: ', activeTiles.length);
-
     if(activeTiles.length === 1) {
       previousTile = this;
-      console.log('previousTile added: ', previousTile);
     }
 
     if(activeTiles.length > 1) {
@@ -75,18 +70,17 @@ export default class Tile extends React.Component {
   }
   checkPair(tiles, currentTile, previousTile) {
     console.log('found the previous tile...', previousTile);
-    console.log('checking pair...', tiles[0].id, tiles[1].id);
     if(tiles[0].id == tiles[1].id) {
       pairsFound.push(tiles[0].id);
-      console.log('found a pair!!!', pairsFound);
 
       for(var i = 0; i < tiles.length; i++) {
-        console.log('currentTile', currentTile.pokemon.pokemonType);
-
-        tiles[i].classList.add('correctTile');
-        tiles[i].classList.add('type-'+currentTile.pokemon.pokemonType);
-
         console.log('tiles', tiles[i]);
+        const correctTile = tiles[i].parentNode.parentNode.children[1].children[0];
+        console.log('---', correctTile);
+        setTimeout(function() {
+          correctTile.classList.add('correctTile');
+          correctTile.classList.add('type-'+currentTile.pokemon.pokemonType);
+        },500);
       }
       tiles[0].classList.remove('activeTile');
       tiles[1].classList.remove('activeTile');
@@ -139,7 +133,7 @@ export default class Tile extends React.Component {
     }
   }
   checkCompletion(pairsFound, currentTile) {
-    const tiles = document.getElementsByClassName('poketile');
+    const tiles = document.getElementsByClassName('pokeimg');
     const lastFound = pairsFound.slice(-1)[0];
     const tokenInventory = this.props.game.tokens;
 
