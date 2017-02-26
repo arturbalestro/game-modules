@@ -30,7 +30,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="text-center">
-        <Col md={12} sm={12} lg={12} className="mapblock land">
+        <Col md={12} sm={12} lg={12}>
           <Row>
             <Col md={12} sm={12} lg={12} className="mapblock land"></Col>
             <Col md={8} sm={8} lg={8} className="mapblock land"></Col>
@@ -170,15 +170,16 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
             <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
 
+            <Col md={12} sm={12} lg={12} className="mapblock water"></Col>
+
             <Col md={3} sm={3} lg={3} className="mapblock water"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock island"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock water"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock island"></Col>
             <Col md={6} sm={6} lg={6} className="mapblock water"></Col>
-          </Row>
-        </Col>
-        <Col md={12} sm={12} lg={12} className="mapblock water">
 
+            <Col md={12} sm={12} lg={12} className="mapblock water"></Col>
+          </Row>
         </Col>
       </div>
     );
