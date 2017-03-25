@@ -1,6 +1,7 @@
 .mapblock {
   display: inline-block;
   min-height: 34px;
+  position: relative;
   text-align: center; }
   .mapblock.no-left {
     border-left: none; }
@@ -12,6 +13,19 @@
     border-bottom: none; }
   .mapblock.no-border {
     border: none; }
+  .mapblock .stagelink {
+    position: absolute;
+    bottom: 15px;
+    right: 0;
+    z-index: 1;
+    text-align: center; }
+    .mapblock .stagelink .stagename {
+      text-decoration: none;
+      position: absolute;
+      bottom: 14px;
+      right: 0; }
+    .mapblock .stagelink img {
+      max-width: 78px; }
 
 .land {
   background: #B0FFA3; }
