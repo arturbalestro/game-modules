@@ -93,7 +93,12 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
-            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom">
+              <a className="stagelink">
+                <Label className="stagename" bsStyle="primary">Viridian Forest</Label>
+                <img src="img/pokestop.png" />
+              </a>
+            </Col>
             <Col md={4} sm={4} lg={4} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
             <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
@@ -120,7 +125,12 @@ class App extends React.Component {
             <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
-            <Col md={1} sm={1} lg={1} className="mapblock road no-border"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-border">
+              <a className="stagelink">
+                <Label className="stagename" bsStyle="primary">Underground Path</Label>
+                <img src="img/pokestop.png" />
+              </a>
+            </Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top no-bottom">
@@ -191,7 +201,12 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-right no-top"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
-            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right no-bottom"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right no-bottom">
+              <a className="stagelink">
+                <Label className="stagename" bsStyle="primary">Safari Zone</Label>
+                <img src="img/pokestop.png" />
+              </a>
+            </Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top"></Col>
 
@@ -209,10 +224,20 @@ class App extends React.Component {
             <Col md={2} sm={2} lg={2} className="mapblock water"></Col>
 
             <Col md={3} sm={3} lg={3} className="mapblock water"></Col>
-            <Col md={1} sm={1} lg={1} className="mapblock island no-top no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock island no-top no-right">
+              <a className="stagelink">
+                <Label className="stagename" bsStyle="primary">Cinnabar Island</Label>
+                <img src="img/pokestop.png" />
+              </a>
+            </Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
-            <Col md={1} sm={1} lg={1} className="mapblock island no-left no-right"></Col>
+            <Col md={1} sm={1} lg={1} className="mapblock island no-left no-right">
+              <a className="stagelink">
+                <Label className="stagename" bsStyle="primary">Seafoam Islands</Label>
+                <img src="img/pokestop.png" />
+              </a>
+            </Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-top"></Col>
