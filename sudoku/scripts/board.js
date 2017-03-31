@@ -3,7 +3,7 @@ function createArray(length) {
   if (arguments.length > 1) {
     var args = Array.prototype.slice.call(arguments, 1);
     while(i--) arr[length-1 - i] = createArray.apply(this, args);
-  } 
+  }
   return arr;
 }
 
@@ -62,26 +62,26 @@ function searchNumber(number) {
     if(number == total[i]) {
       foundNumber++;
     }
-    
+
     for(var j = 0; j < 9; j++) {
       if(number == board[i][j]) {
         foundNumber++;
       }
     }
   }
-  
+
   //console.log("Found '"+number+"' "+foundNumber+" times in the board");
   return foundNumber;
 }
 
 function playGame() {
-  killCookie('numb'); 
+  killCookie('numb');
   $(".board").children("input").remove();
   var tileBoard = $(".board");
   var numbers = [[1,2,3,4,5,6,7,8,9], [9,6,7,8,2,3,4,1,5], [4,5,8,1,7,9,2,6,3], [2,3,4,5,6,7,8,9,1], [6,1,5,9,8,2,3,4,7], [7,8,9,3,1,4,5,2,6], [3,4,1,2,9,5,6,7,8], [8,7,2,6,3,1,9,5,4], [5,9,6,7,4,8,1,3,2]];
-  
+
   var storedNumbers = [];
-  var expDate = new Date(); 
+  var expDate = new Date();
   expDate.setTime(expDate.getTime()+1*86400000);
 
   for(var a = 0; a < 9; a++) {
@@ -127,12 +127,12 @@ function playGame() {
       }
     }
     console.log(total);*/
-    
+
     for(var j = 0; j < 9; j++) {
-      
+
       /*var rand = Math.floor(Math.random() * (numbers.length)) + 1;
       //board[i][j] = j + 1;
-      
+
       var prev = j - 1;
       var next = i + 1;
       var numberCount = searchNumber(rand);
@@ -140,25 +140,26 @@ function playGame() {
       if(rand != board[i][prev] && numberCount <= 0) {
         board[i][j] = rand;
       }
-      
+
       if(zeroCount > 0) {
-        //console.log("Found "+zeroCount+" empty tiles");  
+        //console.log("Found "+zeroCount+" empty tiles");
       }*/
-      
+
       tileBoard.append("<input type='text' pattern='[1-9]' class='tile column "+i+"-"+j+"' value='"+numbers[i][j]+"' name='numb-"+i+"-"+j+"' id='numb-"+i+"-"+j+"' maxlength='1' />");
       storedNumbers.push(numbers[i][j]);
       document.cookie = 'numb-'+i+'-'+j+'='+numbers[i][j]+"; expires="+expDate.toUTCString();
-    
+      console.log('Cookie was created! ', document.cookie);
+
       if(j === 2 || j === 5) {
         $("input[name='numb-"+i+"-"+j+"']").css("margin-right","3px");
       }
-    
+
       if(i === 2 || i === 5) {
         $("input[name='numb-"+i+"-"+j+"']").css("margin-bottom","3px");
       }
     }
   }
-  
+
   //console.log(board);
 
   for(var x = 1; x <= 5; x++) {
@@ -179,7 +180,7 @@ function playGame() {
     });
     return emptyCounter;
   }
-  
+
   $(".tile").on('keypress', function (evt) {
     var currentField = $(this);
     if (evt.which < 48 || evt.which > 57)
@@ -188,7 +189,7 @@ function playGame() {
       $(this).val("");
     }
   });
-  
+
   $(".tile").on('focus', function() {
     var currentField = $(this);
     if(currentField.hasClass("wrong")) {
@@ -201,13 +202,16 @@ function playGame() {
     if(currentField.val() !== "") {
       var addedNumber = currentField.val();
       var tileName = currentField.attr("name").split("numb-");
+      console.log('tileName: ',tileName[1]);
       var correctNumber = getCookie("numb-"+tileName[1]);
+      console.log('addedNumber: ',addedNumber);
+      console.log('correctNumber: ',correctNumber);
       if(addedNumber == correctNumber) {
         currentField.removeClass("wrong").addClass("correct");
       }else{
         currentField.removeClass("correct").addClass("wrong");
       }
-      
+
       currentField.next("input:enabled").trigger("focus");
       var inputs = currentField.closest('.board').find(':input:enabled');
       inputs.eq(inputs.index(currentField) + 1).focus();
@@ -217,7 +221,7 @@ function playGame() {
       if($(".wrong").length <= 0 && errorCounter === 0) {
         $(".success, .overlay").show(200);
       }
-      
+
       if($(".wrong").length > 0 && errorCounter === 0) {
         $(".failure, .overlay").show(200);
       }
