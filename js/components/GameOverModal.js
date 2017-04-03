@@ -4,7 +4,6 @@ import Relay from 'react-relay';
 import TypedTransition from '../../scripts/TypedTransition';
 import { Button, Image, Modal } from 'react-bootstrap';
 import * as app from './App';
-import * as tokenList from './TokenList';
 import PageTransition from 'react-router-page-transition';
 
 export default class GameOverModal extends React.Component {

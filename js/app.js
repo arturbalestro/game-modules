@@ -2,10 +2,6 @@ import 'babel-polyfill';
 
 import App from './components/App';
 import * as app from './components/App';
-import TokenList from './components/TokenList';
-import * as tokenList from './components/TokenList';
-import Stage from './components/Stage';
-import * as stage from './components/Stage';
 
 import AppHomeRoute from './routes/AppHomeRoute';
 import React from 'react';
@@ -45,22 +41,6 @@ const routes = (
     <Route
       path={app.path()}
       component={App}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-
-    {/* /token-list */}
-    <Route
-      path={tokenList.path()}
-      component={TokenList}
-      queries={routeQuery()}
-      renderFailure={renderFailure}
-    />
-
-    {/* /stage */}
-    <Route
-      path={stage.path()}
-      component={Stage}
       queries={routeQuery()}
       renderFailure={renderFailure}
     />

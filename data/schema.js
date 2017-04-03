@@ -32,46 +32,19 @@ import {
 import {
   // Import methods that your schema can use to interact with your database
   Game,
-  HidingSpot,
-  Token,
-  checkTurns,
-  addTokenPayload,
-  editTokenPayload,
+  Tile,
   getGame,
-  getHidingSpot,
-  getHidingSpots,
-  getToken,
-  getTokens,
+  getTiles,
   getTurnsRemaining,
 } from './database';
-
-import {
-  Trainer,
-  getTrainer,
-  getTrainers
-} from './trainers';
-
-import {
-  Pokemon,
-  getPokemon,
-  getPokemons,
-  getPokemonsByTrainer,
-  addPokemonPayload,
-} from './pokemons';
 
 const {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
     const {type, id} = fromGlobalId(globalId);
     if (type === 'Game') {
       return getGame(id);
-    } else if (type === 'HidingSpot') {
-      return getHidingSpot(id);
-    } else if (type === 'Trainer') {
-      return getTrainer(id);
-    } else if (type === 'Pokemon') {
-      return getPokemon(id);
-    } else if (type === 'Token') {
-      return getToken(id);
+    } else if (type === 'Tile') {
+      return getTile(id);
     } else {
       return null;
     }
@@ -79,14 +52,8 @@ const {nodeInterface, nodeField} = nodeDefinitions(
   (obj) => {
     if (obj instanceof Game) {
       return gameType;
-    } else if (obj instanceof HidingSpot) {
-      return hidingSpotType;
-    } else if (obj instanceof Trainer) {
-      return trainerType;
-    } else if (obj instanceof Pokemon) {
-      return pokemonType;
-    } else if (obj instanceof Token) {
-      return tokenType;
+    } else if (obj instanceof Tile) {
+      return tileType;
     } else {
       return null;
     }
@@ -98,29 +65,11 @@ const gameType = new GraphQLObjectType({
   description: 'A treasure search game',
   fields: () => ({
     id: globalIdField('Game'),
-    hidingSpots: {
-      type: hidingSpotConnection,
+    tiles: {
+      type: tileConnection,
       description: 'Places where treasure might be hidden',
       args: connectionArgs,
-      resolve: (game, args) => connectionFromArray(getHidingSpots(), args),
-    },
-    trainers: {
-      type: trainerConnection,
-      description: 'Trainers that have Pokémon',
-      args: connectionArgs,
-      resolve: (game, args) => connectionFromArray(getTrainers(), args),
-    },
-    // pokemons: {
-    //   type: pokemonConnection,
-    //   description: 'Pokemons that can be found',
-    //   args: connectionArgs,
-    //   resolve: (game, args) => connectionFromArray(getPokemons(), args),
-    // },
-    tokens: {
-      type: tokenConnection,
-      description: 'Tokens that can be earned when all pairs are found',
-      args: connectionArgs,
-      resolve: (game, args) => connectionFromArray(getTokens(), args),
+      resolve: (game, args) => connectionFromArray(getTiles(), args),
     },
     turnsRemaining: {
       type: GraphQLInt,
@@ -131,133 +80,27 @@ const gameType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const hidingSpotType = new GraphQLObjectType({
-  name: 'HidingSpot',
+const tileType = new GraphQLObjectType({
+  name: 'NumberGroup',
   description: 'A place where you might find treasure',
   fields: () => ({
-    id: globalIdField('HidingSpot'),
+    id: globalIdField('NumberGroup'),
+    value: {
+      type: GraphQLInt,
+      description: 'True if this spot has already been checked for treasure',
+      resolve: (tile) => tile.value,
+    },
     hasBeenChecked: {
       type: GraphQLBoolean,
       description: 'True if this spot has already been checked for treasure',
-      resolve: (hidingSpot) => hidingSpot.hasBeenChecked,
-    },
-    hasTreasure: {
-      type: GraphQLBoolean,
-      description: 'True if this hiding spot holds treasure',
-      resolve: (hidingSpot) => {
-        if (hidingSpot.hasBeenChecked) {
-          return hidingSpot.hasTreasure;
-        } else {
-          return null;  // Shh... it's a secret!
-        }
-      },
+      resolve: (tile) => tile.hasBeenChecked,
     },
   }),
   interfaces: [nodeInterface],
 });
 
-const pokemonType = new GraphQLObjectType({
-  name: 'Pokemon',
-  description: 'A Pokemon that will appear on the spot',
-  fields: () => ({
-    id: globalIdField('Pokemon'),
-    entryNumber: {
-      type: GraphQLInt,
-      description: 'The Pokédex entry number of the Pokémon',
-    },
-    name: {
-      type: GraphQLString,
-      description: 'The name of the Pokémon',
-    },
-    pokemonType: {
-      type: GraphQLString,
-      description: 'The type of the Pokémon',
-    },
-    image: {
-      type: GraphQLString,
-      description: 'The image of the Pokémon',
-    },
-    canEvolve: {
-      type: GraphQLBoolean,
-      description: 'Specifies if a Pokémon has a direct evolution.',
-    },
-    unlocked: {
-      type: GraphQLBoolean,
-      description: 'Specifies if a Pokémon was unlocked into the game.',
-    },
-    species: {
-      type: GraphQLString,
-      description: 'The species of the Pokémon',
-    },
-  }),
-  interfaces: [nodeInterface],
-});
-
-const trainerType = new GraphQLObjectType({
-  name: 'Trainer',
-  description: 'A person that trains pokémon',
-  fields: () => ({
-    id: globalIdField('Trainer'),
-    name: {
-      type: GraphQLString,
-      description: 'The name of the Trainer',
-    },
-    specialty: {
-      type: GraphQLString,
-      description: 'The specialty of the Trainer (type of pokémon they use the most).',
-    },
-    weakness: {
-      type: GraphQLString,
-      description: 'The type of the Pokémon they have the most problems with.',
-    },
-
-    // We can set up a relationship between trainers and pokémons here
-    pokemons: {
-      description: 'A listing of the trainer\'s Pokémons',
-      type: pokemonConnection,
-      args: connectionArgs,
-      resolve: (trainer, args) => connectionFromArray(getPokemonsByTrainer(trainer.id), args),
-    },
-  }),
-  interfaces: [nodeInterface],
-});
-
-const tokenType = new GraphQLObjectType({
-  name: 'Token',
-  description: 'A token that can be earned when all pairs are found',
-  fields: () => ({
-    id: globalIdField('Token'),
-    name: {
-      type: GraphQLString,
-      description: 'The name of the correspondent Pokémon',
-    },
-    entryNumber: {
-      type: GraphQLInt,
-      description: 'The Pokédex entry number of the correspondent Pokémon',
-    },
-    attribute: {
-      type: GraphQLString,
-      description: 'The type of the correspondent Pokémon',
-    },
-    amount: {
-      type: GraphQLInt,
-      description: 'The amount of tokens you have for each specific Pokémon',
-    },
-  }),
-  interfaces: [nodeInterface],
-});
-
-const {connectionType: hidingSpotConnection} =
-  connectionDefinitions({name: 'HidingSpot', nodeType: hidingSpotType});
-
-const {connectionType: trainerConnection} =
-  connectionDefinitions({name: 'Trainer', nodeType: trainerType});
-
-const {connectionType: pokemonConnection} =
-  connectionDefinitions({name: 'Pokemon', nodeType: pokemonType});
-
-const {connectionType: tokenConnection} =
-  connectionDefinitions({name: 'Token', nodeType: tokenType});
+const {connectionType: tileConnection} =
+  connectionDefinitions({name: 'Tile', nodeType: tileType});
 
 /**
  * This is the type that will be the root of our query,
@@ -274,107 +117,6 @@ const queryType = new GraphQLObjectType({
  }),
 });
 
-const CheckTurnsMutation = mutationWithClientMutationId({
-  name: 'CheckTurns',
-  inputFields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-  },
-  outputFields: {
-    game: {
-      type: gameType,
-      resolve: () => getGame(),
-    },
-  },
-  mutateAndGetPayload: ({id}) => {
-    const localGameId = fromGlobalId(id).id;
-    checkTurns(localGameId);
-    return {localGameId};
-  },
-});
-
-const AddTokenMutation = mutationWithClientMutationId({
-  name: 'AddToken',
-  inputFields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
-    attribute: { type: new GraphQLNonNull(GraphQLString) },
-    amount: { type: new GraphQLNonNull(GraphQLInt) },
-  },
-  outputFields: {
-    token: {
-      type: tokenType,
-      resolve: ({localTokenId}) => getToken(localTokenId),
-    },
-    game: {
-      type: gameType,
-      resolve: () => getGame(),
-    },
-  },
-  mutateAndGetPayload: ({id, name, entryNumber, attribute, amount}) => {
-    const localTokenId = fromGlobalId(id).id;
-    addTokenPayload(localTokenId, name, entryNumber, attribute, amount);
-    return {localTokenId};
-  },
-});
-
-const EditTokenMutation = mutationWithClientMutationId({
-  name: 'EditToken',
-  inputFields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
-    attribute: { type: new GraphQLNonNull(GraphQLString) },
-    amount: { type: new GraphQLNonNull(GraphQLInt) },
-  },
-  outputFields: {
-    token: {
-      type: tokenType,
-      resolve: ({localTokenId}) => getToken(localTokenId),
-    },
-    game: {
-      type: gameType,
-      resolve: () => getGame(),
-    },
-  },
-  mutateAndGetPayload: ({id, amount}) => {
-    const localTokenId = fromGlobalId(id).id;
-    if(localTokenId != undefined) {
-      editTokenPayload(localTokenId);
-    }
-    return {localTokenId};
-  },
-});
-
-const AddPokemonMutation = mutationWithClientMutationId({
-  name: 'AddPokemon',
-  inputFields: {
-    trainerId: { type: new GraphQLNonNull(GraphQLID) },
-    entryNumber: { type: new GraphQLNonNull(GraphQLInt) },
-    unlocked: { type: new GraphQLNonNull(GraphQLBoolean) },
-  },
-  outputFields: {
-    trainer: {
-      type: trainerType,
-      resolve: ({localTrainerId}) => getTrainer(localTrainerId),
-    },
-    pokemon: {
-      type: pokemonType,
-      resolve: ({localPokemonId}) => getPokemon(localPokemonId),
-    },
-    game: {
-      type: gameType,
-      resolve: () => getGame(),
-    },
-  },
-  mutateAndGetPayload: ({trainerId, entryNumber, unlocked}) => {
-    const localTrainerId = fromGlobalId(trainerId).id;
-    console.log('localTrainerId', localTrainerId);
-    addPokemonPayload(localTrainerId, entryNumber, unlocked);
-    return {localTrainerId};
-  },
-});
-
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
@@ -382,10 +124,7 @@ const AddPokemonMutation = mutationWithClientMutationId({
  const mutationType = new GraphQLObjectType({
    name: 'Mutation',
    fields: () => ({
-     checkTurns: CheckTurnsMutation,
-     addToken: AddTokenMutation,
-     editToken: EditTokenMutation,
-     addPokemon: AddPokemonMutation,
+     //mutation: mutationName
    }),
  });
 
@@ -395,5 +134,5 @@ const AddPokemonMutation = mutationWithClientMutationId({
  */
  export const Schema = new GraphQLSchema({
    query: queryType,
-   mutation: mutationType
+   //mutation: mutationType
  });
