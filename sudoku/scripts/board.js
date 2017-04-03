@@ -91,6 +91,7 @@ function playGame() {
       var r = Math.floor(Math.random() * (possibleNumbers.length)) + 1;
       var p = b - 1;
       var nCount = searchNumber(r);
+      console.log(r, p, total[p]);
       if(r != total[p] && nCount <= 0) {
         if(total[p] == 0) {
           total[p] = r;
@@ -99,6 +100,8 @@ function playGame() {
           b++;
         }
       }
+
+      console.log('total: ', total);
 
       /*if(b == 8) {
         board[a] = total;
