@@ -54,9 +54,8 @@ function killCookie($cookieName) {
 }
 
 var board = [[0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0]];
-var total = [0,0,0,0,0,0,0,0,0];
 
-function searchNumber(number) {
+function searchNumber(number, total) {
   var foundNumber = 0;
   for(var i = 0; i < 9; i++) {
     if(number == total[i]) {
@@ -70,8 +69,31 @@ function searchNumber(number) {
     }
   }
 
-  //console.log("Found '"+number+"' "+foundNumber+" times in the board");
+  console.log("Found '"+number+"' "+foundNumber+" times in the board");
   return foundNumber;
+}
+
+function fillBoard() {
+  var possibleNumbers = [1,2,3,4,5,6,7,8,9];
+  var uniqueCounter = 0;
+  var total = [0,0,0,0,0,0,0,0,0];
+
+  while(uniqueCounter < 9) {  
+    var prev = uniqueCounter - 1;
+    var r = Math.floor(Math.random() * (possibleNumbers.length)) + 1;
+    var nCount = searchNumber(r, total);
+    if(r != total[uniqueCounter] && nCount <= 0) {
+      if(total[prev] == 0) {
+        total[prev] = r;
+      }else{
+        total[uniqueCounter] = r; 
+      }
+      uniqueCounter++;
+    }
+    console.log('chosenNumbers: ', total);
+  }
+
+  return total;
 }
 
 function playGame() {
@@ -84,52 +106,13 @@ function playGame() {
   var expDate = new Date();
   expDate.setTime(expDate.getTime()+1*86400000);
 
+  var blankBoard = [];
   for(var a = 0; a < 9; a++) {
-    var b = 0;
-    //while(b < 9) {
-      var possibleNumbers = [1,2,3,4,5,6,7,8,9];
-      var r = Math.floor(Math.random() * (possibleNumbers.length)) + 1;
-      var p = b - 1;
-      var nCount = searchNumber(r);
-      console.log(r, p, total[p]);
-      if(r != total[p] && nCount <= 0) {
-        if(total[p] == 0) {
-          total[p] = r;
-        }else{
-          total[b] = r;
-          b++;
-        }
-      }
-
-      console.log('total: ', total);
-
-      /*if(b == 8) {
-        board[a] = total;
-        console.log(board);
-      }*/
-    //}
+    blankBoard.push(fillBoard());
+    console.log('total arrays: ', blankBoard);
   }
 
   for(var i = 0; i < 9; i++) {
-    /*var possibleNumbers = [1,2,3,4,5,6,7,8,9];
-    var r = Math.floor(Math.random() * (possibleNumbers.length)) + 1;
-    var p = i - 1;
-    var nCount = searchNumber(r);
-    console.log("Trying to add "+r+". Previous number added was "+total[p]);
-    console.log(total[p] === 0);
-    console.log(nCount <= 0);
-    console.log(r != total[p]);
-    if(r != total[p] && nCount <= 0) {
-      if(total[p] == 0) {
-        console.log("insert on previous");
-        total[p] = r;
-        i--;
-      }else{
-        console.log("inserting normally");
-        total[i] = r;
-      }
-    }
-    console.log(total);*/
 
     for(var j = 0; j < 9; j++) {
 
@@ -148,9 +131,9 @@ function playGame() {
         //console.log("Found "+zeroCount+" empty tiles");
       }*/
 
-      tileBoard.append("<input type='text' pattern='[1-9]' class='tile column "+i+"-"+j+"' value='"+numbers[i][j]+"' name='numb-"+i+"-"+j+"' id='numb-"+i+"-"+j+"' maxlength='1' />");
-      storedNumbers.push(numbers[i][j]);
-      document.cookie = 'numb-'+i+'-'+j+'='+numbers[i][j]+"; expires="+expDate.toUTCString();
+      tileBoard.append("<input type='text' pattern='[1-9]' class='tile column "+i+"-"+j+"' value='"+blankBoard[i][j]+"' name='numb-"+i+"-"+j+"' id='numb-"+i+"-"+j+"' maxlength='1' />");
+      storedNumbers.push(blankBoard[i][j]);
+      document.cookie = 'numb-'+i+'-'+j+'='+blankBoard[i][j]+"; expires="+expDate.toUTCString();
       console.log('Cookie was created! ', document.cookie);
 
       if(j === 2 || j === 5) {
@@ -168,7 +151,7 @@ function playGame() {
   for(var x = 1; x <= 5; x++) {
     var randomNumber = Math.floor(Math.random() * 9) + 1;
     var randomRow = Math.floor(Math.random() * 9);
-    var columnIndex = numbers[randomRow].indexOf(randomNumber);
+    var columnIndex = blankBoard[randomRow].indexOf(randomNumber);
     $("input[name='numb-"+randomRow+"-"+columnIndex+"']").val("").addClass("empty");
   }
    $("input:not(.empty)").prop("disabled",true);
@@ -206,7 +189,8 @@ function playGame() {
       var addedNumber = currentField.val();
       var tileName = currentField.attr("name").split("numb-");
       console.log('tileName: ',tileName[1]);
-      var correctNumber = getCookie("numb-"+tileName[1]);
+      //var correctNumber = getCookie("numb-"+tileName[1]);
+      var correctNumber = currentField.attr("value");  
       console.log('addedNumber: ',addedNumber);
       console.log('correctNumber: ',correctNumber);
       if(addedNumber == correctNumber) {
@@ -234,4 +218,5 @@ function playGame() {
 
 function closePopup() {
   $(".popup, .overlay").hide();
+  window.location.reload();
 }
