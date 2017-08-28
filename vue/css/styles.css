@@ -1,0 +1,279 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#stage {
+  position: relative;
+  width: 100%;
+}
+
+.map {
+  background: url("../img/bgs.png") no-repeat center center;
+  background-position: -600px -3851px;
+  margin: auto;
+  display: inline-block;
+  width: 520px;
+  height: 658px;
+  position: relative;
+  vertical-align: top;
+}
+.top-board {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.bottom-board {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.tile {
+  display: inline-block;
+  border: 1px solid black;
+  position: relative;
+  width: 63px;
+  height: 53px;
+  margin-right: -1px;
+  vertical-align: top;
+  text-align: center;
+  padding: 5px;
+}
+
+.menu {
+  background: #002051;
+  border-radius: 5px;
+	border: 5px solid #919267;
+  display: inline-block;
+  vertical-align: top;
+  width: 28%;
+  overflow-y: auto;
+  height: 644px;
+}
+.char-box {
+  cursor: pointer;
+  padding: 5px;
+}
+.char-box:hover {
+  background: #EDC152;
+}
+.char-box:hover .name {
+  color: #FFF;
+}
+.char .face {
+  display: inline-block;
+  padding-right: 5px;
+  vertical-align: middle;
+}
+.char .face img {
+  max-width: 60px;
+  vertical-align: middle;
+}
+.char .name {
+  display: inline-block;
+  color: #EDC152;
+  font-size: 25px;
+  text-transform: capitalize;
+  vertical-align: middle;
+}
+
+.sprite {
+	display: inline-block;
+	width: 32px;
+	height: 48px;
+}
+.char#muzet .sprite {
+	height: 32px;
+}
+.char#neclord .sprite, .char#bleu .sprite {
+	width: 48px;
+}
+.char#elle .sprite, .char#hyades .sprite, .char#mistral .sprite {
+	width: 64px;
+	height: 64px;
+}
+.char#bazba .sprite {
+	width: 48px;
+	height: 64px;
+}
+
+/*For normal sizes (128 x 192)*/
+.animaBottom {
+	animation: playBottom .9s steps(4) infinite;
+}
+.animaLeft {
+	animation: playLeft .9s steps(4) infinite;
+}
+.animaRight {
+	animation: playRight .9s steps(4) infinite;
+}
+.animaTop {
+	animation: playTop .9s steps(4) infinite;
+}
+
+/*For small sizes (128 x 128)*/
+.animaBottom-small {
+	animation: playBottomSmall .9s steps(4) infinite;
+}
+.animaLeft-small {
+	animation: playLeftSmall .9s steps(4) infinite;
+}
+.animaRight-small {
+	animation: playRightSmall .9s steps(4) infinite;
+}
+.animaTop-small {
+	animation: playTopSmall .9s steps(4) infinite;
+}
+
+/*For medium sizes (192 x 192)*/
+.animaBottom-medium {
+	animation: playBottomMedium .9s steps(4) infinite;
+}
+.animaLeft-medium {
+	animation: playLeftMedium .9s steps(4) infinite;
+}
+.animaRight-medium {
+	animation: playRightMedium .9s steps(4) infinite;
+}
+.animaTop-medium {
+	animation: playTopMedium .9s steps(4) infinite;
+}
+
+/*For big sizes (192 x 256)*/
+.animaBottom-big {
+	animation: playBottomBig .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaLeft-big {
+	animation: playLeftBig .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaRight-big {
+	animation: playRightBig .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaTop-big {
+	animation: playTopBig .9s steps(4) infinite;
+  margin-top: -10px;
+}
+
+/*For large sizes (256 x 256)*/
+.animaBottom-large {
+	animation: playBottomLarge .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaLeft-large {
+	animation: playLeftLarge .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaRight-large {
+	animation: playRightLarge .9s steps(4) infinite;
+  margin-top: -10px;
+}
+.animaTop-large {
+	animation: playTopLarge .9s steps(4) infinite;
+  margin-top: -10px;
+}
+
+.paused {
+  -webkit-animation-play-state:paused;
+  -moz-animation-play-state:paused;
+  -o-animation-play-state:paused;
+  animation-play-state:paused;
+}
+.running {
+  -webkit-animation-play-state:running;
+  -moz-animation-play-state:running;
+  -o-animation-play-state:running;
+  animation-play-state:running;
+}
+
+/*For normal sizes (128 x 192)*/
+@keyframes playBottom {
+	from { background-position: 0 0; }
+	to { background-position: -128px 0; }
+}
+@keyframes playLeft {
+	from { background-position: 0 -48px; }
+	to { background-position: -128px -48px; }
+}
+@keyframes playRight {
+	from { background-position: 0 -96px; }
+	to { background-position: -128px -96px; }
+}
+@keyframes playTop {
+	from { background-position: 0 -144px; }
+	to { background-position: -128px -144px; }
+}
+
+/*For small sizes (128 x 128)*/
+@keyframes playBottomSmall {
+	from { background-position: 0 0; }
+	to { background-position: -128px 0; }
+}
+@keyframes playLeftSmall {
+	from { background-position: 0 -32px; }
+	to { background-position: -128px -32px; }
+}
+@keyframes playRightSmall {
+	from { background-position: 0 -64px; }
+	to { background-position: -128px -64px; }
+}
+@keyframes playTopSmall {
+	from { background-position: 0 -96px; }
+	to { background-position: -128px -96px; }
+}
+
+/*For medium sizes (192 x 192)*/
+@keyframes playBottomMedium {
+	from { background-position: 0 0; }
+	to { background-position: -192px 0; }
+}
+@keyframes playLeftMedium {
+	from { background-position: 0 -48px; }
+	to { background-position: -192px -48px; }
+}
+@keyframes playRightMedium {
+	from { background-position: 0 -96px; }
+	to { background-position: -192px -96px; }
+}
+@keyframes playTopMedium {
+	from { background-position: 0 -144px; }
+	to { background-position: -192px -144px; }
+}
+
+/*For big sizes (192 x 256)*/
+@keyframes playBottomBig {
+	from { background-position: 0 0; }
+	to { background-position: -192px 0; }
+}
+@keyframes playLeftBig {
+	from { background-position: 0 -64px; }
+	to { background-position: -192px -64px; }
+}
+@keyframes playRightBig {
+	from { background-position: 0 -128px; }
+	to { background-position: -192px -128px; }
+}
+@keyframes playTopBig {
+	from { background-position: 0 -192px; }
+	to { background-position: -192px -192px; }
+}
+
+/*For large sizes (256 x 256)*/
+@keyframes playBottomLarge {
+	from { background-position: 0 0; }
+	to { background-position: -256px 0; }
+}
+@keyframes playLeftLarge {
+	from { background-position: 0 -64px; }
+	to { background-position: -256px -64px; }
+}
+@keyframes playRightLarge {
+	from { background-position: 0 -128px; }
+	to { background-position: -256px -128px; }
+}
+@keyframes playTopLarge {
+	from { background-position: 0 -192px; }
+	to { background-position: -256px -192px; }
+}

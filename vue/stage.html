@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My first Vue app</title>
+	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	<script type="text/javascript" src="js/vue.js"></script>
+</head>
+<body>
+	<div id="stage" class="">
+		<div class="map">
+			<div class="top-board">
+				<div class="tile" v-if="addChar">
+					<div class="char" v-bind:char-tile="char">
+						<div :class="['sprite animaBottom'+char.size]" v-bind:style="{ backgroundImage: 'url(' + char.sprite + ')' }"></div>
+					</div>
+				</div>
+				<div class="tile wall"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile wall"></div>
+			</div>
+			<div class="bottom-board">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+		</div>
+
+		<div class="menu">
+			<div class="char-selector">
+				<div class="char-box" v-for="char in characters" v-on:click="addCharToMap">
+					<div class="char" v-bind:id=char.name>
+						<div class="face"><img v-bind:src=char.face /></div>
+						<div class="name">{{char.name}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="js/characters.js"></script>
+	<script type="text/javascript" src="js/stage.js"></script>
+</body>
+</html>
