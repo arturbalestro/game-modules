@@ -69,8 +69,58 @@ function searchNumber(number, total) {
     }
   }
 
-  console.log("Found '"+number+"' "+foundNumber+" times in the board");
+  //console.log("Found '"+number+"' "+foundNumber+" times in the board");
   return foundNumber;
+}
+
+function searchInRow(number, prevRow, currentRow) {
+  var foundNumber = 0;
+  for(var i = 0; i < prevRow.length; i++) {
+    //console.log('#numbers', number, prevRow[i], '#indexes', currentRow.indexOf(number), prevRow.indexOf(prevRow[i]));
+    if(number == prevRow[i] && currentRow.indexOf(number) == prevRow.indexOf(prevRow[i])) {
+      foundNumber++;
+    }
+  }
+
+  //console.log("#Found '"+number+"' "+foundNumber+" times in the board");
+  return foundNumber;
+}
+
+function validateRow(currentNumber, prevRow, currentRow, board) {
+  console.log('#current row', currentRow);
+  console.log('#prev row', prevRow);
+
+  for(var x = 0; x < currentRow.length; x++) {
+    console.log('#validating numbers', currentNumber, prevRow[x]);
+    if(currentNumber == prevRow[x]) {
+      var newNumber = Math.floor(Math.random() * (currentRow.length)) + 1;
+
+      if(newNumber != prevRow[x]) {
+        console.log('#current number', currentNumber,'#index', currentRow.indexOf(currentNumber));
+        console.log('#new number', newNumber,'#index', currentRow.indexOf(newNumber));
+
+        var savedNumber = currentNumber;
+        currentRow[currentRow.indexOf(newNumber)] = savedNumber;
+        currentRow[currentRow.indexOf(currentNumber)] = newNumber;
+        console.log('#', currentNumber, 'replaced by', newNumber, currentRow);
+      }else{
+        newNumber = Math.floor(Math.random() * (currentRow.length)) + 1;
+        console.log('new number changed', newNumber,'#index', currentRow.indexOf(newNumber));
+        x--;
+      }
+    }
+
+    //   var xCount = searchInRow(r, prevRow, currentRow);
+    //   console.log('looking for ', r, 'in ', prevRow);
+    //   if(xCount <= 0) { 
+    //     return currentRow;
+    //   }
+    // }else{
+      //return currentRow;
+    //}
+  }
+
+  return currentRow;
 }
 
 function fillBoard() {
@@ -90,14 +140,14 @@ function fillBoard() {
       }
       uniqueCounter++;
     }
-    console.log('chosenNumbers: ', total);
+    //console.log('chosenNumbers: ', total);
   }
 
   return total;
 }
 
 function playGame() {
-  killCookie('numb');
+  //killCookie('numb');
   $(".board").children("input").remove();
   var tileBoard = $(".board");
   var numbers = [[1,2,3,4,5,6,7,8,9], [9,6,7,8,2,3,4,1,5], [4,5,8,1,7,9,2,6,3], [2,3,4,5,6,7,8,9,1], [6,1,5,9,8,2,3,4,7], [7,8,9,3,1,4,5,2,6], [3,4,1,2,9,5,6,7,8], [8,7,2,6,3,1,9,5,4], [5,9,6,7,4,8,1,3,2]];
@@ -109,27 +159,25 @@ function playGame() {
   var blankBoard = [];
   for(var a = 0; a < 9; a++) {
     blankBoard.push(fillBoard());
-    console.log('total arrays: ', blankBoard);
+    //console.log('total arrays: ', blankBoard);
   }
 
   for(var i = 0; i < 9; i++) {
 
     for(var j = 0; j < 9; j++) {
 
-      /*var rand = Math.floor(Math.random() * (numbers.length)) + 1;
-      //board[i][j] = j + 1;
+      if(i > 0) {
+        var currentNumber = blankBoard[i][j];
+        var currentRow = blankBoard[i];
+        var prevRow = blankBoard[i-1];
+        var rowIndex = blankBoard.indexOf(blankBoard[i-1]);
+        var nCount = searchInRow(currentNumber, blankBoard[rowIndex], currentRow);
 
-      var prev = j - 1;
-      var next = i + 1;
-      var numberCount = searchNumber(rand);
-      var zeroCount = searchNumber(0);
-      if(rand != board[i][prev] && numberCount <= 0) {
-        board[i][j] = rand;
+        if(nCount > 0) {
+          var validatedRow = validateRow(currentNumber, prevRow, currentRow, blankBoard);
+          blankBoard[i] = validatedRow;
+        }
       }
-
-      if(zeroCount > 0) {
-        //console.log("Found "+zeroCount+" empty tiles");
-      }*/
 
       tileBoard.append("<input type='text' pattern='[1-9]' class='tile column "+i+"-"+j+"' value='"+blankBoard[i][j]+"' name='numb-"+i+"-"+j+"' id='numb-"+i+"-"+j+"' maxlength='1' />");
       storedNumbers.push(blankBoard[i][j]);
