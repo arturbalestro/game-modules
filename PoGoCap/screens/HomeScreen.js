@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
-import { MonoText } from '../components/StyledText';
+import MainMenu from '../components/MainMenu';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -18,56 +18,58 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
+    let logo = require("../assets/images/pogologo.png");
+
     return (
       <View style={styles.container}>
+        {/* <View style={styles.tabBarInfoContainer}>
+          <Text style={styles.tabBarInfoText}>Saving this for notifications</Text>
+        </View> */}
+
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
-            <Image
+            {/* <Image
               source={
                 __DEV__
                   ? require('../assets/images/robot-dev.png')
                   : require('../assets/images/robot-prod.png')
               }
               style={styles.welcomeImage}
-            />
+            /> */}
+
+            <Image source={logo} style={styles.welcomeImage} />
+            <Text style={styles.getStartedText}>PoGoCap</Text>
           </View>
 
           <View style={styles.getStartedContainer}>
-            {this.renderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>PoGoCap</Text>
+            {/* {this.renderDevelopmentModeWarning()} */}
 
             {this.renderSubtitle()}
+
+            <MainMenu />
           </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
 
   renderSubtitle() {
     return(
+      <View>
         <Text style={styles.developmentModeText}>
-            You play Pokémon Go, but find it hard to get your friends together to play? 
-            PoGoCap can help you with that!
-
-            PoGoCap allows you to:
-
-            {/* <ul>
-              <li>Register nearby Raids and Pokémon.</li>
-              <li>Add your trainer info to share with other players, including pokémon for trade and friends list.</li>
-              <li>Connect to friends (from your list or not) and form raid lists that can be shared with anyone.</li>
-              <li>Help organize your trades and battles easily by checking player availability and pokémon roster.</li>
-            </ul>  */}
-            
+          You play Pokémon Go, but find it hard to get your friends together to play?
         </Text>
+        <Text style={styles.developmentModeText}> 
+          PoGoCap can help you with that!
+        </Text>
+
+        <Text style={styles.developmentModeText}>PoGoCap allows you to:</Text>
+
+        <Text>* Register nearby Raids and Pokémon.</Text>
+        <Text>* Add your trainer info to share with other players, including pokémon for trade and friends list.</Text>
+        <Text>* Connect to friends (from your list or not) and form raid lists that can be shared with anyone.</Text>
+        <Text>* Help organize your trades and battles easily by checking player availability and pokémon roster.</Text>
+      </View>
     )
   }
 
@@ -108,6 +110,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    overflow: 'scroll'
   },
   developmentModeText: {
     marginBottom: 20,
@@ -118,6 +121,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
+    minHeight: 600
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -125,11 +129,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    height: 100,
     resizeMode: 'contain',
     marginTop: 3,
-    marginLeft: -10,
   },
   getStartedContainer: {
     alignItems: 'center',
