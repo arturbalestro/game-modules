@@ -46,7 +46,7 @@ export default class HomeScreen extends React.Component {
 
             {this.renderSubtitle()}
 
-            <MainMenu />
+            {/* <MainMenu /> */}
           </View>
         </ScrollView>
       </View>

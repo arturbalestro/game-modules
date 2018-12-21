@@ -20,36 +20,8 @@ HomeStack.navigationOptions = {
       name={
         Platform.OS === 'ios'
           ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          : 'pokemon-go'
       }
-    />
-  ),
-};
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
-});
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
     />
   ),
 };
@@ -63,14 +35,42 @@ RaidsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'egg-easter' : 'egg-easter'}
+    />
+  ),
+};
+
+const PokemonStack = createStackNavigator({
+  Links: LinksScreen,
+});
+
+PokemonStack.navigationOptions = {
+  tabBarLabel: 'Pokémon',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'pokeball' : 'pokeball'}
+    />
+  ),
+};
+
+const FriendsStack = createStackNavigator({
+  Settings: SettingsScreen,
+});
+
+FriendsStack.navigationOptions = {
+  tabBarLabel: 'Friends',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'account-group' : 'account-group'}
     />
   ),
 };
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
-  RaidsStack
+  RaidsStack,
+  PokemonStack,
+  FriendsStack
 });
