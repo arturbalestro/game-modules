@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry, StyleSheet, View, ScrollView, Text, Button } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Button } from 'react-native';
 
 import AddRaidForm from './AddRaidForm';
 
@@ -221,5 +221,3 @@ export default class RaidList extends React.Component {
         )
     }
 }
-
-AppRegistry.registerComponent('PoGoCap', () => RaidList);

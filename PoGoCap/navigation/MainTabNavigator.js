@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import FriendsScreen from '../screens/FriendsScreen';
 import RaidsScreen from '../screens/RaidsScreen';
 
 const HomeStack = createStackNavigator({
@@ -27,7 +27,7 @@ HomeStack.navigationOptions = {
 };
 
 const RaidsStack = createStackNavigator({
-  Settings: RaidsScreen,
+  Raids: RaidsScreen,
 });
 
 RaidsStack.navigationOptions = {
@@ -55,7 +55,7 @@ PokemonStack.navigationOptions = {
 };
 
 const FriendsStack = createStackNavigator({
-  Settings: SettingsScreen,
+  Friends: FriendsScreen,
 });
 
 FriendsStack.navigationOptions = {
