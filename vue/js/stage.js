@@ -1,5 +1,5 @@
-Vue.component('char-tile', {
-  props: ['char-tile'],
+Vue.component('char', {
+  props: ['char'],
   template: ''
 })
 

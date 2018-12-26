@@ -9,7 +9,7 @@
 
 	<div id="app">
 		<p>{{ message }}</p>
-		
+
 		<span v-bind:title="title">
 			Hover your mouse over me for a few seconds
 			to see my dynamically bound title!
@@ -22,11 +22,11 @@
 		    	{{ todo.text }}
 		    </li>
 
-		    <todo-item
+		    <!-- <todo-item
 		      v-for="item in groceryList"
 		      v-bind:todo="item"
 		      v-bind:key="item.id">
-		    </todo-item>
+		    </todo-item> -->
 		</ol>
 
 	  	<input v-model="message">

@@ -10,7 +10,7 @@
 		<div class="map">
 			<div class="top-board">
 				<div class="tile" v-if="addChar">
-					<div class="char" v-bind:char-tile="char">
+					<div class="char" v-bind:char="char" v-bind:key="char.id">
 						<div :class="['sprite animaBottom'+char.size]" v-bind:style="{ backgroundImage: 'url(' + char.sprite + ')' }"></div>
 					</div>
 				</div>
