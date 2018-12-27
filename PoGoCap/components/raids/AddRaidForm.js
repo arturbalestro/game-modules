@@ -1,10 +1,31 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+
+const styles = StyleSheet.create({
+  raidFormContainer: {
+    padding: 10
+  },
+  textField: {
+    borderColor: '#CCC',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderRadius: 4,
+    width: '100%',
+    minHeight: 40,
+    paddingLeft: 5
+  },
+  label: {
+    padding: 10
+  }
+});
 
 export default class AddRaidForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {text: ''};
+  }
+
+  state = {
+    text: ''
   }
 
   render() {
@@ -27,13 +48,13 @@ export default class AddRaidForm extends Component {
     }
 
     return (
-      <View style={{padding: 10}}>
+      <View style={styles.raidFormContainer}>
         <TextInput
-          style={{height: 40}}
+          style={styles.textField}
           placeholder="Raid Boss"
           onChangeText={(text) => this.setState({text})}
         />
-        <Text style={{padding: 10}}>
+        <Text style={styles.label}>
           The raid level is {raidLvl}
         </Text>
       </View>
@@ -41,5 +62,3 @@ export default class AddRaidForm extends Component {
   }
 }
 
-// skip this line if using Create React Native App
-AppRegistry.registerComponent('AwesomeProject', () => AddRaidForm);

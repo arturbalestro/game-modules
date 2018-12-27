@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text, Button } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Button, Modal, TouchableHighlight } from 'react-native';
 
 import AddRaidForm from './AddRaidForm';
 
@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        padding: 10
     },
     raidItem: {
         backgroundColor: '#FFF',
@@ -47,20 +48,33 @@ const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: 'bold'
+    },
+
+    modalCloseButton: {
+        backgroundColor: 'limegreen',
+        borderRadius: 4,
+        alignItems: 'center',
+        margin: 10,
+        padding: 10
+    },
+    modalCloseButtonText: {
+        fontWeight: 'bold',
+        color: '#FFF'
     }
 });
 
 export default class RaidList extends React.Component {
 
-    handleJoinGroup() {
-        alert('Joining feature is inactive now!');
+    state = {
+        modalVisible: false
+    };
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
     }
 
-    handleAddRaid() {
-        alert('Adding raids will be available soon');
-        return(
-            <AddRaidForm />
-        );
+    handleJoinGroup() {
+        alert('Joining feature is inactive now!');
     }
 
     render() {
@@ -215,7 +229,31 @@ export default class RaidList extends React.Component {
                         </View>
                     </View>
 
-                    <Button onPress={() => this.handleAddRaid()} title="Add a new Raid" />
+                    <Modal
+                        animationType="fade"
+                        transparent={false}
+                        visible={this.state.modalVisible}
+                        presentationStyle="pageSheet"
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
+                        }}
+                    >
+                        <View style={{marginTop: 22}}>
+                            <View>
+                                <AddRaidForm />
+
+                                <TouchableHighlight
+                                    style={styles.modalCloseButton}
+                                    onPress={() => {
+                                        this.setModalVisible(!this.state.modalVisible);
+                                    }}>
+                                    <Text style={styles.modalCloseButtonText}>Hide Modal</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Button onPress={() => this.setModalVisible(true)} title="Add a new Raid" />
                 </View>
             </ScrollView>
         )
