@@ -69,8 +69,7 @@ const friendReducer = (state = INITIAL_STATE, action) => {
         const addedFriend = possible.splice(action.payload.index, 1);
 
         // And put friend in friends.current
-        //alert('ADDING '+addedFriend);
-        current.push(addedFriend);
+        current.push(addedFriend[0]);
 
         // Finally, update our redux state
         const newState = { current, possible };
