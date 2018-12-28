@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     {
         username: 'ElieltoRR',
         nickname: 'Elielto',
+        team: 'Instinct',
         level: 40,
         caught: 15113,
         battlesWon: 2591,
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
     {
         username: 'Julymisuzu',
         nickname: 'Juh',
+        team: 'Valor',
         level: 34,
         caught: 4113,
         battlesWon: 591,
@@ -26,6 +28,7 @@ const INITIAL_STATE = {
     {
         username: 'KekkaZanotti',
         nickname: 'Kelen',
+        team: 'Mystic',
         level: 38,
         caught: 16646,
         battlesWon: 1624,
@@ -35,6 +38,7 @@ const INITIAL_STATE = {
     {
         username: 'DrThibes',
         nickname: 'Julio',
+        team: 'Mystic',
         level: 38,
         caught: 18631,
         battlesWon: 1134,
@@ -44,6 +48,7 @@ const INITIAL_STATE = {
     {
         username: 'iamleojunior',
         nickname: 'Leo',
+        team: 'Mystic',
         level: 28,
         caught: 1512,
         battlesWon: 216,

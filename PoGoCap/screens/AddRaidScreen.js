@@ -3,25 +3,23 @@ import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import RaidList from '../components/raids/RaidList';
+import AddRaidForm from '../components/raids/AddRaidForm';
 import raidReducer from '../reducers/RaidReducer';
 
 const store = createStore(raidReducer);
 
-export default class RaidsScreen extends React.Component {
+export default class AddRaidScreen extends React.Component {
   static navigationOptions = {
-    title: 'Raids',
+    title: 'Add a new Raid',
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
     return (
       <Provider store={ store }>
-        <View>
-            <RaidList navigation={this.props.navigation} />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 10, background: '#FFF' }}>
+          <AddRaidForm navigation={this.props.navigation} />
         </View>
       </Provider>
-    )
+    );
   }
 }

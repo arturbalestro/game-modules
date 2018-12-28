@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import ModalScreen from '../screens/ModalScreen';
+import AddRaidScreen from '../screens/AddRaidScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import RaidsScreen from '../screens/RaidsScreen';
 
@@ -26,15 +26,9 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const ModalStack = createStackNavigator({
-  Modal: ModalScreen,
-}, {
-  mode: 'modal',
-  headerMode: 'none'
-});
-
 const RaidsStack = createStackNavigator({
   Raids: RaidsScreen,
+  AddRaid: AddRaidScreen,
 });
 
 RaidsStack.navigationOptions = {
@@ -77,7 +71,6 @@ FriendsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  ModalStack,
   RaidsStack,
   PokemonStack,
   FriendsStack
