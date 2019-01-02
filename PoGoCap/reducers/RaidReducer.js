@@ -117,10 +117,8 @@ const raidReducer = (state = INITIAL_STATE, action) => {
             currentRaids
         } = state;
 
-        alert('RAID TO BE ADDED: '+action.payload);
-
         // Add new raid to array
-        currentRaids.push(action.payload);
+        currentRaids.push(action.payload.raid);
 
         // Finally, update our redux state
         const newState = { currentRaids };

@@ -14,6 +14,33 @@ class RaidList extends React.Component {
     this.props.navigation.navigate("AddRaid");
   }
 
+  renderRaidGroups(groups) {
+    if(groups === undefined || groups.length <= 0) {
+      return false;
+    }else{
+      return(
+        <View style={raidStyles.raidGroupList}>
+          <Text style={raidStyles.boldText}>Raid Groups:</Text>
+          {groups.map((group, index) => (  
+            <View key={group+index} style={raidStyles.raidGroup}>
+              <Text>
+                  Battle: <Text style={raidStyles.boldText}>{group.battleTime}</Text>
+              </Text>
+              
+              <View style={raidStyles.raidGroupMembers}>
+                  {group.members.map((member, index) => (
+                    <Text key={member+index}>{member.name} - {member.team} - {member.level}</Text>
+                  ))}
+              </View>
+
+              <Button onPress={() => this.handleJoinGroup()} title="Join this group" />
+            </View>
+          ))}
+        </View>
+      )
+    }
+  }
+
   render() {
     return(
       <ScrollView>
@@ -34,25 +61,7 @@ class RaidList extends React.Component {
                       Opens: <Text style={raidStyles.boldText}>{raid.openingTime}</Text>
                   </Text>
 
-                  <View style={raidStyles.raidGroupList}>
-                      <Text style={raidStyles.boldText}>Raid Groups:</Text>
-
-                      {raid.groups.map((group, index) => (
-                        <View key={group+index} style={raidStyles.raidGroup}>
-                          <Text>
-                              Battle: <Text style={raidStyles.boldText}>{group.battleTime}</Text>
-                          </Text>
-                          
-                          <View style={raidStyles.raidGroupMembers}>
-                              {group.members.map((member, index) => (
-                                <Text key={member+index}>{member.name} - {member.team} - {member.level}</Text>
-                              ))}
-                          </View>
-
-                          <Button onPress={() => this.handleJoinGroup()} title="Join this group" />
-                        </View>
-                      ))}
-                  </View>
+                  {this.renderRaidGroups(raid.groups)}
               </View>
             ))}
 

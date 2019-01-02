@@ -15,22 +15,23 @@ class AddRaidForm extends Component {
     raidBoss: '',
     raidLvl: '1',
     gym: '',
-    openingTime: ''
+    openingTime: '',
+    groups: []
   }
 
   submitRaid() {
-    const { raidBoss, raidLvl, gym, openingTime } = this.state;
+    const { raidBoss, raidLvl, gym, openingTime, groups } = this.state;
     
     const newRaid = {
       raidBoss,
       raidLvl,
       gym,
-      openingTime
+      openingTime,
+      groups
     }
 
-    alert(newRaid.raidBoss+'-'+newRaid.raidLvl+'-'+newRaid.gym+'-'+newRaid.openingTime);
-    this.props.addRaid(newRaid);
-    this.props.navigation.goBack();
+    const addRaidsResult = this.props.addRaid(newRaid);
+    this.props.navigation.navigate('Home', addRaidsResult);
   }
 
   render() {
