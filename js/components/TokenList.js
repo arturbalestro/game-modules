@@ -33,6 +33,25 @@ export class TokenList extends React.Component {
     return fullGroup[0].node.pokemons.edges;
   }
 
+  renderHeaderMenu() {
+    console.log('###header menu');
+    const nav = (
+      <Nav bsStyle="pills" stacked activeKey={1} onSelect={handleSelect}>
+        <NavItem eventKey={1} disabled>
+          Sort by Name
+        </NavItem>
+        <NavItem eventKey={2} disabled>
+          Sort by Type
+        </NavItem>
+        <NavItem eventKey={3} disabled>
+          Sort by Obtained
+        </NavItem>
+      </Nav>
+    );
+
+    return nav;
+  }
+
   render() {
     const tokens = this.props.game.tokens.edges;
     const pokemonList = this.getAllPokemon("Red");
@@ -48,7 +67,7 @@ export class TokenList extends React.Component {
           <h2 className="text-center">Tokens</h2>
         </Col>
         <Col md={1} sm={1} lg={1} xs={2} className="text-center">
-          <Button disabled>
+          <Button onClick={() => this.renderHeaderMenu}>
             <Glyphicon glyph="menu-hamburger" />
           </Button>
         </Col>

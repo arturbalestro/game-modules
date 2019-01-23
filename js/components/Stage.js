@@ -74,53 +74,43 @@ class Stage extends React.Component {
     const stageNumber = this.props.location.query.stage;
     let availablePokemon = [];
     switch(stageNumber) {
-      case '1':
-        //power-plant
+      case 'powerPlant':
         availablePokemon = this.getAvailablePokemon("Embar", "Electric", "");
       break;
 
-      case '2':
-        //viridian-forest
+      case 'viridianForest':
         availablePokemon = this.getAvailablePokemon("Embar", "Bug", "");
       break;
 
-      case '3':
-        //cinnabar-island
+      case 'cinnabarIsland':
         availablePokemon = this.getAvailablePokemon("Embar", "Fire", "");
       break;
 
-      case '4':
-        //seafoam-islands
+      case 'seafoamIslands':
         availablePokemon = this.getAvailablePokemon("Embar", "Water", "Ice");
       break;
 
-      case '5':
-        //rock-tunnel
+      case 'rockTunnel':
         availablePokemon = this.getAvailablePokemon("Embar", "Rock", "");
       break;
 
-      case '6':
-        //safari-zone
+      case 'safariZone':
         availablePokemon = this.getAvailablePokemon("Embar", "Grass", "Normal");
       break;
 
-      case '7':
-        //mt-moon
+      case 'mtMoon':
         availablePokemon = this.getAvailablePokemon("Embar", "Fairy", "Flying");
       break;
 
-      case '8':
-        //underground-path
+      case 'undergroundPath':
         availablePokemon = this.getAvailablePokemon("Embar", "Ground", "Poison");
       break;
 
-      case '9':
-        //lavender-tower
+      case 'lavenderTower':
         availablePokemon = this.getAvailablePokemon("Embar", "Ghost", "Psychic");
       break;
 
-      case '10':
-        //victory-road
+      case 'victoryRoad':
         availablePokemon = this.getAvailablePokemon("Embar", "Fighting", "Dragon");
       break;
     }

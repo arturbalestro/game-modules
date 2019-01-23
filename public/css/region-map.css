@@ -2,47 +2,62 @@
   display: inline-block;
   min-height: 34px;
   position: relative;
-  text-align: center; }
-  .mapblock.no-left {
-    border-left: none; }
-  .mapblock.no-right {
-    border-right: none; }
-  .mapblock.no-top {
-    border-top: none; }
-  .mapblock.no-bottom {
-    border-bottom: none; }
-  .mapblock.no-border {
-    border: none; }
-  .mapblock .stagelink {
-    position: absolute;
-    bottom: 15px;
-    right: 0;
-    z-index: 1;
-    text-align: center; }
-    .mapblock .stagelink .stagename {
-      text-decoration: none;
-      position: absolute;
-      bottom: 14px;
-      right: 0; }
-    .mapblock .stagelink img {
-      max-width: 78px; }
+  text-align: center;
+}
+.mapblock.no-left {
+  border-left: none;
+}
+.mapblock.no-right {
+  border-right: none;
+}
+.mapblock.no-top {
+  border-top: none;
+}
+.mapblock.no-bottom {
+  border-bottom: none;
+}
+.mapblock.no-border {
+  border: none;
+}
+.mapblock .stagelink {
+  cursor: pointer;
+  position: absolute;
+  bottom: 15px;
+  right: 0;
+  z-index: 1;
+  text-align: center;
+}
+.mapblock .stagelink .stagename {
+  text-decoration: none;
+  position: absolute;
+  bottom: 14px;
+  right: 0;
+}
+.mapblock .stagelink img {
+  max-width: 78px;
+}
 
 .land {
-  background: #B0FFA3; }
+  background: #B0FFA3;
+}
 
 .road {
   background: #599A88;
-  border: 1px solid #FFFF90; }
+  border: 1px solid #FFFF90;
+}
 
 .water {
-  background: #9FF1D9; }
+  background: #9FF1D9;
+}
 
 .island {
   background: #40FF70;
-  border: 1px solid #FFFF90; }
+  border: 1px solid #FFFF90;
+}
 
 .seatrail {
   background: #54A3CD;
-  border: 1px solid #FFFF90; }
+  border: 1px solid #FFFF90;
+}
 
 /*# sourceMappingURL=region-map.css.map */

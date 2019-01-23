@@ -3,7 +3,8 @@
   "presets": [
     {
       "plugins": [
-        "./build/babelRelayPlugin"
+        "./build/babelRelayPlugin",
+        "react-hot-loader/babel"
       ]
     },
     "react",

@@ -45,14 +45,14 @@ class App extends React.Component {
 
             <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('victoryRoad')}>
                 <Label className="stagename" bsStyle="primary">Victory Road</Label>
                 <img src="img/pokestop.png" />
               </a>
             </Col>
             <Col md={3} sm={3} lg={3} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('mtMoon')}>
                 <Label className="stagename" bsStyle="primary">Mt. Moon</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -63,7 +63,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('powerPlant')}>
                 <Label className="stagename" bsStyle="primary">Power Plant</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -94,7 +94,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('viridianForest')}>
                 <Label className="stagename" bsStyle="primary">Viridian Forest</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -103,7 +103,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom"></Col>
             <Col md={2} sm={2} lg={2} className="mapblock land"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-top no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('rockTunnel')}>
                 <Label className="stagename" bsStyle="primary">Rock Tunnel</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -126,7 +126,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-right no-bottom"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-border">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('undergroundPath')}>
                 <Label className="stagename" bsStyle="primary">Underground Path</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -134,7 +134,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-top no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('lavenderTower')}>
                 <Label className="stagename" bsStyle="primary">Lavender Tower</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -202,7 +202,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock road no-left no-right no-bottom">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('safariZone')}>
                 <Label className="stagename" bsStyle="primary">Safari Zone</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -225,7 +225,7 @@ class App extends React.Component {
 
             <Col md={3} sm={3} lg={3} className="mapblock water"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock island no-top no-right">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('cinnabarIsland')}>
                 <Label className="stagename" bsStyle="primary">Cinnabar Island</Label>
                 <img src="img/pokestop.png" />
               </a>
@@ -233,7 +233,7 @@ class App extends React.Component {
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock seatrail no-left no-right"></Col>
             <Col md={1} sm={1} lg={1} className="mapblock island no-left no-right">
-              <a className="stagelink">
+              <a className="stagelink" onClick={(e) => this.handleSelectStage('seafoamIslands')}>
                 <Label className="stagename" bsStyle="primary">Seafoam Islands</Label>
                 <img src="img/pokestop.png" />
               </a>
