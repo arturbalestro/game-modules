@@ -278,6 +278,20 @@ body {
   }
 }
 
+.token-nav {
+  position: relative;
+}
+
+.sort-nav {
+  position: absolute;
+  right: 0;
+  background: #FFF;
+  z-index: 1;
+  border: 1px solid #337ab7;
+  border-radius: 4px;
+  padding: 2px;
+}
+
 .token-link {
   padding-left: 0px;
   position: relative;

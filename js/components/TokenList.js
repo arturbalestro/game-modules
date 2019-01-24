@@ -1,9 +1,9 @@
 import React from 'react';
 import Relay from 'react-relay';
-import { Row, Col, Image, Button, Glyphicon, Label } from 'react-bootstrap';
+import { Row, Col, Image, Button, Glyphicon, Label, Nav, NavItem } from 'react-bootstrap';
 import TypedTransition from '../../scripts/TypedTransition';
 import * as app from './App';
-import PrizeModal from './PrizeModal';
+import TokenItem from './TokenItem';
 import AddTokenMutation from '../mutations/AddTokenMutation';
 import EditTokenMutation from '../mutations/EditTokenMutation';
 
@@ -15,10 +15,19 @@ export class TokenList extends React.Component {
 
     this.state = {
       pokemonUnlocked: false,
+      menuDisplay: 'none',
+      sortDisabled: true,
+      tokens: this.props.tokens || []
     };
 
     this.backToGame = this.backToGame.bind(this);
     this.getAllPokemon = this.getAllPokemon.bind(this);
+    this.renderHeaderMenu = this.renderHeaderMenu.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  componentDidUpdate() {
+
   }
 
   backToGame() {
@@ -33,69 +42,68 @@ export class TokenList extends React.Component {
     return fullGroup[0].node.pokemons.edges;
   }
 
-  renderHeaderMenu() {
-    console.log('###header menu');
-    const nav = (
-      <Nav bsStyle="pills" stacked activeKey={1} onSelect={handleSelect}>
-        <NavItem eventKey={1} disabled>
-          Sort by Name
-        </NavItem>
-        <NavItem eventKey={2} disabled>
-          Sort by Type
-        </NavItem>
-        <NavItem eventKey={3} disabled>
-          Sort by Obtained
-        </NavItem>
-      </Nav>
-    );
+  handleSelect = (event) => {
+    console.log('####sorting...', event, this.props.game);
 
-    return nav;
+    const tokenList = this.props.game.tokens;
+    console.log('####tokenlist', tokenList);
+
+      const sortedByObtained = tokenList.edges.filter((token) => {
+        console.log('###token', token);
+        return token.node.amount > 0   
+      })
+      console.log('####sortedByObtained', sortedByObtained);
+      this.setState({ tokens: sortedByObtained });
+    
+  }
+
+  renderHeaderMenu = () => {
+    console.log('###header menu', this.state.menuDisplay);
+    this.setState({ menuDisplay: 'none' ? 'block' : 'none' });
+
+    const tokenList = this.props.game.tokens;
+    console.log('####tokenlist', tokenList);
+
+    if(tokenList.length > 0) {
+      this.setState({ sortDisabled: false });
+    }
   }
 
   render() {
-    const tokens = this.props.game.tokens.edges;
+    const tokens = this.state.tokens.length > 0 ? this.state.tokens : this.props.game.tokens;
     const pokemonList = this.getAllPokemon("Red");
+
+    console.log('####tokens!!!', tokens, this.props.game.tokens, this.state.tokens);
 
     return (
       <Row className="token-list transition-item">
-        <Col md={1} sm={1} lg={1} xs={2} className="text-center">
-          <Button onClick={this.backToGame}>
+        <Col md={3} sm={3} lg={3} xs={2} className="text-center">
+          <Button onClick={this.backToGame} className="pull-left">
             <Glyphicon glyph="menu-left" />
           </Button>
         </Col>
-        <Col md={10} sm={10} lg={10} xs={8} className="text-center no-padding">
+        <Col md={6} sm={6} lg={6} xs={4} className="text-center no-padding">
           <h2 className="text-center">Tokens</h2>
         </Col>
-        <Col md={1} sm={1} lg={1} xs={2} className="text-center">
-          <Button onClick={() => this.renderHeaderMenu}>
+        <Col md={3} sm={3} lg={3} xs={2} className="token-nav text-center">
+          <Button onClick={this.renderHeaderMenu} className="pull-right">
             <Glyphicon glyph="menu-hamburger" />
           </Button>
+          <Col md={12} sm={12} lg={12} xs={10}>
+            <Nav className="sort-nav" bsStyle="pills" stacked activeKey={1} onSelect={this.handleSelect} style={{ display: this.state.menuDisplay }}>
+              <NavItem eventKey={1}>
+                Sort by Name
+              </NavItem>
+              <NavItem eventKey={2}>
+                Sort by Type
+              </NavItem>
+              <NavItem eventKey={3}>
+                Sort by Obtained
+              </NavItem>
+            </Nav>
+          </Col>
         </Col>
-        <Col md={12} className="text-center pull-left">
-          {pokemonList.map(function(pokemon, index) {
-            const token = tokens.filter((token) => token.node.name === pokemon.node.name );
-            if(token.length > 0) {
-              return (
-                <Col md={2} sm={1} lg={2} key={token[0].node.id} className="token-box text-center">
-                  <Label className="token-amount">{token[0].node.amount}</Label>
-                  <div className={"token type-"+token[0].node.attribute}>
-                    <Image src={pokemon.node.image} />
-                  </div>
-                  <Label className="token-name text-center">{pokemon.node.name}</Label>
-                </Col>
-              )
-            } else {
-              return (
-                <Col md={2} sm={1} lg={2} key={pokemon.node.id} className="token-box text-center inactive">
-                  <div className="token">
-                    <Image src={pokemon.node.image} />
-                  </div>
-                  <Label className="token-name text-center">{pokemon.node.name}</Label>
-                </Col>
-              )
-            }
-          })}
-        </Col>
+        <TokenItem game={this.props.game} tokens={tokens} pokemonList={pokemonList} />
       </Row>
     )
   }
@@ -157,6 +165,7 @@ export default Relay.createContainer(TokenList, {
             }
           }
         }
+        ${TokenItem.getFragment('game')},
         ${AddTokenMutation.getFragment('game')},
         ${EditTokenMutation.getFragment('game')},
       }
